@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Portfolio · Redouane</title>
+    <meta name="description" content="Portfolio de Redouane: projets, à propos, et contact." />
+    <meta name="theme-color" content="#0b0b0b" />
+    <meta property="og:title" content="Portfolio · Redouane" />
+    <meta property="og:description" content="Portfolio de Redouane: projets, à propos, et contact." />
+    <meta property="og:type" content="website" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header" data-reveal>
+      <div class="container header-inner">
+        <a href="#hero" class="brand" aria-label="Accueil">RD</a>
+        <button class="nav-toggle" aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="site-nav">
+          <span class="nav-bar"></span>
+          <span class="nav-bar"></span>
+          <span class="nav-bar"></span>
+        </button>
+        <nav id="site-nav" class="site-nav" aria-label="Navigation principale">
+          <a href="#projets">Projets</a>
+          <a href="#competences">Compétences</a>
+          <a href="#apropos">À propos</a>
+          <a href="#experience">Expérience</a>
+          <a href="#formation">Formation</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section id="hero" class="hero section">
+        <div class="container">
+          <p class="eyebrow" data-reveal>Portfolio</p>
+          <h1 class="title" data-reveal>
+            Créons des expériences web <span class="accent">rapides</span>,
+            <span class="accent">élégantes</span> et <span class="accent">utiles</span>.
+          </h1>
+          <p class="subtitle" data-reveal>
+            Étudiant en BTS SIO à IRIS Mediaschool (Rouen) et alternant chez GetCaaS.
+            Passionné de réseaux, systèmes et développement, je conçois des
+            interfaces performantes et accessibles.
+          </p>
+          <div class="cta" data-reveal>
+            <a class="btn primary" href="#projets">Voir mes projets</a>
+            <a class="btn ghost" href="#contact">Me contacter</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="projets" class="section projects">
+        <div class="container">
+          <div class="section-head">
+            <h2 data-reveal>Projets sélectionnés</h2>
+            <p class="muted" data-reveal>
+              Une sélection de travaux récents. Plus sur demande.
+            </p>
+          </div>
+
+          <div class="grid">
+            <article class="card" data-reveal>
+              <a class="card-link" href="#" target="_blank" rel="noopener">
+                <div class="card-media" aria-hidden="true"></div>
+                <div class="card-body">
+                  <h3>Dashboard Analytics</h3>
+                  <p>SPA en JavaScript avec animations fluides et API temps réel.</p>
+                  <span class="pill">JS</span>
+                  <span class="pill">REST</span>
+                  <span class="pill">Charts</span>
+                </div>
+              </a>
+            </article>
+
+            <article class="card" data-reveal>
+              <a class="card-link" href="#" target="_blank" rel="noopener">
+                <div class="card-media" aria-hidden="true"></div>
+                <div class="card-body">
+                  <h3>Site Vitrine Minimal</h3>
+                  <p>Site statique ultra‑rapide avec SEO et accessibilité soignée.</p>
+                  <span class="pill">HTML</span>
+                  <span class="pill">CSS</span>
+                  <span class="pill">A11y</span>
+                </div>
+              </a>
+            </article>
+
+            <article class="card" data-reveal>
+              <a class="card-link" href="#" target="_blank" rel="noopener">
+                <div class="card-media" aria-hidden="true"></div>
+                <div class="card-body">
+                  <h3>Landing SaaS</h3>
+                  <p>Page marketing avec conversions optimisées et micro‑interactions.</p>
+                  <span class="pill">Motion</span>
+                  <span class="pill">Perf</span>
+                  <span class="pill">UX</span>
+                </div>
+              </a>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="competences" class="section skills">
+        <div class="container">
+          <div class="section-head">
+            <h2 data-reveal>Compétences</h2>
+            <p class="muted" data-reveal>Un aperçu de mes points forts.</p>
+          </div>
+
+          <div class="skills-grid">
+            <div class="skill" data-reveal>
+              <div class="skill-header">
+                <span class="skill-name">Administration réseau</span>
+                <span class="skill-value">85%</span>
+              </div>
+              <div class="skill-bar" aria-hidden="true">
+                <div class="skill-fill" data-skill-value="85"></div>
+              </div>
+            </div>
+
+            <div class="skill" data-reveal>
+              <div class="skill-header">
+                <span class="skill-name">Support IT</span>
+                <span class="skill-value">80%</span>
+              </div>
+              <div class="skill-bar" aria-hidden="true">
+                <div class="skill-fill" data-skill-value="80"></div>
+              </div>
+            </div>
+
+            <div class="skill" data-reveal>
+              <div class="skill-header">
+                <span class="skill-name">Administration système et réseau</span>
+                <span class="skill-value">82%</span>
+              </div>
+              <div class="skill-bar" aria-hidden="true">
+                <div class="skill-fill" data-skill-value="82"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="apropos" class="section about">
+        <div class="container">
+          <div class="section-head">
+            <h2 data-reveal>À propos</h2>
+          </div>
+          <div class="about-content" data-reveal>
+            <p>
+              Alternant en <strong>BTS SIO</strong> à l’IRIS Mediaschool Rouen, je me forme dans
+              les domaines réseaux, systèmes et développement. Passionné
+              d’informatique, je mets mes compétences en pratique chez <strong>GetCaaS</strong>
+              tout en développant des projets personnels (dont ce site CV).
+              Curieux, rigoureux et orienté solutions, je suis motivé à relever de
+              nouveaux défis et à contribuer à la réussite des projets numériques.
+            </p>
+            <ul class="tags">
+              <li>Administration réseau</li>
+              <li>Administration système</li>
+              <li>Support IT</li>
+              <li>Développement web</li>
+              <li>Organisation & autonomie</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section id="experience" class="section experience">
+        <div class="container">
+          <div class="section-head">
+            <h2 data-reveal>Expérience</h2>
+          </div>
+          <div class="timeline">
+            <div class="timeline-item" data-reveal>
+              <div class="timeline-meta">septembre 2025 – Présent · Rouen</div>
+              <h3 class="timeline-title">Administrateur réseau et systèmes · GetCaaS</h3>
+              <p class="muted">
+                Support utilisateurs (N1/N2), diagnostic et résolution,
+                création d’un système de gestion de tickets, amélioration de la traçabilité
+                et des temps de réponse.
+              </p>
+            </div>
+            <div class="timeline-item" data-reveal>
+              <div class="timeline-meta">juillet 2025 – août 2025 · Rouen</div>
+              <h3 class="timeline-title">Administrateur réseau et systèmes · GetCaaS</h3>
+              <p class="muted">Immersion DSI, montée en compétences en admin système & réseau.</p>
+            </div>
+            <div class="timeline-item" data-reveal>
+              <div class="timeline-meta">janvier 2025 · Grand-Couronne</div>
+              <h3 class="timeline-title">Manutentionnaire · Nouvelle Attitude</h3>
+              <p class="muted">Déchargement de camions.</p>
+            </div>
+            <div class="timeline-item" data-reveal>
+              <div class="timeline-meta">2024 · Rouen</div>
+              <h3 class="timeline-title">Vendeur · H&M</h3>
+              <p class="muted">Mise des prix des articles.</p>
+            </div>
+            <div class="timeline-item" data-reveal>
+              <div class="timeline-meta">2024 · Bois-Guillaume</div>
+              <h3 class="timeline-title">Assistant du chef de rayon · Carrefour</h3>
+              <p class="muted">Mise en rayon.</p>
+            </div>
+            <div class="timeline-item" data-reveal>
+              <div class="timeline-meta">juillet 2020 – juillet 2023 · Sotteville-lès-Rouen</div>
+              <h3 class="timeline-title">Commerçant · SARAOUI</h3>
+              <p class="muted">Gestion du stock, vente de cosmétiques/vêtements, encaissement.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="formation" class="section education">
+        <div class="container">
+          <div class="section-head">
+            <h2 data-reveal>Formation</h2>
+          </div>
+          <div class="timeline">
+            <div class="timeline-item" data-reveal>
+              <div class="timeline-meta">octobre 2024 – juillet 2026</div>
+              <h3 class="timeline-title">BTS SIO · IRIS - École supérieure d’informatique</h3>
+              <p class="muted">Informatique, services aux organisations.</p>
+            </div>
+            <div class="timeline-item" data-reveal>
+              <div class="timeline-meta">septembre 2022 – juillet 2024</div>
+              <h3 class="timeline-title">CPGE · Lycée Marcel Sembat</h3>
+              <p class="muted">Technologie informatique / systèmes informatiques.</p>
+            </div>
+            <div class="timeline-item" data-reveal>
+              <div class="timeline-meta">septembre 2020 – juillet 2022</div>
+              <h3 class="timeline-title">Baccalauréat STI2D · Lycée Marcel Sembat</h3>
+              <p class="muted">Informatique.</p>
+            </div>
+            <div class="timeline-item" data-reveal>
+              <div class="timeline-meta">septembre 2020 – juillet 2021</div>
+              <h3 class="timeline-title">Brevet d’Initiation Aéronautique · Lycée Marcel Sembat</h3>
+              <p class="muted">Science et technologie aéronautique / aérospatiale / aviation.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact" class="section contact">
+        <div class="container">
+          <div class="section-head">
+            <h2 data-reveal>Contact</h2>
+            <p class="muted" data-reveal>
+              Discutons de votre projet. Réponse sous 24h.
+            </p>
+          </div>
+          <div class="contact-actions" data-reveal>
+            <a class="btn primary" href="tel:+33606496618">06 06 49 66 18</a>
+            <a class="btn ghost" href="mailto:redouane@saraoui.fr">redouane@saraoui.fr</a>
+            <a class="btn ghost" href="https://www.linkedin.com/in/redouane-saraoui" target="_blank" rel="noopener">LinkedIn</a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container">
+        <p>© <span id="year"></span> Redouane. Fait avec ♥.</p>
+      </div>
+    </footer>
+
+    <script src="script.js" defer></script>
+  </body>
+  </html>
