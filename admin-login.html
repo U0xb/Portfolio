@@ -8,6 +8,23 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --text-muted: #6b6b6b;
+            --accent-primary: #818cf8;
+            --accent-secondary: #a78bfa;
+            --accent-glow: rgba(129, 140, 248, 0.4);
+            --border-color: #2a2a2a;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.8);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.9);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.95);
+            --shadow-glow: 0 0 50px var(--accent-glow);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -16,7 +33,7 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-primary);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -24,18 +41,35 @@
             padding: 20px;
             position: relative;
             overflow: hidden;
+            color: var(--text-primary);
+        }
+
+        /* Effet de particules en arrière-plan */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(129, 140, 248, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(167, 139, 250, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         /* Effet d'animation de fond */
-        body::before {
+        body::after {
             content: '';
             position: absolute;
             top: -50%;
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            background: radial-gradient(circle, rgba(129, 140, 248, 0.08) 0%, transparent 70%);
             animation: rotate 20s linear infinite;
+            z-index: 0;
         }
 
         @keyframes rotate {
@@ -44,21 +78,21 @@
         }
 
         .login-container {
-            background: #1a1a1a;
+            background: var(--bg-secondary);
             border-radius: 24px;
             padding: 3rem;
             width: 100%;
             max-width: 480px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            box-shadow: var(--shadow-lg);
             position: relative;
             z-index: 1;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border-color);
         }
 
         .logo {
             width: 90px;
             height: 90px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             border-radius: 20px;
             display: flex;
             align-items: center;
@@ -67,18 +101,18 @@
             font-weight: 900;
             color: white;
             margin-bottom: 2rem;
-            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+            box-shadow: var(--shadow-glow);
         }
 
         h1 {
-            color: white;
+            color: var(--text-primary);
             font-size: 2rem;
             margin-bottom: 0.75rem;
             font-weight: 800;
         }
 
         .subtitle {
-            color: #999;
+            color: var(--text-secondary);
             margin-bottom: 2.5rem;
             font-size: 1rem;
         }
@@ -100,7 +134,7 @@
 
         .form-group label {
             display: block;
-            color: #ccc;
+            color: var(--text-secondary);
             margin-bottom: 0.75rem;
             font-weight: 600;
             font-size: 0.95rem;
@@ -109,10 +143,10 @@
         .form-group input {
             width: 100%;
             padding: 1rem 1.25rem;
-            background: #2a2a2a;
-            border: 2px solid #3a3a3a;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
             border-radius: 12px;
-            color: white;
+            color: var(--text-primary);
             font-size: 1rem;
             transition: all 0.3s ease;
             font-family: inherit;
@@ -120,19 +154,19 @@
 
         .form-group input:focus {
             outline: none;
-            border-color: #667eea;
-            background: #333;
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            border-color: var(--accent-primary);
+            background: var(--bg-secondary);
+            box-shadow: 0 0 0 4px var(--accent-glow);
         }
 
         .form-group input::placeholder {
-            color: #666;
+            color: var(--text-muted);
         }
 
         .login-btn {
             width: 100%;
             padding: 1.125rem;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             border: none;
             border-radius: 12px;
             color: white;
@@ -156,7 +190,7 @@
 
         .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 12px 28px rgba(102, 126, 234, 0.5);
+            box-shadow: var(--shadow-glow);
         }
 
         .login-btn:hover::before {
@@ -177,7 +211,7 @@
             display: inline-flex;
             align-items: center;
             gap: 0.5rem;
-            color: #667eea;
+            color: var(--accent-primary);
             text-decoration: none;
             margin-top: 1.5rem;
             transition: all 0.3s ease;
@@ -186,7 +220,7 @@
         }
 
         .back-link:hover {
-            color: #8b5cf6;
+            color: var(--accent-secondary);
             gap: 0.75rem;
         }
 
