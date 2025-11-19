@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion Admin - Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -12,85 +15,114 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Effet d'animation de fond */
+        body::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
         }
 
         .login-container {
             background: #1a1a1a;
-            border-radius: 16px;
-            padding: 40px;
+            border-radius: 24px;
+            padding: 3rem;
             width: 100%;
-            max-width: 450px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 480px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 1;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .logo {
-            width: 80px;
-            height: 80px;
+            width: 90px;
+            height: 90px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border-radius: 16px;
+            border-radius: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 32px;
-            font-weight: bold;
+            font-size: 36px;
+            font-weight: 900;
             color: white;
-            margin-bottom: 30px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
         }
 
         h1 {
             color: white;
-            font-size: 32px;
-            margin-bottom: 10px;
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+            font-weight: 800;
         }
 
         .subtitle {
             color: #999;
-            margin-bottom: 30px;
+            margin-bottom: 2.5rem;
+            font-size: 1rem;
         }
 
         .error-message {
-            background: rgba(231, 76, 60, 0.2);
-            color: #e74c3c;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid rgba(231, 76, 60, 0.3);
+            background: rgba(239, 68, 68, 0.15);
+            color: #ef4444;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(239, 68, 68, 0.3);
             display: none;
+            font-size: 0.95rem;
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.75rem;
         }
 
         .form-group label {
             display: block;
             color: #ccc;
-            margin-bottom: 8px;
-            font-weight: 500;
+            margin-bottom: 0.75rem;
+            font-weight: 600;
+            font-size: 0.95rem;
         }
 
         .form-group input {
             width: 100%;
-            padding: 14px;
+            padding: 1rem 1.25rem;
             background: #2a2a2a;
             border: 2px solid #3a3a3a;
-            border-radius: 8px;
+            border-radius: 12px;
             color: white;
-            font-size: 16px;
-            transition: all 0.3s;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            font-family: inherit;
         }
 
         .form-group input:focus {
             outline: none;
             border-color: #667eea;
             background: #333;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
         }
 
         .form-group input::placeholder {
@@ -99,21 +131,36 @@
 
         .login-btn {
             width: 100%;
-            padding: 16px;
+            padding: 1.125rem;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border: none;
-            border-radius: 8px;
+            border-radius: 12px;
             color: white;
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 1.05rem;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 10px;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .login-btn::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: white;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
 
         .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+            box-shadow: 0 12px 28px rgba(102, 126, 234, 0.5);
+        }
+
+        .login-btn:hover::before {
+            opacity: 0.1;
         }
 
         .login-btn:disabled {
@@ -122,24 +169,32 @@
             transform: none;
         }
 
+        .login-btn:disabled:hover {
+            box-shadow: none;
+        }
+
         .back-link {
             display: inline-flex;
             align-items: center;
+            gap: 0.5rem;
             color: #667eea;
             text-decoration: none;
-            margin-top: 20px;
-            transition: color 0.3s;
+            margin-top: 1.5rem;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            font-size: 0.95rem;
         }
 
         .back-link:hover {
-            color: #764ba2;
+            color: #8b5cf6;
+            gap: 0.75rem;
         }
 
         .spinner {
             display: none;
             width: 20px;
             height: 20px;
-            border: 3px solid rgba(255,255,255,0.3);
+            border: 3px solid rgba(255, 255, 255, 0.3);
             border-top-color: white;
             border-radius: 50%;
             animation: spin 0.8s linear infinite;
@@ -156,6 +211,38 @@
 
         .loading .btn-text {
             display: none;
+        }
+
+        /* Animation d'entrée */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .login-container {
+            animation: fadeInUp 0.6s ease;
+        }
+
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 2rem;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            .logo {
+                width: 80px;
+                height: 80px;
+                font-size: 32px;
+            }
         }
     </style>
 </head>
@@ -174,7 +261,7 @@
                     type="email" 
                     id="email" 
                     name="email" 
-                    placeholder="redouane@saraoui.fr"
+                    placeholder="votre@email.com"
                     required
                     autocomplete="email"
                 >
