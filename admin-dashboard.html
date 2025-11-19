@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Admin - Portfolio Redouane</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        .dashboard-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .dashboard-header h1 {
+            font-size: 28px;
+            font-weight: 600;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .logout-btn:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .dashboard-content {
+            padding: 30px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 20px;
+            background: #f9f9f9;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .section-header h2 {
+            font-size: 22px;
+            color: #333;
+        }
+
+        .btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-danger {
+            background: #e74c3c;
+        }
+
+        .btn-danger:hover {
+            background: #c0392b;
+        }
+
+        .btn-success {
+            background: #27ae60;
+        }
+
+        .btn-success:hover {
+            background: #229954;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .item-list {
+            display: grid;
+            gap: 15px;
+        }
+
+        .item-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            transition: all 0.3s;
+        }
+
+        .item-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .item-card h3 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 18px;
+        }
+
+        .item-card p {
+            color: #666;
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .item-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            font-size: 24px;
+            color: #333;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            line-height: 1;
+        }
+
+        .close-modal:hover {
+            color: #333;
+        }
+
+        .tags-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 8px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            min-height: 45px;
+        }
+
+        .tag {
+            background: #667eea;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+        }
+
+        .tag button {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            line-height: 1;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+
+            .item-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <h1>🎨 Dashboard Portfolio - Redouane</h1>
+            <button class="logout-btn" onclick="logout()">Déconnexion</button>
+        </div>
+
+        <div class="dashboard-content">
+            <div class="success-message" id="successMessage"></div>
+            <div class="error-message" id="errorMessage"></div>
+
+            <!-- Hero Section -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>📢 Section Hero</h2>
+                </div>
+                <div id="heroForm">
+                    <input type="hidden" id="heroId">
+                    <div class="form-group">
+                        <label>Titre</label>
+                        <input type="text" id="heroTitle" placeholder="Créons des expériences web rapides, élégantes et utiles.">
+                    </div>
+                    <div class="form-group">
+                        <label>Sous-titre</label>
+                        <textarea id="heroSubtitle" rows="3" placeholder="Étudiant en BTS SIO..."></textarea>
+                    </div>
+                    <button class="btn btn-success" onclick="saveHero()">💾 Enregistrer</button>
+                </div>
+            </div>
+
+            <!-- Projects Section -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>🚀 Projets</h2>
+                    <button class="btn" onclick="openProjectModal()">➕ Ajouter un projet</button>
+                </div>
+                <div class="item-list" id="projectsList"></div>
+            </div>
+
+            <!-- Skills Section -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>💡 Compétences</h2>
+                    <button class="btn" onclick="openSkillModal()">➕ Ajouter une compétence</button>
+                </div>
+                <div class="item-list" id="skillsList"></div>
+            </div>
+
+            <!-- About Section -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>👤 À propos</h2>
+                </div>
+                <div id="aboutForm">
+                    <input type="hidden" id="aboutId">
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea id="aboutDescription" rows="6" placeholder="Parlez de vous..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Tags (appuyez sur Entrée pour ajouter)</label>
+                        <div class="tags-input" id="aboutTagsContainer" onclick="focusAboutTagInput()">
+                            <input type="text" id="aboutTagInput" style="border:none;flex:1;outline:none;" onkeypress="addAboutTag(event)">
+                        </div>
+                    </div>
+                    <button class="btn btn-success" onclick="saveAbout()">💾 Enregistrer</button>
+                </div>
+            </div>
+
+            <!-- Experience Section -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>💼 Expériences</h2>
+                    <button class="btn" onclick="openExperienceModal()">➕ Ajouter une expérience</button>
+                </div>
+                <div class="item-list" id="experienceList"></div>
+            </div>
+
+            <!-- Education Section -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>🎓 Formation</h2>
+                    <button class="btn" onclick="openEducationModal()">➕ Ajouter une formation</button>
+                </div>
+                <div class="item-list" id="educationList"></div>
+            </div>
+
+            <!-- Contact Section -->
+            <div class="section">
+                <div class="section-header">
+                    <h2>📧 Contact</h2>
+                </div>
+                <div id="contactForm">
+                    <input type="hidden" id="contactId">
+                    <div class="form-group">
+                        <label>Téléphone</label>
+                        <input type="tel" id="contactPhone" placeholder="06 06 49 66 18">
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="contactEmail" placeholder="redouane@saraoui.fr">
+                    </div>
+                    <div class="form-group">
+                        <label>LinkedIn</label>
+                        <input type="url" id="contactLinkedin" placeholder="https://www.linkedin.com/in/...">
+                    </div>
+                    <button class="btn btn-success" onclick="saveContact()">💾 Enregistrer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Project Modal -->
+    <div id="projectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="projectModalTitle">Ajouter un projet</h3>
+                <button class="close-modal" onclick="closeProjectModal()">×</button>
+            </div>
+            <form id="projectForm">
+                <input type="hidden" id="projectId">
+                <div class="form-group">
+                    <label>Titre*</label>
+                    <input type="text" id="projectTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Description*</label>
+                    <textarea id="projectDescription" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Lien</label>
+                    <input type="url" id="projectLink" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>Image URL</label>
+                    <input type="url" id="projectImageUrl" placeholder="https://...">
+                </div>
+                <div class="form-group">
+                    <label>Tags (appuyez sur Entrée pour ajouter)</label>
+                    <div class="tags-input" id="projectTagsContainer" onclick="focusTagInput()">
+                        <input type="text" id="projectTagInput" style="border:none;flex:1;outline:none;" onkeypress="addProjectTag(event)">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Ordre d'affichage</label>
+                    <input type="number" id="projectOrder" value="0">
+                </div>
+                <button type="submit" class="btn btn-success">💾 Enregistrer</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Skill Modal -->
+    <div id="skillModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="skillModalTitle">Ajouter une compétence</h3>
+                <button class="close-modal" onclick="closeSkillModal()">×</button>
+            </div>
+            <form id="skillForm">
+                <input type="hidden" id="skillId">
+                <div class="form-group">
+                    <label>Nom*</label>
+                    <input type="text" id="skillName" required>
+                </div>
+                <div class="form-group">
+                    <label>Valeur (0-100)*</label>
+                    <input type="number" id="skillValue" min="0" max="100" required>
+                </div>
+                <div class="form-group">
+                    <label>Ordre d'affichage</label>
+                    <input type="number" id="skillOrder" value="0">
+                </div>
+                <button type="submit" class="btn btn-success">💾 Enregistrer</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Experience Modal -->
+    <div id="experienceModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="experienceModalTitle">Ajouter une expérience</h3>
+                <button class="close-modal" onclick="closeExperienceModal()">×</button>
+            </div>
+            <form id="experienceForm">
+                <input type="hidden" id="experienceId">
+                <div class="form-group">
+                    <label>Poste*</label>
+                    <input type="text" id="experienceTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Entreprise*</label>
+                    <input type="text" id="experienceCompany" required>
+                </div>
+                <div class="form-group">
+                    <label>Date*</label>
+                    <input type="text" id="experienceDate" placeholder="septembre 2025 – Présent" required>
+                </div>
+                <div class="form-group">
+                    <label>Lieu</label>
+                    <input type="text" id="experienceLocation" placeholder="Rouen">
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="experienceDescription"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Ordre d'affichage</label>
+                    <input type="number" id="experienceOrder" value="0">
+                </div>
+                <button type="submit" class="btn btn-success">💾 Enregistrer</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Education Modal -->
+    <div id="educationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="educationModalTitle">Ajouter une formation</h3>
+                <button class="close-modal" onclick="closeEducationModal()">×</button>
+            </div>
+            <form id="educationForm">
+                <input type="hidden" id="educationId">
+                <div class="form-group">
+                    <label>Diplôme*</label>
+                    <input type="text" id="educationTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>Établissement*</label>
+                    <input type="text" id="educationInstitution" required>
+                </div>
+                <div class="form-group">
+                    <label>Date*</label>
+                    <input type="text" id="educationDate" placeholder="octobre 2024 – juillet 2026" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="educationDescription"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Ordre d'affichage</label>
+                    <input type="number" id="educationOrder" value="0">
+                </div>
+                <button type="submit" class="btn btn-success">💾 Enregistrer</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="supabase-config.js"></script>
+    <script src="admin-dashboard.js"></script>
+</body>
+</html>
