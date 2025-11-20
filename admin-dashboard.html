@@ -3,8 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Admin - Portfolio Redouane</title>
+    <title>Dashboard Admin - Portfolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #111111;
+            --bg-tertiary: #1a1a1a;
+            --text-primary: #f0f0f0;
+            --text-secondary: #a0a0a0;
+            --text-muted: #6b6b6b;
+            --accent-primary: #818cf8;
+            --accent-secondary: #a78bfa;
+            --accent-glow: rgba(129, 140, 248, 0.4);
+            --border-color: #2a2a2a;
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.8);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.9);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.95);
+            --shadow-glow: 0 0 50px var(--accent-glow);
+            --success: #10b981;
+            --danger: #ef4444;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -12,179 +34,223 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
             min-height: 100vh;
-            padding: 20px;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Effet de particules en arrière-plan */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 50%, rgba(129, 140, 248, 0.05) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(167, 139, 250, 0.05) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
         }
 
         .dashboard-container {
             max-width: 1400px;
             margin: 0 auto;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            overflow: hidden;
+            position: relative;
+            z-index: 1;
         }
 
         .dashboard-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 30px;
+            background: var(--bg-secondary);
+            border-bottom: 1px solid var(--border-color);
+            padding: 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            backdrop-filter: blur(20px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .dashboard-header h1 {
-            font-size: 28px;
-            font-weight: 600;
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .logout-btn {
-            background: rgba(255,255,255,0.2);
-            border: 2px solid white;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 6px;
+            background: transparent;
+            border: 2px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s;
+            font-size: 0.95rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            font-family: inherit;
         }
 
         .logout-btn:hover {
-            background: white;
-            color: #667eea;
+            border-color: var(--danger);
+            color: var(--danger);
+            transform: translateY(-2px);
         }
 
         .dashboard-content {
-            padding: 30px;
+            padding: 2rem;
         }
 
         .section {
-            margin-bottom: 40px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            padding: 20px;
-            background: #f9f9f9;
+            margin-bottom: 3rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            box-shadow: var(--shadow-md);
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #667eea;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
         }
 
         .section-header h2 {
-            font-size: 22px;
-            color: #333;
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .btn {
-            background: #667eea;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 6px;
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s;
+            font-size: 0.95rem;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            font-family: inherit;
         }
 
         .btn:hover {
-            background: #5568d3;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            box-shadow: var(--shadow-glow);
         }
 
         .btn-danger {
-            background: #e74c3c;
+            background: var(--danger);
         }
 
         .btn-danger:hover {
-            background: #c0392b;
+            background: #dc2626;
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.4);
         }
 
         .btn-success {
-            background: #27ae60;
+            background: var(--success);
         }
 
         .btn-success:hover {
-            background: #229954;
+            background: #059669;
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
         }
 
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 1.5rem;
         }
 
         .form-group label {
             display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #555;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+            color: var(--text-secondary);
+            font-size: 0.95rem;
         }
 
         .form-group input,
         .form-group textarea,
         .form-group select {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            font-size: 14px;
+            padding: 1rem;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 0.95rem;
             font-family: inherit;
-            transition: border-color 0.3s;
+            transition: all 0.3s ease;
         }
 
         .form-group input:focus,
         .form-group textarea:focus,
         .form-group select:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px var(--accent-glow);
         }
 
         .form-group textarea {
-            min-height: 100px;
+            min-height: 120px;
             resize: vertical;
         }
 
         .item-list {
             display: grid;
-            gap: 15px;
+            gap: 1.5rem;
         }
 
         .item-card {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            border: 1px solid #ddd;
-            transition: all 0.3s;
+            background: var(--bg-tertiary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
         }
 
         .item-card:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateX(8px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--accent-primary);
         }
 
         .item-card h3 {
-            margin-bottom: 10px;
-            color: #333;
-            font-size: 18px;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            color: var(--text-primary);
         }
 
         .item-card p {
-            color: #666;
-            margin-bottom: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
             line-height: 1.6;
         }
 
         .item-actions {
             display: flex;
-            gap: 10px;
+            gap: 0.75rem;
+            flex-wrap: wrap;
         }
 
         .modal {
@@ -194,10 +260,17 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
             z-index: 1000;
             align-items: center;
             justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .modal.active {
@@ -205,97 +278,196 @@
         }
 
         .modal-content {
-            background: white;
-            padding: 30px;
-            border-radius: 12px;
+            background: var(--bg-secondary);
+            padding: 2.5rem;
+            border-radius: 20px;
             max-width: 600px;
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
+            border: 1px solid var(--border-color);
+            box-shadow: var(--shadow-lg);
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .modal-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid var(--border-color);
         }
 
         .modal-header h3 {
-            font-size: 24px;
-            color: #333;
+            font-size: 1.75rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .close-modal {
-            background: none;
+            background: transparent;
             border: none;
-            font-size: 28px;
+            font-size: 2rem;
             cursor: pointer;
-            color: #999;
+            color: var(--text-secondary);
             line-height: 1;
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
         }
 
         .close-modal:hover {
-            color: #333;
+            color: var(--text-primary);
+            background: var(--bg-tertiary);
         }
 
         .tags-input {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            padding: 8px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            min-height: 45px;
+            gap: 0.5rem;
+            padding: 0.75rem;
+            background: var(--bg-tertiary);
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            min-height: 50px;
+            transition: all 0.3s ease;
+        }
+
+        .tags-input:focus-within {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 4px var(--accent-glow);
         }
 
         .tag {
-            background: #667eea;
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
             color: white;
-            padding: 5px 12px;
+            padding: 0.4rem 0.75rem;
             border-radius: 20px;
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 13px;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            font-weight: 700;
         }
 
         .tag button {
-            background: none;
+            background: transparent;
             border: none;
             color: white;
             cursor: pointer;
-            font-size: 16px;
+            font-size: 1.25rem;
             line-height: 1;
+            transition: transform 0.2s ease;
+        }
+
+        .tag button:hover {
+            transform: scale(1.2);
+        }
+
+        .success-message,
+        .error-message {
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            display: none;
+            font-weight: 600;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .success-message {
-            background: #d4edda;
-            color: #155724;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            display: none;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
         .error-message {
-            background: #f8d7da;
-            color: #721c24;
-            padding: 15px;
-            border-radius: 6px;
-            margin-bottom: 20px;
-            display: none;
+            background: rgba(239, 68, 68, 0.15);
+            color: var(--danger);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            font-size: 1.125rem;
+            color: var(--text-secondary);
+        }
+
+        /* Scrollbar personnalisée */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-tertiary);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--accent-primary);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent-secondary);
         }
 
         @media (max-width: 768px) {
             .dashboard-header {
                 flex-direction: column;
-                gap: 15px;
+                gap: 1rem;
                 text-align: center;
+            }
+
+            .dashboard-header h1 {
+                font-size: 1.5rem;
+            }
+
+            .section {
+                padding: 1.5rem;
+            }
+
+            .section-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
             }
 
             .item-actions {
                 flex-direction: column;
+            }
+
+            .modal-content {
+                padding: 1.5rem;
             }
         }
     </style>
@@ -303,7 +475,7 @@
 <body>
     <div class="dashboard-container">
         <div class="dashboard-header">
-            <h1>🎨 Dashboard Portfolio - Redouane</h1>
+            <h1>🎨 Dashboard Portfolio</h1>
             <button class="logout-btn" onclick="logout()">Déconnexion</button>
         </div>
 
@@ -362,7 +534,7 @@
                     <div class="form-group">
                         <label>Tags (appuyez sur Entrée pour ajouter)</label>
                         <div class="tags-input" id="aboutTagsContainer" onclick="focusAboutTagInput()">
-                            <input type="text" id="aboutTagInput" style="border:none;flex:1;outline:none;" onkeypress="addAboutTag(event)">
+                            <input type="text" id="aboutTagInput" style="border:none;flex:1;outline:none;background:transparent;color:var(--text-primary);" onkeypress="addAboutTag(event)">
                         </div>
                     </div>
                     <button class="btn btn-success" onclick="saveAbout()">💾 Enregistrer</button>
@@ -400,7 +572,7 @@
                     </div>
                     <div class="form-group">
                         <label>Email</label>
-                        <input type="email" id="contactEmail" placeholder="redouane@saraoui.fr">
+                        <input type="email" id="contactEmail" placeholder="votre@email.com">
                     </div>
                     <div class="form-group">
                         <label>LinkedIn</label>
@@ -440,7 +612,7 @@
                 <div class="form-group">
                     <label>Tags (appuyez sur Entrée pour ajouter)</label>
                     <div class="tags-input" id="projectTagsContainer" onclick="focusTagInput()">
-                        <input type="text" id="projectTagInput" style="border:none;flex:1;outline:none;" onkeypress="addProjectTag(event)">
+                        <input type="text" id="projectTagInput" style="border:none;flex:1;outline:none;background:transparent;color:var(--text-primary);" onkeypress="addProjectTag(event)">
                     </div>
                 </div>
                 <div class="form-group">
