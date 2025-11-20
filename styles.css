@@ -263,33 +263,62 @@ body {
 }
 
 .theme-toggle {
-  background: var(--bg-tertiary);
-  border: 2px solid var(--border-color);
+  background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+  border: none;
   border-radius: 50%;
-  width: 45px;
-  height: 45px;
+  width: 50px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   margin-left: 1.5rem;
+  position: relative;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+.theme-toggle::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: white;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  border-radius: 50%;
 }
 
 .theme-toggle:hover {
-  transform: scale(1.1);
-  border-color: var(--accent-primary);
+  transform: scale(1.15) rotate(180deg);
   box-shadow: var(--shadow-glow);
 }
 
+.theme-toggle:hover::before {
+  opacity: 0.2;
+}
+
 .theme-toggle svg {
-  width: 22px;
-  height: 22px;
-  transition: transform 0.3s ease;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.4s ease;
+  position: relative;
+  z-index: 1;
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
 }
 
 .theme-toggle:hover svg {
-  transform: rotate(15deg);
+  transform: scale(1.1);
+}
+
+[data-theme="dark"] .theme-toggle svg {
+  animation: rotateIcon 20s linear infinite;
+}
+
+@keyframes rotateIcon {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 .nav-toggle {
