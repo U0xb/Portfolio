@@ -6,414 +6,70 @@
     <title>Connexion Admin - Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #141414;
-            --bg-tertiary: #1a1a1a;
-            --text-primary: #f0f0f0;
-            --text-secondary: #a0a0a0;
-            --text-muted: #6b6b6b;
-            --accent-primary: #818cf8;
-            --accent-secondary: #a78bfa;
-            --accent-glow: rgba(129, 140, 248, 0.4);
-            --border-color: #2a2a2a;
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.8);
-            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.9);
-            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.95);
-            --shadow-glow: 0 0 50px var(--accent-glow);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-primary);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            position: relative;
-            overflow: hidden;
-            color: var(--text-primary);
-        }
-
-        /* Effet de particules en arrière-plan */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(circle at 20% 50%, rgba(129, 140, 248, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(167, 139, 250, 0.05) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        /* Effet d'animation de fond */
-        body::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(129, 140, 248, 0.08) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-            z-index: 0;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .login-container {
-            background: var(--bg-secondary);
-            border-radius: 24px;
-            padding: 3rem;
-            width: 100%;
-            max-width: 480px;
-            box-shadow: var(--shadow-lg);
-            position: relative;
-            z-index: 1;
-            border: 1px solid var(--border-color);
-        }
-
-        .logo {
-            width: 90px;
-            height: 90px;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            font-weight: 900;
-            color: white;
-            margin-bottom: 2rem;
-            box-shadow: var(--shadow-glow);
-        }
-
-        h1 {
-            color: var(--text-primary);
-            font-size: 2rem;
-            margin-bottom: 0.75rem;
-            font-weight: 800;
-        }
-
-        .subtitle {
-            color: var(--text-secondary);
-            margin-bottom: 2.5rem;
-            font-size: 1rem;
-        }
-
-        .error-message {
-            background: rgba(239, 68, 68, 0.15);
-            color: #ef4444;
-            padding: 1rem;
-            border-radius: 12px;
-            margin-bottom: 1.5rem;
-            border: 1px solid rgba(239, 68, 68, 0.3);
-            display: none;
-            font-size: 0.95rem;
-        }
-
-        .form-group {
-            margin-bottom: 1.75rem;
-        }
-
-        .form-group label {
-            display: block;
-            color: var(--text-secondary);
-            margin-bottom: 0.75rem;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 1rem 1.25rem;
-            background: var(--bg-tertiary);
-            border: 2px solid var(--border-color);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            font-family: inherit;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            background: var(--bg-secondary);
-            box-shadow: 0 0 0 4px var(--accent-glow);
-        }
-
-        .form-group input::placeholder {
-            color: var(--text-muted);
-        }
-
-        .login-btn {
-            width: 100%;
-            padding: 1.125rem;
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            border: none;
-            border-radius: 12px;
-            color: white;
-            font-size: 1.05rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-top: 1rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .login-btn::before {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: white;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-        }
-
-        .login-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-glow);
-        }
-
-        .login-btn:hover::before {
-            opacity: 0.1;
-        }
-
-        .login-btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        .login-btn:disabled:hover {
-            box-shadow: none;
-        }
-
-        .back-link {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            color: var(--accent-primary);
-            text-decoration: none;
-            margin-top: 1.5rem;
-            transition: all 0.3s ease;
-            font-weight: 600;
-            font-size: 0.95rem;
-        }
-
-        .back-link:hover {
-            color: var(--accent-secondary);
-            gap: 0.75rem;
-        }
-
-        .spinner {
-            display: none;
-            width: 20px;
-            height: 20px;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            border-top-color: white;
-            border-radius: 50%;
-            animation: spin 0.8s linear infinite;
-            margin: 0 auto;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .loading .spinner {
-            display: block;
-        }
-
-        .loading .btn-text {
-            display: none;
-        }
-
-        /* Animation d'entrée */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .login-container {
-            animation: fadeInUp 0.6s ease;
-        }
-
-        @media (max-width: 480px) {
-            .login-container {
-                padding: 2rem;
-            }
-
-            h1 {
-                font-size: 1.75rem;
-            }
-
-            .logo {
-                width: 80px;
-                height: 80px;
-                font-size: 32px;
-            }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Styles de base -->
+    <link rel="stylesheet" href="styles.css">
+    <!-- Styles spécifiques admin login -->
+    <link rel="stylesheet" href="styles-admin-login.css">
 </head>
 <body>
     <div class="login-container">
-        <div class="logo">RD</div>
-        <h1>Connexion Admin</h1>
-        <p class="subtitle">Gérez votre portfolio en toute sécurité</p>
-
-        <div class="error-message" id="errorMessage"></div>
-
-        <form id="loginForm">
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input 
-                    type="email" 
-                    id="email" 
-                    name="email" 
-                    placeholder="votre@email.com"
-                    required
-                    autocomplete="email"
-                >
+        <div class="login-box">
+            <div class="login-header">
+                <div class="login-icon">
+                    <svg fill="white" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                    </svg>
+                </div>
+                <h1>Connexion Admin</h1>
+                <p>Accédez au tableau de bord</p>
             </div>
 
-            <div class="form-group">
-                <label for="password">Mot de passe</label>
-                <input 
-                    type="password" 
-                    id="password" 
-                    name="password" 
-                    placeholder="••••••••••••"
-                    required
-                    autocomplete="current-password"
-                >
+            <form id="loginForm" class="login-form">
+                <div class="error-message" id="errorMessage"></div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input 
+                        type="email" 
+                        id="email" 
+                        placeholder="admin@example.com" 
+                        required
+                        autocomplete="email"
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Mot de passe</label>
+                    <input 
+                        type="password" 
+                        id="password" 
+                        placeholder="••••••••" 
+                        required
+                        autocomplete="current-password"
+                    >
+                </div>
+
+                <button type="submit" class="login-btn">
+                    🔐 Se connecter
+                </button>
+            </form>
+
+            <div class="back-home">
+                <a href="index.html">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Retour au portfolio
+                </a>
             </div>
-
-            <button type="submit" class="login-btn" id="loginBtn">
-                <span class="btn-text">Se connecter</span>
-                <div class="spinner"></div>
-            </button>
-        </form>
-
-        <a href="index.html" class="back-link">← Retour au portfolio</a>
+        </div>
     </div>
 
-    <!-- Charger la bibliothèque Supabase en PREMIER -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
-    <!-- Ensuite charger la configuration -->
     <script src="supabase-config.js"></script>
-    
-    <!-- Enfin le script de connexion -->
-    <script>
-        const loginForm = document.getElementById('loginForm');
-        const loginBtn = document.getElementById('loginBtn');
-        const errorMessage = document.getElementById('errorMessage');
-
-        // Vérifier si déjà connecté
-        (async () => {
-            const { data: { session } } = await supabase.auth.getSession();
-            if (session) {
-                window.location.href = 'admin-dashboard.html';
-            }
-        })();
-
-        // Fonction pour afficher les erreurs
-        function showError(message) {
-            errorMessage.textContent = message;
-            errorMessage.style.display = 'block';
-            setTimeout(() => {
-                errorMessage.style.display = 'none';
-            }, 5000);
-        }
-
-        // Gérer la soumission du formulaire
-        loginForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const email = document.getElementById('email').value.trim();
-            const password = document.getElementById('password').value;
-
-            // Validation basique
-            if (!email || !password) {
-                showError('Veuillez remplir tous les champs');
-                return;
-            }
-
-            // Afficher le chargement
-            loginBtn.classList.add('loading');
-            loginBtn.disabled = true;
-
-            try {
-                // Connexion avec Supabase
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email: email,
-                    password: password
-                });
-
-                if (error) {
-                    throw error;
-                }
-
-                if (data.session) {
-                    // Connexion réussie - rediriger vers le dashboard
-                    window.location.href = 'admin-dashboard.html';
-                } else {
-                    showError('Erreur de connexion. Veuillez réessayer.');
-                }
-
-            } catch (error) {
-                console.error('Erreur de connexion:', error);
-                
-                // Messages d'erreur personnalisés
-                let errorMsg = 'Erreur de connexion. Veuillez réessayer.';
-                
-                if (error.message.includes('Invalid login credentials')) {
-                    errorMsg = 'Email ou mot de passe incorrect';
-                } else if (error.message.includes('Email not confirmed')) {
-                    errorMsg = 'Veuillez confirmer votre email';
-                } else if (error.message.includes('network')) {
-                    errorMsg = 'Erreur de connexion réseau';
-                }
-                
-                showError(errorMsg);
-            } finally {
-                // Masquer le chargement
-                loginBtn.classList.remove('loading');
-                loginBtn.disabled = false;
-            }
-        });
-
-        // Permettre la connexion avec Entrée
-        document.getElementById('password').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                loginForm.dispatchEvent(new Event('submit'));
-            }
-        });
-    </script>
+    <script src="script.js"></script>
+    <script src="admin-auth.js"></script>
 </body>
 </html>
