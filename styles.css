@@ -312,6 +312,13 @@ body {
   padding: 6rem 0;
   position: relative;
   z-index: 1;
+  background: transparent !important;
+  border: none !important;
+}
+
+.section::before,
+.section::after {
+  display: none !important;
 }
 
 .section-head {
@@ -356,10 +363,7 @@ body {
   padding-top: 100px;
   position: relative;
   overflow: hidden;
-}
-
-[data-theme="dark"] .hero {
-  background: linear-gradient(180deg, #0a0a0a 0%, #000000 100%);
+  background: transparent !important;
 }
 
 [data-theme="dark"] .hero::before {
@@ -372,22 +376,19 @@ body {
   background: 
     conic-gradient(from 0deg at 50% 50%,
       transparent 0deg,
-      rgba(129, 140, 248, 0.2) 90deg,
-      rgba(167, 139, 250, 0.15) 180deg,
-      rgba(99, 102, 241, 0.1) 270deg,
+      rgba(129, 140, 248, 0.15) 90deg,
+      rgba(167, 139, 250, 0.1) 180deg,
+      rgba(99, 102, 241, 0.08) 270deg,
       transparent 360deg
     );
   animation: rotateLight 20s linear infinite;
-  filter: blur(60px);
+  filter: blur(80px);
+  opacity: 0.6;
 }
 
 @keyframes rotateLight {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
-}
-
-:root:not([data-theme="dark"]) .hero {
-  background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%);
 }
 
 :root:not([data-theme="dark"]) .hero::before {
@@ -398,21 +399,27 @@ body {
   width: 160%;
   height: 160%;
   background: 
-    radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
-    radial-gradient(circle at 70% 60%, rgba(139, 92, 246, 0.1) 0%, transparent 40%);
+    radial-gradient(circle at 30% 30%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+    radial-gradient(circle at 70% 60%, rgba(139, 92, 246, 0.08) 0%, transparent 40%);
   animation: lightPulse 15s ease-in-out infinite;
-  filter: blur(40px);
+  filter: blur(50px);
+  opacity: 0.5;
 }
 
 @keyframes lightPulse {
   0%, 100% {
-    opacity: 0.6;
+    opacity: 0.4;
     transform: scale(1);
   }
   50% {
-    opacity: 0.8;
-    transform: scale(1.1);
+    opacity: 0.6;
+    transform: scale(1.05);
   }
+}
+
+.hero .container {
+  position: relative;
+  z-index: 1;
 }
 
 .hero .title {
@@ -438,6 +445,12 @@ body {
   max-width: 750px;
   margin: 0 auto 3rem;
   line-height: 1.8;
+  position: relative;
+  z-index: 1;
+}
+
+.hero .eyebrow {
+  color: var(--accent-primary);
   position: relative;
   z-index: 1;
 }
@@ -812,7 +825,6 @@ body {
   border-color: transparent;
 }
 
-
 /* ========================================
    TIMELINE
 ======================================== */
@@ -883,7 +895,6 @@ body {
   justify-content: center;
   flex-wrap: wrap;
 }
-
 
 /* ========================================
    FOOTER
@@ -1008,6 +1019,27 @@ a:hover, button:hover {
 [data-reveal].is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ========================================
+   CORRECTION FINALE - BACKGROUNDS UNIFORMES
+======================================== */
+
+.hero,
+.projects,
+.skills,
+.about,
+.experience,
+.education,
+.contact {
+  background: transparent !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+section {
+  border: none !important;
+  box-shadow: none !important;
 }
 
 /* ========================================
