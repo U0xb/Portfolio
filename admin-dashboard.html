@@ -6,75 +6,29 @@
     <title>Dashboard Admin - Portfolio</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
     <style>
-        :root {
-            --bg-primary: #0a0a0a;
-            --bg-secondary: #111111;
-            --bg-tertiary: #1a1a1a;
-            --text-primary: #f0f0f0;
-            --text-secondary: #a0a0a0;
-            --text-muted: #6b6b6b;
-            --accent-primary: #818cf8;
-            --accent-secondary: #a78bfa;
-            --accent-glow: rgba(129, 140, 248, 0.4);
-            --border-color: #2a2a2a;
-            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.8);
-            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.9);
-            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.95);
-            --shadow-glow: 0 0 50px var(--accent-glow);
-            --success: #10b981;
-            --danger: #ef4444;
-        }
+        /* Styles spécifiques au dashboard */
+        .dashboard-header {
+        position: relative; /* Changé de sticky à relative */
+        z-index: 100;
+        background: var(--nav-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border-color);
+        padding: 2rem;
+        margin-top: 80px; /* Compense le header fixe en haut */
+        margin-bottom: 2rem; /* Espacement avec la section suivante */
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-
-        /* Effet de particules en arrière-plan */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: 
-                radial-gradient(circle at 20% 50%, rgba(129, 140, 248, 0.05) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(167, 139, 250, 0.05) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-        }
-
-        .dashboard-container {
+        .dashboard-header-content {
             max-width: 1400px;
             margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .dashboard-header {
-            background: var(--bg-secondary);
-            border-bottom: 1px solid var(--border-color);
-            padding: 2rem;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            backdrop-filter: blur(20px);
-            position: sticky;
-            top: 0;
-            z-index: 100;
         }
 
         .dashboard-header h1 {
@@ -100,26 +54,46 @@
         }
 
         .logout-btn:hover {
-            border-color: var(--danger);
-            color: var(--danger);
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
             transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
         }
 
         .dashboard-content {
-            padding: 2rem;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 2rem 4rem;
+}
+
+    .dashboard-section {
+        margin-bottom: 3rem;
+        background: var(--card-bg);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border: 1px solid var(--border-color);
+        border-radius: 16px;
+        padding: 2rem;
+        transition: all 0.3s ease;
+}
+
+        [data-theme="dark"] .dashboard-section {
+            background: rgba(20, 20, 20, 0.6);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
         }
 
-        .section {
-            margin-bottom: 3rem;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-color);
-            border-radius: 16px;
-            padding: 2rem;
-            transition: all 0.3s ease;
+        :root:not([data-theme="dark"]) .dashboard-section {
+            background: rgba(255, 255, 255, 0.8);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
         }
 
-        .section:hover {
-            box-shadow: var(--shadow-md);
+        .dashboard-section:hover {
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent-primary);
         }
 
         .section-header {
@@ -138,42 +112,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-            color: white;
-            border: none;
-            padding: 0.75rem 1.5rem;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 700;
-            transition: all 0.3s ease;
-            font-family: inherit;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-glow);
-        }
-
-        .btn-danger {
-            background: var(--danger);
-        }
-
-        .btn-danger:hover {
-            background: #dc2626;
-            box-shadow: 0 0 30px rgba(239, 68, 68, 0.4);
-        }
-
-        .btn-success {
-            background: var(--success);
-        }
-
-        .btn-success:hover {
-            background: #059669;
-            box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
         }
 
         .form-group {
@@ -253,6 +191,26 @@
             flex-wrap: wrap;
         }
 
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            box-shadow: 0 0 30px rgba(239, 68, 68, 0.4);
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+        }
+
         .modal {
             display: none;
             position: fixed;
@@ -278,7 +236,7 @@
         }
 
         .modal-content {
-            background: var(--bg-secondary);
+            background: var(--card-bg);
             padding: 2.5rem;
             border-radius: 20px;
             max-width: 600px;
@@ -288,6 +246,14 @@
             border: 1px solid var(--border-color);
             box-shadow: var(--shadow-lg);
             animation: slideUp 0.3s ease;
+        }
+
+        [data-theme="dark"] .modal-content {
+            background: rgba(20, 20, 20, 0.95);
+        }
+
+        :root:not([data-theme="dark"]) .modal-content {
+            background: rgba(255, 255, 255, 0.95);
         }
 
         @keyframes slideUp {
@@ -406,13 +372,13 @@
 
         .success-message {
             background: rgba(16, 185, 129, 0.15);
-            color: var(--success);
+            color: #10b981;
             border: 1px solid rgba(16, 185, 129, 0.3);
         }
 
         .error-message {
             background: rgba(239, 68, 68, 0.15);
-            color: var(--danger);
+            color: #ef4444;
             border: 1px solid rgba(239, 68, 68, 0.3);
         }
 
@@ -423,26 +389,8 @@
             color: var(--text-secondary);
         }
 
-        /* Scrollbar personnalisée */
-        ::-webkit-scrollbar {
-            width: 10px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: var(--bg-tertiary);
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent-primary);
-            border-radius: 5px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-secondary);
-        }
-
         @media (max-width: 768px) {
-            .dashboard-header {
+            .dashboard-header-content {
                 flex-direction: column;
                 gap: 1rem;
                 text-align: center;
@@ -452,7 +400,7 @@
                 font-size: 1.5rem;
             }
 
-            .section {
+            .dashboard-section {
                 padding: 1.5rem;
             }
 
@@ -473,113 +421,125 @@
     </style>
 </head>
 <body>
-    <div class="dashboard-container">
-        <div class="dashboard-header">
+    <!-- Header avec navigation -->
+    <header class="site-header">
+        <div class="header-inner">
+            <a href="index.html" class="brand">RD</a>
+            <nav class="site-nav">
+                <a href="index.html">Retour au portfolio</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Dashboard Header -->
+    <div class="dashboard-header">
+        <div class="dashboard-header-content">
             <h1>🎨 Dashboard Portfolio</h1>
             <button class="logout-btn" onclick="logout()">Déconnexion</button>
         </div>
+    </div>
 
-        <div class="dashboard-content">
-            <div class="success-message" id="successMessage"></div>
-            <div class="error-message" id="errorMessage"></div>
+    <!-- Dashboard Content -->
+    <div class="dashboard-content">
+        <div class="success-message" id="successMessage"></div>
+        <div class="error-message" id="errorMessage"></div>
 
-            <!-- Hero Section -->
-            <div class="section">
-                <div class="section-header">
-                    <h2>📢 Section Hero</h2>
-                </div>
-                <div id="heroForm">
-                    <input type="hidden" id="heroId">
-                    <div class="form-group">
-                        <label>Titre</label>
-                        <input type="text" id="heroTitle" placeholder="Créons des expériences web rapides, élégantes et utiles.">
-                    </div>
-                    <div class="form-group">
-                        <label>Sous-titre</label>
-                        <textarea id="heroSubtitle" rows="3" placeholder="Étudiant en BTS SIO..."></textarea>
-                    </div>
-                    <button class="btn btn-success" onclick="saveHero()">💾 Enregistrer</button>
-                </div>
+        <!-- Hero Section -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2>📢 Section Hero</h2>
             </div>
-
-            <!-- Projects Section -->
-            <div class="section">
-                <div class="section-header">
-                    <h2>🚀 Projets</h2>
-                    <button class="btn" onclick="openProjectModal()">➕ Ajouter un projet</button>
+            <div id="heroForm">
+                <input type="hidden" id="heroId">
+                <div class="form-group">
+                    <label>Titre</label>
+                    <input type="text" id="heroTitle" placeholder="Créons des expériences web rapides, élégantes et utiles.">
                 </div>
-                <div class="item-list" id="projectsList"></div>
+                <div class="form-group">
+                    <label>Sous-titre</label>
+                    <textarea id="heroSubtitle" rows="3" placeholder="Étudiant en BTS SIO..."></textarea>
+                </div>
+                <button class="btn btn-success" onclick="saveHero()">💾 Enregistrer</button>
             </div>
+        </div>
 
-            <!-- Skills Section -->
-            <div class="section">
-                <div class="section-header">
-                    <h2>💡 Compétences</h2>
-                    <button class="btn" onclick="openSkillModal()">➕ Ajouter une compétence</button>
-                </div>
-                <div class="item-list" id="skillsList"></div>
+        <!-- Projects Section -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2>🚀 Projets</h2>
+                <button class="btn primary" onclick="openProjectModal()">➕ Ajouter un projet</button>
             </div>
+            <div class="item-list" id="projectsList"></div>
+        </div>
 
-            <!-- About Section -->
-            <div class="section">
-                <div class="section-header">
-                    <h2>👤 À propos</h2>
-                </div>
-                <div id="aboutForm">
-                    <input type="hidden" id="aboutId">
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea id="aboutDescription" rows="6" placeholder="Parlez de vous..."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Tags (appuyez sur Entrée pour ajouter)</label>
-                        <div class="tags-input" id="aboutTagsContainer" onclick="focusAboutTagInput()">
-                            <input type="text" id="aboutTagInput" style="border:none;flex:1;outline:none;background:transparent;color:var(--text-primary);" onkeypress="addAboutTag(event)">
-                        </div>
-                    </div>
-                    <button class="btn btn-success" onclick="saveAbout()">💾 Enregistrer</button>
-                </div>
+        <!-- Skills Section -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2>💡 Compétences</h2>
+                <button class="btn primary" onclick="openSkillModal()">➕ Ajouter une compétence</button>
             </div>
+            <div class="item-list" id="skillsList"></div>
+        </div>
 
-            <!-- Experience Section -->
-            <div class="section">
-                <div class="section-header">
-                    <h2>💼 Expériences</h2>
-                    <button class="btn" onclick="openExperienceModal()">➕ Ajouter une expérience</button>
-                </div>
-                <div class="item-list" id="experienceList"></div>
+        <!-- About Section -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2>👤 À propos</h2>
             </div>
-
-            <!-- Education Section -->
-            <div class="section">
-                <div class="section-header">
-                    <h2>🎓 Formation</h2>
-                    <button class="btn" onclick="openEducationModal()">➕ Ajouter une formation</button>
+            <div id="aboutForm">
+                <input type="hidden" id="aboutId">
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="aboutDescription" rows="6" placeholder="Parlez de vous..."></textarea>
                 </div>
-                <div class="item-list" id="educationList"></div>
+                <div class="form-group">
+                    <label>Tags (appuyez sur Entrée pour ajouter)</label>
+                    <div class="tags-input" id="aboutTagsContainer" onclick="focusAboutTagInput()">
+                        <input type="text" id="aboutTagInput" style="border:none;flex:1;outline:none;background:transparent;color:var(--text-primary);" onkeypress="addAboutTag(event)">
+                    </div>
+                </div>
+                <button class="btn btn-success" onclick="saveAbout()">💾 Enregistrer</button>
             </div>
+        </div>
 
-            <!-- Contact Section -->
-            <div class="section">
-                <div class="section-header">
-                    <h2>📧 Contact</h2>
+        <!-- Experience Section -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2>💼 Expériences</h2>
+                <button class="btn primary" onclick="openExperienceModal()">➕ Ajouter une expérience</button>
+            </div>
+            <div class="item-list" id="experienceList"></div>
+        </div>
+
+        <!-- Education Section -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2>🎓 Formation</h2>
+                <button class="btn primary" onclick="openEducationModal()">➕ Ajouter une formation</button>
+            </div>
+            <div class="item-list" id="educationList"></div>
+        </div>
+
+        <!-- Contact Section -->
+        <div class="dashboard-section">
+            <div class="section-header">
+                <h2>📧 Contact</h2>
+            </div>
+            <div id="contactForm">
+                <input type="hidden" id="contactId">
+                <div class="form-group">
+                    <label>Téléphone</label>
+                    <input type="tel" id="contactPhone" placeholder="06 06 49 66 18">
                 </div>
-                <div id="contactForm">
-                    <input type="hidden" id="contactId">
-                    <div class="form-group">
-                        <label>Téléphone</label>
-                        <input type="tel" id="contactPhone" placeholder="06 06 49 66 18">
-                    </div>
-                    <div class="form-group">
-                        <label>Email</label>
-                        <input type="email" id="contactEmail" placeholder="votre@email.com">
-                    </div>
-                    <div class="form-group">
-                        <label>LinkedIn</label>
-                        <input type="url" id="contactLinkedin" placeholder="https://www.linkedin.com/in/...">
-                    </div>
-                    <button class="btn btn-success" onclick="saveContact()">💾 Enregistrer</button>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" id="contactEmail" placeholder="votre@email.com">
                 </div>
+                <div class="form-group">
+                    <label>LinkedIn</label>
+                    <input type="url" id="contactLinkedin" placeholder="https://www.linkedin.com/in/...">
+                </div>
+                <button class="btn btn-success" onclick="saveContact()">💾 Enregistrer</button>
             </div>
         </div>
     </div>
@@ -724,6 +684,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
+    <script src="script.js"></script>
     <script src="admin-dashboard.js"></script>
 </body>
 </html>
