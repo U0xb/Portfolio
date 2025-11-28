@@ -15,6 +15,28 @@ document.addEventListener('DOMContentLoaded', async () => {
 let currentProjectTags = [];
 let currentAboutTags = [];
 
+// ===== SVG ICONS =====
+const icons = {
+    edit: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+    </svg>`,
+    delete: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="3 6 5 6 21 6"></polyline>
+        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+        <line x1="10" y1="11" x2="10" y2="17"></line>
+        <line x1="14" y1="11" x2="14" y2="17"></line>
+    </svg>`,
+    link: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+    </svg>`,
+    close: `<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="18" y1="6" x2="6" y2="18"></line>
+        <line x1="6" y1="6" x2="18" y2="18"></line>
+    </svg>`
+};
+
 // ===== HERO =====
 async function loadHero() {
     try {
@@ -60,15 +82,15 @@ async function loadProjects() {
             <div class="item-card">
                 <h3>${project.title}</h3>
                 <p>${project.description}</p>
-                ${project.link ? `<p><a href="${project.link}" target="_blank">🔗 Voir le projet</a></p>` : ''}
+                ${project.link ? `<p><a href="${project.link}" target="_blank">${icons.link} Voir le projet</a></p>` : ''}
                 ${project.tags && project.tags.length > 0 ? `
                     <div style="display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 10px;">
                         ${project.tags.map(tag => `<span class="tag">${tag}</span>`).join('')}
                     </div>
                 ` : ''}
                 <div class="item-actions">
-                    <button class="btn" onclick='editProject(${JSON.stringify(project).replace(/'/g, "&apos;")})'>✏️ Modifier</button>
-                    <button class="btn btn-danger" onclick="deleteProject('${project.id}')">🗑️ Supprimer</button>
+                    <button class="btn" onclick='editProject(${JSON.stringify(project).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
+                    <button class="btn btn-danger" onclick="deleteProject('${project.id}')">${icons.delete} Supprimer</button>
                 </div>
             </div>
         `).join('');
@@ -113,7 +135,7 @@ function renderProjectTags() {
     container.innerHTML = currentProjectTags.map((tag, index) => `
         <span class="tag">
             ${tag}
-            <button type="button" onclick="removeProjectTag(${index})">×</button>
+            <button type="button" onclick="removeProjectTag(${index})">${icons.close}</button>
         </span>
     `).join('') + input.outerHTML;
 }
@@ -206,8 +228,8 @@ async function loadSkills() {
                     <div style="background: #667eea; height: 100%; width: ${skill.value}%;"></div>
                 </div>
                 <div class="item-actions" style="margin-top: 15px;">
-                    <button class="btn" onclick='editSkill(${JSON.stringify(skill).replace(/'/g, "&apos;")})'>✏️ Modifier</button>
-                    <button class="btn btn-danger" onclick="deleteSkill('${skill.id}')">🗑️ Supprimer</button>
+                    <button class="btn" onclick='editSkill(${JSON.stringify(skill).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
+                    <button class="btn btn-danger" onclick="deleteSkill('${skill.id}')">${icons.delete} Supprimer</button>
                 </div>
             </div>
         `).join('');
@@ -304,7 +326,7 @@ function renderAboutTags() {
     container.innerHTML = currentAboutTags.map((tag, index) => `
         <span class="tag">
             ${tag}
-            <button type="button" onclick="removeAboutTag(${index})">×</button>
+            <button type="button" onclick="removeAboutTag(${index})">${icons.close}</button>
         </span>
     `).join('') + input.outerHTML;
 }
@@ -365,8 +387,8 @@ async function loadExperience() {
                 <p><strong>${exp.date}</strong>${exp.location ? ' | ' + exp.location : ''}</p>
                 ${exp.description ? `<p>${exp.description}</p>` : ''}
                 <div class="item-actions">
-                    <button class="btn" onclick='editExperience(${JSON.stringify(exp).replace(/'/g, "&apos;")})'>✏️ Modifier</button>
-                    <button class="btn btn-danger" onclick="deleteExperience('${exp.id}')">🗑️ Supprimer</button>
+                    <button class="btn" onclick='editExperience(${JSON.stringify(exp).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
+                    <button class="btn btn-danger" onclick="deleteExperience('${exp.id}')">${icons.delete} Supprimer</button>
                 </div>
             </div>
         `).join('');
@@ -465,8 +487,8 @@ async function loadEducation() {
                 <p>${edu.date}</p>
                 ${edu.description ? `<p>${edu.description}</p>` : ''}
                 <div class="item-actions">
-                    <button class="btn" onclick='editEducation(${JSON.stringify(edu).replace(/'/g, "&apos;")})'>✏️ Modifier</button>
-                    <button class="btn btn-danger" onclick="deleteEducation('${edu.id}')">🗑️ Supprimer</button>
+                    <button class="btn" onclick='editEducation(${JSON.stringify(edu).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
+                    <button class="btn btn-danger" onclick="deleteEducation('${edu.id}')">${icons.delete} Supprimer</button>
                 </div>
             </div>
         `).join('');
