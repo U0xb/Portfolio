@@ -958,19 +958,23 @@ body {
   margin: 0;
 }
 
-/* Accès admin discret via le cœur */
+/* Accès admin discret via le cœur - Sans animation */
+/* Accès admin discret via le cœur - SANS ANIMATION */
 .heart-link {
   color: inherit;
   text-decoration: none;
-  transition: all 0.3s ease;
-  display: inline-block;
-  cursor: pointer;
+  display: inline;
+  cursor: default;
+  transition: none !important;
+  animation: none !important;
 }
 
 .heart-link:hover {
-  color: var(--accent-primary);
-  transform: scale(1.2);
-  filter: drop-shadow(0 0 8px var(--accent-glow));
+  color: inherit;
+  cursor: default;
+  transform: none !important;
+  filter: none !important;
+  animation: none !important;
 }
 
 /* ========================================
