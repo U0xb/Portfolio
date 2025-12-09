@@ -233,6 +233,7 @@ body {
   align-items: center;
 }
 
+/* Animation professionnelle - Soulignement de gauche à droite */
 .site-nav a {
   color: var(--text-secondary);
   text-decoration: none;
@@ -240,18 +241,18 @@ body {
   font-size: 0.95rem;
   transition: color 0.3s ease;
   position: relative;
+  padding-bottom: 4px;
 }
 
 .site-nav a::before {
   content: '';
   position: absolute;
-  bottom: -4px;
-  left: 50%;
+  bottom: 0;
+  left: 0;
   width: 0;
   height: 2px;
   background: var(--accent-primary);
-  transform: translateX(-50%);
-  transition: width 0.3s ease;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .site-nav a:hover {
@@ -931,15 +932,16 @@ body {
   display: inline-flex !important;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  width: 56px;
+  height: 56px;
+  padding: 0;
 }
 
 .contact-actions .btn svg {
-  flex-shrink: 0;
-  width: 20px;
-  height: 20px;
-  display: block;
+  width: 24px;
+  height: 24px;
   margin: 0;
+  flex-shrink: 0;
 }
 
 /* ========================================
@@ -958,7 +960,6 @@ body {
   margin: 0;
 }
 
-/* Accès admin discret via le cœur - Sans animation */
 /* Accès admin discret via le cœur - SANS ANIMATION */
 .heart-link {
   color: inherit;
@@ -1013,21 +1014,32 @@ body {
   z-index: 9998;
 }
 
-a:hover, button:hover {
-  animation: pulse 1s ease-in-out infinite;
+/* ========================================
+   ANIMATIONS HOVER - NOUVELLE VERSION ÉLÉGANTE
+======================================== */
+
+/* Animation subtile pour les liens et boutons (sans carré violet) */
+.site-nav a:hover:not(.heart-link),
+.btn:hover {
+  animation: gentleGlow 2s ease-in-out infinite;
 }
 
-@keyframes pulse {
+@keyframes gentleGlow {
   0%, 100% {
-    box-shadow: 0 0 0 0 var(--accent-glow);
+    filter: brightness(1);
   }
   50% {
-    box-shadow: 0 0 20px 5px var(--accent-glow);
+    filter: brightness(1.1);
   }
 }
 
-.section:hover h2 {
-  filter: drop-shadow(0 0 10px var(--accent-glow));
+/* Titre des sections avec effet subtil */
+.section-head h2 {
+  transition: filter 0.3s ease;
+}
+
+.section:hover .section-head h2 {
+  filter: drop-shadow(0 0 20px var(--accent-glow));
 }
 
 /* ========================================
