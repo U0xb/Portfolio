@@ -1,26 +1,54 @@
 console.log('🚀 Démarrage...');
 
-(async function() {
+// ========================================
+// CLIENT SUPABASE UNIQUE - VERSION ULTIME
+// ========================================
+
+function getSupabaseClient() {
+  // Si le client existe déjà globalement, le retourner
+  if (window.__portfolioSupabaseClient) {
+    console.log('♻️ Client existant réutilisé');
+    return window.__portfolioSupabaseClient;
+  }
+  
+  console.log('✅ Création du nouveau client');
+  const createClient = window.supabase.createClient;
+  
+  if (!createClient) {
+    console.error('❌ createClient non trouvé');
+    return null;
+  }
+  
+  // Créer avec une clé de stockage unique pour éviter les conflits
+  const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+    auth: {
+      storageKey: 'portfolio-auth-unique-key', // Clé unique
+      persistSession: false, // Pas de persistance
+      autoRefreshToken: false, // Pas de refresh auto
+      detectSessionInUrl: false // Pas de détection d'URL
+    }
+  });
+  
+  // Stocker globalement
+  window.__portfolioSupabaseClient = client;
+  
+  return client;
+}
+
+// ========================================
+// CHARGEMENT DU PORTFOLIO
+// ========================================
+
+(async function loadPortfolio() {
     try {
-        // Utiliser window.supabase directement
-        const createClient = window.supabase.createClient;
+        const client = getSupabaseClient();
         
-        if (!createClient) {
-            console.error('❌ createClient non trouvé');
+        if (!client) {
+            console.error('❌ Client non disponible');
             return;
         }
-        
-        console.log('✅ createClient trouvé');
-        
-        // Créer le client
-        const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        console.log('✅ Client Supabase créé');
-        
-        // ===========================================
-        // RÉCUPÉRATION DES DONNÉES
-        // ===========================================
-        
-        console.log('📡 Récupération des données...');
+
+        console.log('📡 Chargement des données...');
         
         const [hero, projects, skills, about, experience, education, contact] = await Promise.all([
             client.from('hero').select('*').single(),
@@ -32,7 +60,7 @@ console.log('🚀 Démarrage...');
             client.from('contact').select('*').single()
         ]);
         
-        console.log('📊 Données reçues:', {
+        console.log('📊 Données:', {
             hero: !!hero.data,
             projects: projects.data?.length || 0,
             skills: skills.data?.length || 0,
@@ -42,17 +70,13 @@ console.log('🚀 Démarrage...');
             contact: !!contact.data
         });
         
-        // ===========================================
-        // AFFICHAGE
-        // ===========================================
-        
         // HERO
         if (hero.data) {
             const t = document.getElementById('heroTitle');
             const s = document.getElementById('heroSubtitle');
             if (t) t.textContent = hero.data.title;
             if (s) s.textContent = hero.data.subtitle;
-            console.log('✅ Hero affiché');
+            console.log('✅ Hero');
         }
         
         // PROJETS
@@ -71,7 +95,7 @@ console.log('🚀 Démarrage...');
                         </a>
                     </article>
                 `).join('');
-                console.log('✅ Projets affichés:', projects.data.length);
+                console.log('✅ Projets:', projects.data.length);
             }
         }
         
@@ -86,11 +110,18 @@ console.log('🚀 Démarrage...');
                             <span class="skill-value">${s.value}%</span>
                         </div>
                         <div class="skill-bar">
-                            <div class="skill-fill" style="width: ${s.value}%; transition: width 1s ease;"></div>
+                            <div class="skill-fill" data-skill-value="${s.value}" style="width: 0; transition: width 1s ease;"></div>
                         </div>
                     </div>
                 `).join('');
-                console.log('✅ Compétences affichées:', skills.data.length);
+                
+                setTimeout(() => {
+                    document.querySelectorAll('.skill-fill').forEach(bar => {
+                        bar.style.width = bar.getAttribute('data-skill-value') + '%';
+                    });
+                }, 100);
+                
+                console.log('✅ Compétences:', skills.data.length);
             }
         }
         
@@ -99,14 +130,11 @@ console.log('🚀 Démarrage...');
             const desc = document.getElementById('aboutDescription');
             const tags = document.getElementById('aboutTags');
             
-            if (desc && about.data.description) {
-                desc.innerHTML = about.data.description;
-            }
-            
+            if (desc && about.data.description) desc.innerHTML = about.data.description;
             if (tags && about.data.tags && Array.isArray(about.data.tags)) {
                 tags.innerHTML = about.data.tags.map(t => `<li>${t}</li>`).join('');
             }
-            console.log('✅ À propos affiché');
+            console.log('✅ À propos');
         }
         
         // EXPÉRIENCE
@@ -120,7 +148,7 @@ console.log('🚀 Démarrage...');
                         ${e.description ? `<p>${e.description}</p>` : ''}
                     </div>
                 `).join('');
-                console.log('✅ Expérience affichée:', experience.data.length);
+                console.log('✅ Expérience:', experience.data.length);
             }
         }
         
@@ -135,7 +163,7 @@ console.log('🚀 Démarrage...');
                         ${e.description ? `<p>${e.description}</p>` : ''}
                     </div>
                 `).join('');
-                console.log('✅ Formation affichée:', education.data.length);
+                console.log('✅ Formation:', education.data.length);
             }
         }
         
@@ -176,13 +204,13 @@ console.log('🚀 Démarrage...');
                 }
                 
                 btns.innerHTML = buttons.join('');
-                console.log('✅ Contact affiché');
+                console.log('✅ Contact');
             }
         }
         
-        console.log('🎉🎉🎉 PORTFOLIO CHARGÉ AVEC SUCCÈS !');
+        console.log('🎉 PORTFOLIO CHARGÉ !');
         
     } catch (error) {
-        console.error('❌ ERREUR:', error);
+        console.error('❌ Erreur:', error);
     }
 })();

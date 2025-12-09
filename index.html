@@ -7,6 +7,10 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Favicon ajouté -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🚀</text></svg>">
+    
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -30,17 +34,14 @@
         </div>
     </header>
 
+
     <!-- Hero -->
     <section class="section hero">
         <div class="container">
             <h1 class="title" data-reveal>
-                <span id="heroTitle">Créons des expériences web rapides, élégantes et utiles.</span>
+                <span id="heroTitle"></span>
             </h1>
-            <p class="subtitle" data-reveal id="heroSubtitle">
-                Étudiant en BTS SIO à IRIS Mediaschool (Rouen) et alternant chez GetCaaS. 
-                Passionné de réseaux, systèmes et développement, je conçois des interfaces 
-                performantes et accessibles.
-            </p>
+            <p class="subtitle" data-reveal id="heroSubtitle"></p>
             <div class="cta" data-reveal>
                 <a href="#projets" class="btn primary">Voir mes projets</a>
                 <a href="#contact" class="btn ghost">Me contacter</a>
@@ -48,18 +49,20 @@
         </div>
     </section>
 
+
     <!-- Projects -->
     <section class="section projects" id="projets">
         <div class="container">
             <div class="section-head" data-reveal>
                 <p class="eyebrow">Portfolio</p>
-                <h2>Une sélection de travaux récents. Plus sur demande.</h2>
+                <h2>Une sélection de travaux récents réalisés</h2>
             </div>
             <div class="grid" id="projectsGrid" data-reveal>
                 <!-- Les projets seront chargés ici via JavaScript -->
             </div>
         </div>
     </section>
+
 
     <!-- Skills -->
     <section class="section skills" id="competences">
@@ -73,6 +76,7 @@
             </div>
         </div>
     </section>
+
 
     <!-- About -->
     <section class="section about" id="a-propos">
@@ -92,6 +96,7 @@
         </div>
     </section>
 
+
     <!-- Experience -->
     <section class="section" id="experience">
         <div class="container">
@@ -104,6 +109,7 @@
             </div>
         </div>
     </section>
+
 
     <!-- Education -->
     <section class="section" id="formation">
@@ -118,6 +124,7 @@
         </div>
     </section>
 
+
     <!-- Contact -->
     <section class="section" id="contact">
         <div class="container">
@@ -131,6 +138,7 @@
         </div>
     </section>
 
+
     <!-- Footer -->
     <footer class="site-footer">
         <div class="container">
@@ -138,7 +146,8 @@
         </div>
     </footer>
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- Scripts - CDN Supabase modifié -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="supabase-config.js"></script>
     <script src="script.js"></script>
     <script src="portfolio-loader.js"></script>
