@@ -1,20 +1,26 @@
-// Utilities
+// ========================================
+// UTILITIES
+// ========================================
+
 const selectAll = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 const select = (sel, ctx = document) => ctx.querySelector(sel);
 
-// Set current year
+// ========================================
+// SET CURRENT YEAR
+// ========================================
+
 document.addEventListener('DOMContentLoaded', () => {
   const y = document.getElementById('year');
   if (y) y.textContent = new Date().getFullYear();
   
   // Initialiser le thème
   initTheme();
-  
-  // Créer le bouton admin secret
-  createAdminButton();
 });
 
-// ===== THÈME CLAIR/SOMBRE =====
+// ========================================
+// THÈME CLAIR/SOMBRE
+// ========================================
+
 function initTheme() {
   // Récupérer le thème sauvegardé ou utiliser la préférence système
   const savedTheme = localStorage.getItem('theme');
@@ -71,27 +77,10 @@ function toggleTheme() {
   }
 }
 
-// ===== BOUTON ADMIN SECRET =====
-function createAdminButton() {
-  // Zone de déclenchement invisible
-  const trigger = document.createElement('div');
-  trigger.className = 'admin-secret-trigger';
-  
-  // Bouton admin
-  const button = document.createElement('button');
-  button.className = 'admin-secret';
-  button.setAttribute('aria-label', 'Admin');
-  button.innerHTML = '<svg fill="white" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M11.49 3.17c-.38-1.56-2.6-1.56-2.98 0a1.532 1.532 0 01-2.286.948c-1.372-.836-2.942.734-2.106 2.106.54.886.061 2.042-.947 2.287-1.561.379-1.561 2.6 0 2.978a1.532 1.532 0 01.947 2.287c-.836 1.372.734 2.942 2.106 2.106a1.532 1.532 0 012.287.947c.379 1.561 2.6 1.561 2.978 0a1.533 1.533 0 012.287-.947c1.372.836 2.942-.734 2.106-2.106a1.533 1.533 0 01.947-2.287c1.561-.379 1.561-2.6 0-2.978a1.532 1.532 0 01-.947-2.287c.836-1.372-.734-2.942-2.106-2.106a1.532 1.532 0 01-2.287-.947zM10 13a3 3 0 100-6 3 3 0 000 6z" clip-rule="evenodd"/></svg>';
-  
-  button.addEventListener('click', () => {
-    window.location.href = 'admin-login.html';
-  });
-  
-  document.body.appendChild(trigger);
-  document.body.appendChild(button);
-}
+// ========================================
+// REVEAL ON SCROLL
+// ========================================
 
-// Reveal on scroll
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (entry.isIntersecting) {
@@ -103,7 +92,10 @@ const observer = new IntersectionObserver((entries) => {
 
 selectAll('[data-reveal]').forEach((el) => observer.observe(el));
 
-// Smooth scroll
+// ========================================
+// SMOOTH SCROLL
+// ========================================
+
 selectAll('a[href^="#"]').forEach((link) => {
   link.addEventListener('click', (e) => {
     const id = link.getAttribute('href');
@@ -112,5 +104,87 @@ selectAll('a[href^="#"]').forEach((link) => {
     if (!target) return;
     e.preventDefault();
     target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    setTimeout(() => { 
+      target.setAttribute('tabindex', '-1'); 
+      target.focus({ preventScroll: true }); 
+    }, 500);
   });
 });
+
+// ========================================
+// ANIMATION DES BARRES DE COMPÉTENCES
+// ========================================
+
+const animateSkills = () => {
+  selectAll('.skill-fill').forEach((bar) => {
+    const value = Number(bar.getAttribute('data-skill-value') || '0');
+    const clamped = Math.max(0, Math.min(100, value));
+    bar.style.width = clamped + '%';
+  });
+};
+
+const skillsObserver = new IntersectionObserver((entries) => {
+  entries.forEach((entry) => {
+    if (entry.isIntersecting) {
+      animateSkills();
+      skillsObserver.disconnect();
+    }
+  });
+}, { threshold: 0.2 });
+
+const skillsSection = document.getElementById('competences');
+if (skillsSection) skillsObserver.observe(skillsSection);
+
+// ========================================
+// MOBILE NAV TOGGLE
+// ========================================
+
+const navToggle = select('.nav-toggle');
+const siteNav = select('.site-nav');
+
+if (navToggle && siteNav) {
+  // Ouvrir/fermer le menu
+  navToggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = siteNav.classList.toggle('is-open');
+    navToggle.setAttribute('aria-expanded', String(isOpen));
+    
+    // Empêcher le scroll du body quand le menu est ouvert
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Fermer le menu quand on clique sur un lien
+  selectAll('.site-nav a').forEach((link) => {
+    link.addEventListener('click', () => {
+      if (siteNav.classList.contains('is-open')) {
+        siteNav.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+    });
+  });
+
+  // Fermer le menu quand on clique en dehors
+  document.addEventListener('click', (e) => {
+    if (siteNav.classList.contains('is-open')) {
+      if (!siteNav.contains(e.target) && !navToggle.contains(e.target)) {
+        siteNav.classList.remove('is-open');
+        navToggle.setAttribute('aria-expanded', 'false');
+        document.body.style.overflow = '';
+      }
+    }
+  });
+
+  // Fermer avec la touche Escape
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && siteNav.classList.contains('is-open')) {
+      siteNav.classList.remove('is-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+  });
+}
