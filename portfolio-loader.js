@@ -5,34 +5,47 @@ console.log('🚀 Démarrage...');
 // ========================================
 
 function getSupabaseClient() {
-  // Si le client existe déjà globalement, le retourner
-  if (window.__portfolioSupabaseClient) {
-    console.log('♻️ Client existant réutilisé');
-    return window.__portfolioSupabaseClient;
-  }
-  
-  console.log('✅ Création du nouveau client');
-  const createClient = window.supabase.createClient;
-  
-  if (!createClient) {
-    console.error('❌ createClient non trouvé');
+  try {
+    // Si un client est déjà mis en cache, on le réutilise
+    if (window.__portfolioSupabaseClient) {
+      console.log('♻️ Client existant réutilisé');
+      return window.__portfolioSupabaseClient;
+    }
+
+    // Si "supabase" global est déjà un client (créé dans supabase-config.js)
+    if (window.supabase && typeof window.supabase.from === 'function') {
+      console.log('♻️ Client global Supabase réutilisé');
+      window.__portfolioSupabaseClient = window.supabase;
+      return window.supabase;
+    }
+
+    console.log('✅ Création du nouveau client');
+
+    const createClient = window.supabase && window.supabase.createClient;
+    if (!createClient) {
+      console.error('❌ createClient non trouvé');
+      return null;
+    }
+
+    // Créer avec une clé de stockage unique pour éviter les conflits
+    const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+      auth: {
+        storageKey: 'portfolio-auth-unique-key', // Clé unique
+        persistSession: false, // Pas de persistance
+        autoRefreshToken: false, // Pas de refresh auto
+        detectSessionInUrl: false // Pas de détection d'URL
+      }
+    });
+
+    // Stocker globalement
+    window.__portfolioSupabaseClient = client;
+    window.supabase = client;
+
+    return client;
+  } catch (error) {
+    console.error('❌ Erreur lors de la création/récupération du client Supabase:', error);
     return null;
   }
-  
-  // Créer avec une clé de stockage unique pour éviter les conflits
-  const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-    auth: {
-      storageKey: 'portfolio-auth-unique-key', // Clé unique
-      persistSession: false, // Pas de persistance
-      autoRefreshToken: false, // Pas de refresh auto
-      detectSessionInUrl: false // Pas de détection d'URL
-    }
-  });
-  
-  // Stocker globalement
-  window.__portfolioSupabaseClient = client;
-  
-  return client;
 }
 
 // ========================================

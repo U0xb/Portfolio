@@ -2,8 +2,9 @@
 const SUPABASE_URL = 'https://bhfastbtpfqqggaukxmo.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJoZmFzdGJ0cGZxcWdnYXVreG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MDU5NDcsImV4cCI6MjA3OTA4MTk0N30.k9IJSDLXLRGQZLhy-LlIkgiTm78JTYb_1_3LttBOuuc';
 
-// Initialiser le client Supabase
-const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// Initialiser le client Supabase sans redéclarer l'identifiant global "supabase"
+// On réutilise le namespace fourni par le CDN en le remplaçant par le client
+window.supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 // API Portfolio adaptée à votre structure
 const portfolioAPI = {
