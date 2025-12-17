@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://redouane.saraoui.fr/sitemap.xml
+
+# Interdire l'indexation des pages d'administration
+Disallow: /admin-login.html
+Disallow: /admin-dashboard.html
