@@ -154,13 +154,29 @@ function getSupabaseClient() {
         if (experience.data && experience.data.length > 0) {
             const timeline = document.getElementById('experienceTimeline');
             if (timeline) {
-                timeline.innerHTML = experience.data.map(e => `
+                timeline.innerHTML = experience.data.map(e => {
+                    // On essaye plusieurs noms possibles de champs pour l'entreprise
+                    const company =
+                        e.company ||
+                        e.entreprise ||
+                        e.organization ||
+                        e.organisation ||
+                        e.employer ||
+                        '';
+
+                    const title = e.title || '';
+                    const titleWithCompany = company
+                        ? `${title} · ${company}`
+                        : title;
+
+                    return `
                     <div class="timeline-item">
                         <p class="timeline-meta">${e.period || e.date || ''}</p>
-                        <h3 class="timeline-title">${e.title}</h3>
+                        <h3 class="timeline-title">${titleWithCompany}</h3>
                         ${e.description ? `<p>${e.description}</p>` : ''}
                     </div>
-                `).join('');
+                `;
+                }).join('');
                 console.log('✅ Expérience:', experience.data.length);
             }
         }
@@ -169,13 +185,32 @@ function getSupabaseClient() {
         if (education.data && education.data.length > 0) {
             const timeline = document.getElementById('educationTimeline');
             if (timeline) {
-                timeline.innerHTML = education.data.map(e => `
+                timeline.innerHTML = education.data.map(e => {
+                    // On essaye plusieurs noms possibles de champs pour l'établissement scolaire
+                    const school =
+                        e.school ||
+                        e.ecole ||
+                        e.etablissement ||      // sans accent
+                        e["établissement"] ||   // avec accent
+                        e.institution ||        // nom de colonne indiqué par l'utilisateur
+                        e.establishment ||
+                        e.university ||
+                        e.universite ||
+                        '';
+
+                    const title = e.title || '';
+                    const titleWithSchool = school
+                        ? `${title} · ${school}`
+                        : title;
+
+                    return `
                     <div class="timeline-item">
                         <p class="timeline-meta">${e.period || e.date || ''}</p>
-                        <h3 class="timeline-title">${e.title}</h3>
+                        <h3 class="timeline-title">${titleWithSchool}</h3>
                         ${e.description ? `<p>${e.description}</p>` : ''}
                     </div>
-                `).join('');
+                `;
+                }).join('');
                 console.log('✅ Formation:', education.data.length);
             }
         }
