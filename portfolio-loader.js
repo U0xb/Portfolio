@@ -1,5 +1,3 @@
-console.log('🚀 Démarrage...');
-
 // ========================================
 // CLIENT SUPABASE UNIQUE - VERSION ULTIME
 // ========================================
@@ -8,22 +6,17 @@ function getSupabaseClient() {
   try {
     // Si un client est déjà mis en cache, on le réutilise
     if (window.__portfolioSupabaseClient) {
-      console.log('♻️ Client existant réutilisé');
       return window.__portfolioSupabaseClient;
     }
 
     // Si "supabase" global est déjà un client (créé dans supabase-config.js)
     if (window.supabase && typeof window.supabase.from === 'function') {
-      console.log('♻️ Client global Supabase réutilisé');
       window.__portfolioSupabaseClient = window.supabase;
       return window.supabase;
     }
 
-    console.log('✅ Création du nouveau client');
-
     const createClient = window.supabase && window.supabase.createClient;
     if (!createClient) {
-      console.error('❌ createClient non trouvé');
       return null;
     }
 
@@ -43,7 +36,6 @@ function getSupabaseClient() {
 
     return client;
   } catch (error) {
-    console.error('❌ Erreur lors de la création/récupération du client Supabase:', error);
     return null;
   }
 }
@@ -57,11 +49,8 @@ function getSupabaseClient() {
         const client = getSupabaseClient();
         
         if (!client) {
-            console.error('❌ Client non disponible');
             return;
         }
-
-        console.log('📡 Chargement des données...');
         
         const [hero, projects, skills, about, experience, education, contact] = await Promise.all([
             client.from('hero').select('*').single(),
@@ -73,23 +62,12 @@ function getSupabaseClient() {
             client.from('contact').select('*').single()
         ]);
         
-        console.log('📊 Données:', {
-            hero: !!hero.data,
-            projects: projects.data?.length || 0,
-            skills: skills.data?.length || 0,
-            about: !!about.data,
-            exp: experience.data?.length || 0,
-            edu: education.data?.length || 0,
-            contact: !!contact.data
-        });
-        
         // HERO
         if (hero.data) {
             const t = document.getElementById('heroTitle');
             const s = document.getElementById('heroSubtitle');
             if (t) t.textContent = hero.data.title;
             if (s) s.textContent = hero.data.subtitle;
-            console.log('✅ Hero');
         }
         
         // PROJETS
@@ -108,7 +86,6 @@ function getSupabaseClient() {
                         </a>
                     </article>
                 `).join('');
-                console.log('✅ Projets:', projects.data.length);
             }
         }
         
@@ -133,8 +110,6 @@ function getSupabaseClient() {
                         bar.style.width = bar.getAttribute('data-skill-value') + '%';
                     });
                 }, 100);
-                
-                console.log('✅ Compétences:', skills.data.length);
             }
         }
         
@@ -147,7 +122,6 @@ function getSupabaseClient() {
             if (tags && about.data.tags && Array.isArray(about.data.tags)) {
                 tags.innerHTML = about.data.tags.map(t => `<li>${t}</li>`).join('');
             }
-            console.log('✅ À propos');
         }
         
         // EXPÉRIENCE
@@ -167,7 +141,6 @@ function getSupabaseClient() {
                     </div>
                 `;
                 }).join('');
-                console.log('✅ Expérience:', experience.data.length);
             }
         }
         
@@ -188,7 +161,6 @@ function getSupabaseClient() {
                     </div>
                 `;
                 }).join('');
-                console.log('✅ Formation:', education.data.length);
             }
         }
         
@@ -229,13 +201,10 @@ function getSupabaseClient() {
                 }
                 
                 btns.innerHTML = buttons.join('');
-                console.log('✅ Contact');
             }
         }
         
-        console.log('🎉 PORTFOLIO CHARGÉ !');
-        
     } catch (error) {
-        console.error('❌ Erreur:', error);
+        // Erreur silencieuse
     }
 })();
