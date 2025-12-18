@@ -154,13 +154,19 @@ function getSupabaseClient() {
         if (experience.data && experience.data.length > 0) {
             const timeline = document.getElementById('experienceTimeline');
             if (timeline) {
-                timeline.innerHTML = experience.data.map(e => `
+                timeline.innerHTML = experience.data.map(e => {
+                    // Chercher l'entreprise dans différents champs possibles
+                    const company = e.company || e.entreprise || e.organization || e.organisation || e.employer || '';
+                    const titleText = company ? `${e.title} · ${company}` : e.title;
+                    
+                    return `
                     <div class="timeline-item">
                         <p class="timeline-meta">${e.period || e.date || ''}</p>
-                        <h3 class="timeline-title">${e.title}</h3>
+                        <h3 class="timeline-title">${titleText}</h3>
                         ${e.description ? `<p>${e.description}</p>` : ''}
                     </div>
-                `).join('');
+                `;
+                }).join('');
                 console.log('✅ Expérience:', experience.data.length);
             }
         }
@@ -169,13 +175,19 @@ function getSupabaseClient() {
         if (education.data && education.data.length > 0) {
             const timeline = document.getElementById('educationTimeline');
             if (timeline) {
-                timeline.innerHTML = education.data.map(e => `
+                timeline.innerHTML = education.data.map(e => {
+                    // Chercher l'établissement dans différents champs possibles
+                    const institution = e.institution || e.school || e.ecole || e.etablissement || e.établissement || e.establishment || e.university || e.universite || '';
+                    const titleText = institution ? `${e.title} · ${institution}` : e.title;
+                    
+                    return `
                     <div class="timeline-item">
                         <p class="timeline-meta">${e.period || e.date || ''}</p>
-                        <h3 class="timeline-title">${e.title}</h3>
+                        <h3 class="timeline-title">${titleText}</h3>
                         ${e.description ? `<p>${e.description}</p>` : ''}
                     </div>
-                `).join('');
+                `;
+                }).join('');
                 console.log('✅ Formation:', education.data.length);
             }
         }
