@@ -42,15 +42,18 @@ Interface d'administration complète avec base de données en temps réel
     📁 STRUCTURE DU PROJET
 ================================================================================
 
+## 📁 Structure du Projet
+
+```text
 Portfolio/
 │
-├── 🏠 PAGES PUBLIQUES
+├── 🏠 Pages publiques
 │   ├── index.html                    # Page d'accueil du portfolio
 │   ├── styles.css                    # Styles principaux (29 KB)
 │   ├── script.js                     # Scripts interactifs
 │   └── favicon.svg                   # Icône du site
 │
-├── 🔧 ADMINISTRATION
+├── 🔧 Administration
 │   ├── admin-login.html              # Page de connexion
 │   ├── admin-login.css               # Styles de connexion
 │   ├── admin-dashboard.html          # Interface d'administration
@@ -58,11 +61,11 @@ Portfolio/
 │   ├── admin-dashboard.js            # Logique du dashboard (23 KB)
 │   └── admin-auth.js                 # Gestion de l'authentification
 │
-├── 🗄️ CONFIGURATION SUPABASE
+├── 🗄️ Configuration Supabase
 │   ├── supabase-config.js            # Configuration API
 │   └── portfolio-loader.js           # Chargement dynamique des données
 │
-├── 🔍 SEO & OUTILS
+├── 🔍 SEO & Outils
 │   ├── sitemap.xml                   # Plan du site
 │   ├── robots.txt                    # Directives pour les robots
 │   ├── google885faaf69e75ca73.html   # Vérification Google
@@ -71,6 +74,17 @@ Portfolio/
 │   └── update-sitemap.bat            # Script Windows
 │
 └── 📖 README.md                      # Documentation
+```
+
+### Fichiers principaux
+
+| Fichier | Description | Taille |
+|---------|-------------|--------|
+| `index.html` | Page d'accueil du portfolio | 5 KB |
+| `styles.css` | Styles principaux | 29 KB |
+| `admin-dashboard.js` | Logique du dashboard | 23 KB |
+| `supabase-config.js` | Configuration API Supabase | 6 KB |
+| `portfolio-loader.js` | Chargement des données | 9 KB |
 
 ================================================================================
     🚀 INSTALLATION & DÉPLOIEMENT
