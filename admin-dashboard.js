@@ -89,7 +89,7 @@ async function loadProjects() {
                     </div>
                 ` : ''}
                 <div class="item-actions">
-                    <button class="btn" onclick='editProject(${JSON.stringify(project).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
+                    <button class="btn" onclick='editProject(${JSON.stringify(project).replace(/'/g, "&apos;")})' >${icons.edit} Modifier</button>
                     <button class="btn btn-danger" onclick="deleteProject('${project.id}')">${icons.delete} Supprimer</button>
                 </div>
             </div>
@@ -110,6 +110,7 @@ function openProjectModal(project = null) {
         document.getElementById('projectDescription').value = project.description;
         document.getElementById('projectLink').value = project.link || '';
         document.getElementById('projectImageUrl').value = project.image_url || '';
+        document.getElementById('projectPdfUrl').value = project.pdf_url || '';
         document.getElementById('projectOrder').value = project.order_index || 0;
         currentProjectTags = project.tags || [];
         renderProjectTags();
@@ -117,6 +118,7 @@ function openProjectModal(project = null) {
         title.textContent = 'Ajouter un projet';
         document.getElementById('projectForm').reset();
         document.getElementById('projectId').value = '';
+        document.getElementById('projectPdfUrl').value = '';
         currentProjectTags = [];
         renderProjectTags();
     }
@@ -126,6 +128,41 @@ function openProjectModal(project = null) {
 
 function closeProjectModal() {
     document.getElementById('projectModal').classList.remove('active');
+}
+
+// Fonction pour uploader le PDF
+async function uploadPDF(file) {
+    const statusDiv = document.getElementById('pdfUploadStatus');
+    
+    try {
+        statusDiv.textContent = '⏳ Upload en cours...';
+        statusDiv.style.color = '#667eea';
+        
+        // Créer un nom de fichier unique
+        const timestamp = Date.now();
+        const fileName = `${timestamp}-${file.name.replace(/\s+/g, '-')}`;
+        
+        // Upload vers Supabase Storage
+        const { data, error } = await supabase.storage
+            .from('project-pdfs')
+            .upload(fileName, file, {
+                cacheControl: '3600',
+                upsert: false
+            });
+        
+        if (error) throw error;
+        
+        // IMPORTANT : Stocker UNIQUEMENT le nom du fichier
+        document.getElementById('projectPdfUrl').value = fileName;
+        statusDiv.textContent = '✅ PDF uploadé avec succès !';
+        statusDiv.style.color = '#10b981';
+        
+        return fileName;
+    } catch (error) {
+        statusDiv.textContent = '❌ Erreur: ' + error.message;
+        statusDiv.style.color = '#ef4444';
+        throw error;
+    }
 }
 
 function renderProjectTags() {
@@ -188,6 +225,7 @@ document.getElementById('projectForm').addEventListener('submit', async (e) => {
             description: document.getElementById('projectDescription').value,
             link: document.getElementById('projectLink').value || null,
             image_url: document.getElementById('projectImageUrl').value || null,
+            pdf_url: document.getElementById('projectPdfUrl').value || null,
             tags: currentProjectTags,
             order_index: parseInt(document.getElementById('projectOrder').value) || 0
         };
@@ -228,7 +266,7 @@ async function loadSkills() {
                     <div style="background: #667eea; height: 100%; width: ${skill.value}%;"></div>
                 </div>
                 <div class="item-actions" style="margin-top: 15px;">
-                    <button class="btn" onclick='editSkill(${JSON.stringify(skill).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
+                    <button class="btn" onclick='editSkill(${JSON.stringify(skill).replace(/'/g, "&apos;")})' >${icons.edit} Modifier</button>
                     <button class="btn btn-danger" onclick="deleteSkill('${skill.id}')">${icons.delete} Supprimer</button>
                 </div>
             </div>
@@ -387,7 +425,7 @@ async function loadExperience() {
                 <p><strong>${exp.date}</strong>${exp.location ? ' | ' + exp.location : ''}</p>
                 ${exp.description ? `<p>${exp.description}</p>` : ''}
                 <div class="item-actions">
-                    <button class="btn" onclick='editExperience(${JSON.stringify(exp).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
+                    <button class="btn" onclick='editExperience(${JSON.stringify(exp).replace(/'/g, "&apos;")})' >${icons.edit} Modifier</button>
                     <button class="btn btn-danger" onclick="deleteExperience('${exp.id}')">${icons.delete} Supprimer</button>
                 </div>
             </div>
@@ -487,7 +525,7 @@ async function loadEducation() {
                 <p>${edu.date}</p>
                 ${edu.description ? `<p>${edu.description}</p>` : ''}
                 <div class="item-actions">
-                    <button class="btn" onclick='editEducation(${JSON.stringify(edu).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
+                    <button class="btn" onclick='editEducation(${JSON.stringify(edu).replace(/'/g, "&apos;")})' >${icons.edit} Modifier</button>
                     <button class="btn btn-danger" onclick="deleteEducation('${edu.id}')">${icons.delete} Supprimer</button>
                 </div>
             </div>
@@ -643,3 +681,28 @@ window.addEventListener('click', (e) => {
         e.target.classList.remove('active');
     }
 });
+
+// ===== INITIALISATION UPLOAD PDF =====
+// Écouter les changements sur le champ file PDF
+const initPdfUpload = () => {
+    const pdfInput = document.getElementById('projectPdfFile');
+    if (pdfInput) {
+        pdfInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file && file.type === 'application/pdf') {
+                await uploadPDF(file);
+            } else if (file) {
+                const statusDiv = document.getElementById('pdfUploadStatus');
+                statusDiv.textContent = '❌ Veuillez sélectionner un fichier PDF';
+                statusDiv.style.color = '#ef4444';
+            }
+        });
+    }
+};
+
+// Initialiser l'upload après le chargement de la page
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPdfUpload);
+} else {
+    initPdfUpload();
+}

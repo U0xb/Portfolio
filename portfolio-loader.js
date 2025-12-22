@@ -3,41 +3,41 @@
 // ========================================
 
 function getSupabaseClient() {
-  try {
-    // Si un client est déjà mis en cache, on le réutilise
-    if (window.__portfolioSupabaseClient) {
-      return window.__portfolioSupabaseClient;
-    }
-
-    // Si "supabase" global est déjà un client (créé dans supabase-config.js)
-    if (window.supabase && typeof window.supabase.from === 'function') {
-      window.__portfolioSupabaseClient = window.supabase;
-      return window.supabase;
-    }
-
-    const createClient = window.supabase && window.supabase.createClient;
-    if (!createClient) {
+    try {
+      // Si un client est déjà mis en cache, on le réutilise
+      if (window.__portfolioSupabaseClient) {
+        return window.__portfolioSupabaseClient;
+      }
+  
+      // Si "supabase" global est déjà un client (créé dans supabase-config.js)
+      if (window.supabase && typeof window.supabase.from === 'function') {
+        window.__portfolioSupabaseClient = window.supabase;
+        return window.supabase;
+      }
+  
+      const createClient = window.supabase && window.supabase.createClient;
+      if (!createClient) {
+        return null;
+      }
+  
+      // Créer avec une clé de stockage unique pour éviter les conflits
+      const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+        auth: {
+          storageKey: 'portfolio-auth-unique-key', // Clé unique
+          persistSession: false, // Pas de persistance
+          autoRefreshToken: false, // Pas de refresh auto
+          detectSessionInUrl: false // Pas de détection d'URL
+        }
+      });
+  
+      // Stocker globalement
+      window.__portfolioSupabaseClient = client;
+      window.supabase = client;
+  
+      return client;
+    } catch (error) {
       return null;
     }
-
-    // Créer avec une clé de stockage unique pour éviter les conflits
-    const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
-      auth: {
-        storageKey: 'portfolio-auth-unique-key', // Clé unique
-        persistSession: false, // Pas de persistance
-        autoRefreshToken: false, // Pas de refresh auto
-        detectSessionInUrl: false // Pas de détection d'URL
-      }
-    });
-
-    // Stocker globalement
-    window.__portfolioSupabaseClient = client;
-    window.supabase = client;
-
-    return client;
-  } catch (error) {
-    return null;
-  }
 }
 
 // ========================================
@@ -74,9 +74,25 @@ function getSupabaseClient() {
         if (projects.data && projects.data.length > 0) {
             const grid = document.getElementById('projectsGrid');
             if (grid) {
-                grid.innerHTML = projects.data.map(p => `
+                // Construire le HTML de manière asynchrone pour gérer les URLs
+                const projectsHTML = await Promise.all(projects.data.map(async p => {
+                    let pdfLink = '#';
+                    
+                    // Si un PDF existe, utiliser getPublicUrl
+                    if (p.pdf_url) {
+                        const { data: urlData } = client.storage
+                            .from('project-pdfs')
+                            .getPublicUrl(p.pdf_url);
+                        pdfLink = urlData.publicUrl;
+                    } 
+                    // Sinon, utiliser le lien normal s'il existe
+                    else if (p.link) {
+                        pdfLink = p.link;
+                    }
+                    
+                    return `
                     <article class="card">
-                        <a class="card-link" href="${p.link || '#'}" target="_blank" rel="noopener">
+                        <a class="card-link" href="${pdfLink}" target="_blank" rel="noopener">
                             <div class="card-media" style="background-image: url('${p.image_url || ''}');"></div>
                             <div class="card-body">
                                 <h3>${p.title}</h3>
@@ -85,7 +101,10 @@ function getSupabaseClient() {
                             </div>
                         </a>
                     </article>
-                `).join('');
+                    `;
+                }));
+                
+                grid.innerHTML = projectsHTML.join('');
             }
         }
         

@@ -240,6 +240,17 @@
                     <label>Image URL</label>
                     <input type="url" id="projectImageUrl" placeholder="https://...">
                 </div>
+                <!-- NOUVEAU CHAMP POUR LE PDF -->
+                <div class="form-group">
+                    <label>Fichier PDF du projet</label>
+                    <input type="file" id="projectPdfFile" accept=".pdf">
+                    <small style="color: #999; font-size: 13px;">Sélectionnez un fichier PDF à uploader</small>
+                    <div id="pdfUploadStatus" style="margin-top: 8px; font-size: 13px;"></div>
+                </div>
+                <div class="form-group">
+                    <label>URL du PDF (généré automatiquement après upload)</label>
+                    <input type="url" id="projectPdfUrl" placeholder="Sera rempli après l'upload" readonly>
+                </div>                
                 <div class="form-group">
                     <label>Tags (appuyez sur Entrée pour ajouter)</label>
                     <div class="tags-input" id="projectTagsContainer" onclick="focusTagInput()">
