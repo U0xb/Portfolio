@@ -565,6 +565,7 @@
     display: flex;
 }
 
+/* Masquer la scrollbar du modal */
 .modal-content {
     background: var(--card-bg);
     padding: 2.5rem;
@@ -577,6 +578,17 @@
     box-shadow: var(--shadow-lg);
     animation: slideUp 0.3s ease;
     margin: auto;
+    
+    /* Masquer la scrollbar - Firefox */
+    scrollbar-width: none;
+    
+    /* Masquer la scrollbar - IE et Edge */
+    -ms-overflow-style: none;
+}
+
+/* Masquer la scrollbar - Chrome, Safari et Opera */
+.modal-content::-webkit-scrollbar {
+    display: none;
 }
 
 .modal-content.modal-large {
