@@ -55,6 +55,18 @@
 html {
   scroll-behavior: smooth;
   overflow-x: hidden;
+  
+  /* Masquer la scrollbar - Firefox */
+  scrollbar-width: none;
+  
+  /* Masquer la scrollbar - IE et Edge */
+  -ms-overflow-style: none;
+}
+
+/* Masquer la scrollbar - Chrome, Safari et Opera */
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none;
 }
 
 /* ========================================
@@ -72,6 +84,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   position: relative;
   overflow-x: hidden;
+  
+  /* Masquer la scrollbar - Firefox */
+  scrollbar-width: none;
+  
+  /* Masquer la scrollbar - IE et Edge */
+  -ms-overflow-style: none;
 }
 
 [data-theme="dark"] body::before {
@@ -1176,6 +1194,15 @@ section {
     transition: right 0.3s ease;
     box-shadow: -5px 0 20px rgba(0, 0, 0, 0.3);
     z-index: 999;
+    
+    /* Masquer la scrollbar du menu mobile */
+    overflow-y: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+  
+  .site-nav::-webkit-scrollbar {
+    display: none;
   }
   
   .site-nav.is-open {
