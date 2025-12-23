@@ -4,12 +4,10 @@
 
 function getSupabaseClient() {
     try {
-      // Si un client est déjà mis en cache, on le réutilise
       if (window.__portfolioSupabaseClient) {
         return window.__portfolioSupabaseClient;
       }
   
-      // Si "supabase" global est déjà un client (créé dans supabase-config.js)
       if (window.supabase && typeof window.supabase.from === 'function') {
         window.__portfolioSupabaseClient = window.supabase;
         return window.supabase;
@@ -20,17 +18,15 @@ function getSupabaseClient() {
         return null;
       }
   
-      // Créer avec une clé de stockage unique pour éviter les conflits
       const client = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
         auth: {
-          storageKey: 'portfolio-auth-unique-key', // Clé unique
-          persistSession: false, // Pas de persistance
-          autoRefreshToken: false, // Pas de refresh auto
-          detectSessionInUrl: false // Pas de détection d'URL
+          storageKey: 'portfolio-auth-unique-key',
+          persistSession: false,
+          autoRefreshToken: false,
+          detectSessionInUrl: false
         }
       });
   
-      // Stocker globalement
       window.__portfolioSupabaseClient = client;
       window.supabase = client;
   
@@ -74,18 +70,14 @@ function getSupabaseClient() {
         if (projects.data && projects.data.length > 0) {
             const grid = document.getElementById('projectsGrid');
             if (grid) {
-                // Construire le HTML de manière asynchrone pour gérer les URLs
                 const projectsHTML = await Promise.all(projects.data.map(async p => {
                     let pdfLink = '#';
                     
-                    // Si un PDF existe, utiliser getPublicUrl
+                    // Si un PDF existe, créer lien masqué via pdf.php
                     if (p.pdf_url) {
-                        const { data: urlData } = client.storage
-                            .from('project-pdfs')
-                            .getPublicUrl(p.pdf_url);
-                        pdfLink = urlData.publicUrl;
+                        const fileName = p.pdf_url.replace(/^\d+-/, '');
+                        pdfLink = `/pdf.php?f=${fileName}`;
                     } 
-                    // Sinon, utiliser le lien normal s'il existe
                     else if (p.link) {
                         pdfLink = p.link;
                     }
@@ -148,7 +140,6 @@ function getSupabaseClient() {
             const timeline = document.getElementById('experienceTimeline');
             if (timeline) {
                 timeline.innerHTML = experience.data.map(e => {
-                    // Chercher l'entreprise dans différents champs possibles
                     const company = e.company || e.entreprise || e.organization || e.organisation || e.employer || '';
                     const titleText = company ? `${e.title} · ${company}` : e.title;
                     
@@ -168,7 +159,6 @@ function getSupabaseClient() {
             const timeline = document.getElementById('educationTimeline');
             if (timeline) {
                 timeline.innerHTML = education.data.map(e => {
-                    // Chercher l'établissement dans différents champs possibles
                     const institution = e.institution || e.school || e.ecole || e.etablissement || e.établissement || e.establishment || e.university || e.universite || '';
                     const titleText = institution ? `${e.title} · ${institution}` : e.title;
                     
