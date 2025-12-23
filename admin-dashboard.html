@@ -218,56 +218,144 @@
 
     <!-- Project Modal -->
     <div id="projectModal" class="modal">
-        <div class="modal-content">
+        <div class="modal-content modal-large">
             <div class="modal-header">
-                <h3 id="projectModalTitle">Ajouter un projet</h3>
+                <h3 id="projectModalTitle">
+                    <svg style="width:24px;height:24px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Ajouter un projet
+                </h3>
                 <button class="close-modal" onclick="closeProjectModal()">×</button>
             </div>
             <form id="projectForm">
                 <input type="hidden" id="projectId">
-                <div class="form-group">
-                    <label>Titre*</label>
-                    <input type="text" id="projectTitle" required>
-                </div>
-                <div class="form-group">
-                    <label>Description*</label>
-                    <textarea id="projectDescription" required></textarea>
-                </div>
-                <div class="form-group">
-                    <label>Lien</label>
-                    <input type="url" id="projectLink" placeholder="https://...">
-                </div>
-                <div class="form-group">
-                    <label>Image URL</label>
-                    <input type="url" id="projectImageUrl" placeholder="https://...">
-                </div>
-                <!-- NOUVEAU CHAMP POUR LE PDF -->
-                <div class="form-group">
-                    <label>Fichier PDF du projet</label>
-                    <input type="file" id="projectPdfFile" accept=".pdf">
-                    <small style="color: #999; font-size: 13px;">Sélectionnez un fichier PDF à uploader</small>
-                    <div id="pdfUploadStatus" style="margin-top: 8px; font-size: 13px;"></div>
-                </div>
-                <div class="form-group">
-                    <label>URL du PDF (généré automatiquement après upload)</label>
-                    <input type="url" id="projectPdfUrl" placeholder="Sera rempli après l'upload" readonly>
-                </div>                
-                <div class="form-group">
-                    <label>Tags (appuyez sur Entrée pour ajouter)</label>
-                    <div class="tags-input" id="projectTagsContainer" onclick="focusTagInput()">
-                        <input type="text" id="projectTagInput" style="border:none;flex:1;outline:none;background:transparent;color:var(--text-primary);" onkeypress="addProjectTag(event)">
+                
+                <!-- Section Information de base -->
+                <div class="form-section">
+                    <h4 class="form-section-title">
+                        <svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        Informations de base
+                    </h4>
+                    
+                    <div class="form-group">
+                        <label>Titre du projet*</label>
+                        <input type="text" id="projectTitle" required placeholder="Ex: Application de gestion de tickets">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Description complète*</label>
+                        <textarea id="projectDescription" required rows="4" placeholder="Décrivez votre projet en détail..."></textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Lien vers le projet</label>
+                            <input type="url" id="projectLink" placeholder="https://www.exemple-projet.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Ordre d'affichage</label>
+                            <input type="number" id="projectOrder" value="0" min="0">
+                        </div>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label>Ordre d'affichage</label>
-                    <input type="number" id="projectOrder" value="0">
+
+                <!-- Section Médias -->
+                <div class="form-section">
+                    <h4 class="form-section-title">
+                        <svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                        </svg>
+                        Médias et fichiers
+                    </h4>
+                    
+                    <div class="form-group">
+                        <label>Image de couverture (URL)</label>
+                        <input type="url" id="projectImageUrl" placeholder="https://exemple.com/image.jpg">
+                        <small class="form-help">URL de l'image qui sera affichée sur la carte du projet</small>
+                    </div>
+                    
+                    <!-- Zone upload PDF améliorée -->
+                    <div class="form-group">
+                        <label>Document PDF du projet</label>
+                        <div class="file-upload-zone" id="pdfDropZone">
+                            <input type="file" id="projectPdfFile" accept=".pdf" hidden>
+                            <div class="file-upload-content">
+                                <svg class="file-upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                                </svg>
+                                <div class="file-upload-text">
+                                    <span class="file-upload-label">Cliquez pour sélectionner un fichier PDF</span>
+                                    <span class="file-upload-hint">ou glissez-déposez le fichier ici</span>
+                                </div>
+                                <button type="button" class="btn btn-upload" onclick="document.getElementById('projectPdfFile').click()">
+                                    <svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                                    </svg>
+                                    Parcourir
+                                </button>
+                            </div>
+                            <div class="file-upload-preview" id="pdfPreview" style="display:none;">
+                                <div class="file-preview-content">
+                                    <svg class="file-preview-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+                                    </svg>
+                                    <div class="file-preview-info">
+                                        <span class="file-preview-name" id="pdfFileName">document.pdf</span>
+                                        <span class="file-preview-size" id="pdfFileSize">0 KB</span>
+                                    </div>
+                                    <button type="button" class="file-preview-remove" onclick="removePdfFile()">
+                                        <svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="upload-status" id="pdfUploadStatus"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>URL du PDF (lecture seule)</label>
+                        <input type="url" id="projectPdfUrl" readonly placeholder="Généré automatiquement après upload">
+                        <small class="form-help">Cette URL sera générée automatiquement après l'upload du fichier</small>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-success">
-                    <svg style="width:18px;height:18px;display:inline-block;vertical-align:middle;margin-right:6px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
-                    </svg>
-                    Enregistrer
-                </button>
+
+                <!-- Section Tags -->
+                <div class="form-section">
+                    <h4 class="form-section-title">
+                        <svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
+                        </svg>
+                        Technologies utilisées
+                    </h4>
+                    
+                    <div class="form-group">
+                        <label>Tags (appuyez sur Entrée pour ajouter)</label>
+                        <div class="tags-input" id="projectTagsContainer" onclick="focusTagInput()">
+                            <input type="text" id="projectTagInput" placeholder="Ex: React, Node.js, MongoDB..." style="border:none;flex:1;outline:none;background:transparent;color:var(--text-primary);" onkeypress="addProjectTag(event)">
+                        </div>
+                        <small class="form-help">Ajoutez les technologies et outils utilisés dans ce projet</small>
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn ghost" onclick="closeProjectModal()">
+                        <svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                        Annuler
+                    </button>
+                    <button type="submit" class="btn btn-success">
+                        <svg style="width:18px;height:18px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"/>
+                        </svg>
+                        Enregistrer le projet
+                    </button>
+                </div>
             </form>
         </div>
     </div>
