@@ -1,5 +1,5 @@
 /* ========================================
-   ADMIN DASHBOARD - DESIGN COMPACT
+   ADMIN DASHBOARD - NAVIGATION PAR CARTES
 ======================================== */
 
 /* Réinitialisation de la base */
@@ -47,6 +47,34 @@ body {
     height: 22px;
 }
 
+/* Bouton retour */
+.btn-back {
+    background: transparent;
+    border: 1.5px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    font-family: inherit;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.btn-back:hover {
+    border-color: var(--accent-primary);
+    color: var(--accent-primary);
+    transform: translateX(-2px);
+}
+
+.btn-back svg {
+    width: 16px;
+    height: 16px;
+}
+
 /* Bouton déconnexion */
 .logout-btn {
     background: transparent;
@@ -67,32 +95,199 @@ body {
     transform: translateY(-1px);
 }
 
-/* Dashboard Content - LAYOUT EN GRILLE */
+/* Dashboard Content */
 .dashboard-content {
     max-width: 1600px;
     margin: 0 auto;
     padding: 0 1.5rem 2rem;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
 }
 
-/* Dashboard Section - COMPACT */
+/* Messages */
+.success-message,
+.error-message {
+    padding: 0.65rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    display: none;
+    font-weight: 600;
+    font-size: 0.8rem;
+}
+
+.success-message {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.error-message {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+/* ========================================
+   VUE NAVIGATION - GRILLE DE CARTES
+======================================== */
+
+#navigationView {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+.section-card {
+    background: var(--card-bg);
+    border: 2px solid var(--border-color);
+    border-radius: 12px;
+    padding: 1.5rem 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+[data-theme="dark"] .section-card {
+    background: rgba(20, 20, 20, 0.6);
+}
+
+:root:not([data-theme="dark"]) .section-card {
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.section-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    opacity: 0.1;
+    transition: height 0.4s ease;
+}
+
+.section-card:hover::before {
+    height: 100%;
+}
+
+.section-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--accent-primary);
+    box-shadow: 0 8px 24px rgba(var(--accent-primary-rgb), 0.2);
+}
+
+.section-card-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.section-card:hover .section-card-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.section-card-icon svg {
+    width: 32px;
+    height: 32px;
+}
+
+.section-card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    position: relative;
+    z-index: 1;
+}
+
+.section-card-count {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    position: relative;
+    z-index: 1;
+}
+
+/* ========================================
+   VUE SECTION - CONTENU DÉTAILLÉ
+======================================== */
+
+#sectionView {
+    display: none;
+}
+
+#sectionView.active {
+    display: block;
+}
+
+.section-view-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 2px solid var(--border-color);
+}
+
+.section-view-title {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.section-view-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+}
+
+.section-view-icon svg {
+    width: 28px;
+    height: 28px;
+}
+
+.section-view-title h2 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.section-view-actions {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+/* Dashboard Section dans section view */
 .dashboard-section {
     background: var(--card-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--border-color);
     border-radius: 12px;
-    padding: 1rem;
+    padding: 1.25rem;
     transition: all 0.2s ease;
-    display: flex;
-    flex-direction: column;
-}
-
-/* Sections pleine largeur */
-.dashboard-section.full-width {
-    grid-column: 1 / -1;
 }
 
 [data-theme="dark"] .dashboard-section {
@@ -105,35 +300,26 @@ body {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
-.dashboard-section:hover {
-    border-color: var(--accent-primary);
-}
-
-/* Section Header - COMPACT */
+/* Section Header */
 .section-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 0.75rem;
+    margin-bottom: 1rem;
     padding-bottom: 0.75rem;
     border-bottom: 1.5px solid var(--border-color);
-    flex-shrink: 0;
 }
 
 .section-header h2 {
     font-size: 1.1rem;
     font-weight: 700;
-    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    display: flex !important;
+    color: var(--text-primary);
+    display: flex;
     align-items: center;
     gap: 0.4rem;
 }
 
 .section-header h2 svg {
-    flex-shrink: 0;
     width: 18px;
     height: 18px;
 }
@@ -192,7 +378,7 @@ body {
 }
 
 .form-group textarea {
-    min-height: 70px;
+    min-height: 80px;
     resize: vertical;
 }
 
@@ -248,7 +434,7 @@ body {
     gap: 0.75rem;
 }
 
-/* Form Actions - MINIMAL */
+/* Form Actions */
 .form-actions {
     display: flex;
     justify-content: flex-end;
@@ -479,28 +665,6 @@ body {
 .item-list {
     display: grid;
     gap: 0.75rem;
-    overflow-y: auto;
-    max-height: 400px;
-    padding-right: 0.5rem;
-}
-
-/* Scrollbar custom pour item-list */
-.item-list::-webkit-scrollbar {
-    width: 6px;
-}
-
-.item-list::-webkit-scrollbar-track {
-    background: var(--bg-secondary);
-    border-radius: 3px;
-}
-
-.item-list::-webkit-scrollbar-thumb {
-    background: var(--border-color);
-    border-radius: 3px;
-}
-
-.item-list::-webkit-scrollbar-thumb:hover {
-    background: var(--accent-primary);
 }
 
 .item-card {
@@ -728,30 +892,6 @@ body {
     transform: scale(1.2);
 }
 
-/* Messages - COMPACT */
-.success-message,
-.error-message {
-    padding: 0.65rem 1rem;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-    display: none;
-    font-weight: 600;
-    font-size: 0.8rem;
-    grid-column: 1 / -1;
-}
-
-.success-message {
-    background: rgba(16, 185, 129, 0.15);
-    color: #10b981;
-    border: 1px solid rgba(16, 185, 129, 0.3);
-}
-
-.error-message {
-    background: rgba(239, 68, 68, 0.15);
-    color: #ef4444;
-    border: 1px solid rgba(239, 68, 68, 0.3);
-}
-
 /* Loading & Empty State - COMPACT */
 .loading {
     text-align: center;
@@ -785,14 +925,15 @@ body {
     margin-bottom: 1rem;
 }
 
+/* Classes utilitaires */
+.hidden {
+    display: none !important;
+}
+
 /* Responsive */
-@media (max-width: 1200px) {
-    .dashboard-content {
-        grid-template-columns: 1fr;
-    }
-    
-    .dashboard-section.full-width {
-        grid-column: 1;
+@media (max-width: 1024px) {
+    #navigationView {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
     }
 }
 
@@ -819,25 +960,64 @@ body {
 
     .dashboard-content {
         padding: 0 1rem 1.5rem;
-        grid-template-columns: 1fr;
+    }
+
+    #navigationView {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 0.75rem;
+    }
+
+    .section-card {
+        padding: 1.25rem 0.85rem;
+    }
+
+    .section-card-icon {
+        width: 48px;
+        height: 48px;
+    }
+
+    .section-card-icon svg {
+        width: 28px;
+        height: 28px;
+    }
+
+    .section-view-header {
+        flex-direction: column;
+        gap: 0.75rem;
+        align-items: flex-start;
+    }
+
+    .section-view-title {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+
+    .section-view-icon {
+        width: 40px;
+        height: 40px;
+    }
+
+    .section-view-icon svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .section-view-title h2 {
+        font-size: 1.35rem;
+    }
+
+    .section-view-actions {
+        width: 100%;
+        flex-direction: column;
+    }
+
+    .section-view-actions .btn {
+        width: 100%;
     }
 
     .dashboard-section {
         padding: 0.85rem;
-    }
-
-    .section-header {
-        flex-direction: column;
-        gap: 0.5rem;
-        align-items: flex-start;
-    }
-
-    .section-header h2 {
-        font-size: 1rem;
-    }
-
-    .item-list {
-        max-height: 300px;
     }
 
     .item-card {
