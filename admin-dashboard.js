@@ -250,8 +250,7 @@ function renderSkillsSection() {
                             <div style="background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); height: 100%; width: ${skill.value}%; transition: width 0.3s ease;"></div>
                         </div>
                         <div class="item-actions">
-                            <button class="btn" onclick='editSkill(${JSON.stringify(skill).replace(/'/g, "&apos;")})'>
-                                ${icons.edit} Modifier
+                            <button class="btn" onclick='editSkill(${JSON.stringify(skill).replace(/'/g, "&apos;")})'>                                ${icons.edit} Modifier
                             </button>
                             <button class="btn btn-danger" onclick="deleteSkill('${skill.id}')">
                                 ${icons.delete} Supprimer
@@ -317,8 +316,7 @@ function renderExperienceSection() {
                         <p style="color: var(--text-secondary); font-size: 0.75rem;">${exp.date}</p>
                         ${exp.description ? `<p style="margin-top: 0.5rem;">${exp.description}</p>` : ''}
                         <div class="item-actions">
-                            <button class="btn" onclick='editExperience(${JSON.stringify(exp).replace(/'/g, "&apos;")})'>
-                                ${icons.edit} Modifier
+                            <button class="btn" onclick='editExperience(${JSON.stringify(exp).replace(/'/g, "&apos;")})'>                                ${icons.edit} Modifier
                             </button>
                             <button class="btn btn-danger" onclick="deleteExperience('${exp.id}')">
                                 ${icons.delete} Supprimer
@@ -358,8 +356,7 @@ function renderEducationSection() {
                         <p style="color: var(--text-secondary); font-size: 0.75rem;">${edu.date}</p>
                         ${edu.description ? `<p style="margin-top: 0.5rem;">${edu.description}</p>` : ''}
                         <div class="item-actions">
-                            <button class="btn" onclick='editEducation(${JSON.stringify(edu).replace(/'/g, "&apos;")})'>
-                                ${icons.edit} Modifier
+                            <button class="btn" onclick='editEducation(${JSON.stringify(edu).replace(/'/g, "&apos;")})'>                                ${icons.edit} Modifier
                             </button>
                             <button class="btn btn-danger" onclick="deleteEducation('${edu.id}')">
                                 ${icons.delete} Supprimer
@@ -699,12 +696,19 @@ async function uploadPDF(file) {
         
         if (error) throw error;
         
-        document.getElementById('projectPdfUrl').value = fileName;
+        // Obtenir l'URL publique du fichier uploadé
+        const { data: publicUrlData } = supabase.storage
+            .from('project-pdfs')
+            .getPublicUrl(fileName);
+        
+        // Mettre l'URL publique complète au lieu du nom du fichier
+        document.getElementById('projectPdfUrl').value = publicUrlData.publicUrl;
+        
         statusDiv.textContent = '✅ PDF uploadé avec succès !';
         statusDiv.classList.remove('loading');
         statusDiv.classList.add('success');
         
-        return fileName;
+        return publicUrlData.publicUrl;
     } catch (error) {
         statusDiv.textContent = '❌ Erreur: ' + error.message;
         statusDiv.classList.remove('loading');
