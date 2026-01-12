@@ -612,6 +612,13 @@ function openProjectModal(project = null) {
         document.getElementById('projectOrder').value = project.order_index || 0;
         currentProjectTags = project.tags || [];
         renderProjectTags();
+        
+        // Afficher le PDF s'il existe
+        if (project.pdf_url) {
+            updatePdfDisplay(project.pdf_url);
+        } else {
+            hidePdfDisplay();
+        }
     } else {
         title.textContent = 'Ajouter un projet';
         document.getElementById('projectForm').reset();
@@ -619,6 +626,7 @@ function openProjectModal(project = null) {
         document.getElementById('projectPdfUrl').value = '';
         currentProjectTags = [];
         renderProjectTags();
+        hidePdfDisplay();
     }
     
     modal.classList.add('active');
@@ -626,6 +634,8 @@ function openProjectModal(project = null) {
 
 function closeProjectModal() {
     document.getElementById('projectModal').classList.remove('active');
+    // Réinitialiser l'affichage du PDF
+    hidePdfDisplay();
 }
 
 function editProject(project) {
@@ -675,6 +685,27 @@ document.getElementById('projectForm').addEventListener('submit', async (e) => {
     }
 });
 
+// Nettoyage des noms de fichiers pour Supabase Storage
+function sanitizeFileName(originalName) {
+    const normalized = originalName
+        .normalize('NFD') // sépare les accents
+        .replace(/[\u0300-\u036f]/g, ''); // supprime les accents
+    
+    const safe = normalized
+        .replace(/[^a-zA-Z0-9.\-_]/g, '-') // remplace les caractères spéciaux
+        .replace(/-+/g, '-') // évite les doubles tirets
+        .replace(/^-+|-+$/g, ''); // supprime les tirets en bordure
+    
+    // Sépare nom / extension pour conserver l'extension
+    const lastDot = safe.lastIndexOf('.');
+    const base = lastDot > 0 ? safe.slice(0, lastDot) : safe || 'file';
+    const ext = lastDot > 0 ? safe.slice(lastDot) : '';
+    
+    // Tronque pour éviter des clés trop longues
+    const truncatedBase = base.slice(0, 80);
+    return `${truncatedBase}${ext}` || `file${ext || '.pdf'}`;
+}
+
 // Upload PDF
 async function uploadPDF(file) {
     const statusDiv = document.getElementById('pdfUploadStatus');
@@ -685,36 +716,114 @@ async function uploadPDF(file) {
         statusDiv.classList.remove('success', 'error');
         
         const timestamp = Date.now();
-        const fileName = `${timestamp}-${file.name.replace(/\s+/g, '-')}`;
+        const fileName = `${timestamp}-${sanitizeFileName(file.name)}`;
         
         const { data, error } = await supabase.storage
             .from('project-pdfs')
             .upload(fileName, file, {
                 cacheControl: '3600',
-                upsert: false
+                upsert: false,
+                contentType: file.type || 'application/pdf'
             });
         
         if (error) throw error;
         
-        // Obtenir l'URL publique du fichier uploadé
-        const { data: publicUrlData } = supabase.storage
-            .from('project-pdfs')
-            .getPublicUrl(fileName);
+        // Stocker seulement le nom du fichier (pas l'URL complète)
+        // L'URL sera générée côté client lors de l'affichage
+        document.getElementById('projectPdfUrl').value = fileName;
         
-        // Mettre l'URL publique complète au lieu du nom du fichier
-        document.getElementById('projectPdfUrl').value = publicUrlData.publicUrl;
+        // Afficher le PDF uploadé
+        updatePdfDisplay(fileName);
         
         statusDiv.textContent = '✅ PDF uploadé avec succès !';
         statusDiv.classList.remove('loading');
         statusDiv.classList.add('success');
         
-        return publicUrlData.publicUrl;
+        return fileName;
     } catch (error) {
         statusDiv.textContent = '❌ Erreur: ' + error.message;
         statusDiv.classList.remove('loading');
         statusDiv.classList.add('error');
         throw error;
     }
+}
+
+// Fonction pour mettre à jour l'affichage du PDF
+function updatePdfDisplay(fileName) {
+    const display = document.getElementById('currentPdfDisplay');
+    const nameSpan = document.getElementById('currentPdfName');
+    
+    if (display && nameSpan) {
+        // Extraire le nom du fichier (sans le timestamp si présent)
+        const displayName = fileName.includes('-') && /^\d+-/.test(fileName) 
+            ? fileName.substring(fileName.indexOf('-') + 1) 
+            : fileName;
+        nameSpan.textContent = displayName;
+        display.style.display = 'block';
+    }
+}
+
+// Fonction pour masquer l'affichage du PDF
+function hidePdfDisplay() {
+    const display = document.getElementById('currentPdfDisplay');
+    if (display) {
+        display.style.display = 'none';
+    }
+}
+
+// Fonction pour supprimer le PDF
+async function deletePDF() {
+    const pdfUrl = document.getElementById('projectPdfUrl').value;
+    
+    if (!pdfUrl) {
+        return;
+    }
+    
+    if (!confirm('Êtes-vous sûr de vouloir supprimer ce PDF ?')) {
+        return;
+    }
+    
+    try {
+        // Extraire le nom du fichier si c'est une URL complète
+        let fileName = pdfUrl;
+        if (pdfUrl.startsWith('http://') || pdfUrl.startsWith('https://')) {
+            // Extraire le nom du fichier de l'URL
+            const urlParts = pdfUrl.split('/');
+            fileName = urlParts[urlParts.length - 1];
+        }
+        
+        // Supprimer le fichier du storage Supabase
+        const { error } = await supabase.storage
+            .from('project-pdfs')
+            .remove([fileName]);
+        
+        if (error) {
+            // Si le fichier n'existe pas, ce n'est pas grave, on continue
+            console.warn('Erreur lors de la suppression du fichier:', error);
+        }
+        
+        // Vider le champ et masquer l'affichage
+        document.getElementById('projectPdfUrl').value = '';
+        document.getElementById('projectPdfFile').value = '';
+        hidePdfDisplay();
+        
+        // Réinitialiser le statut d'upload
+        const statusDiv = document.getElementById('pdfUploadStatus');
+        if (statusDiv) {
+            statusDiv.textContent = '';
+            statusDiv.classList.remove('show', 'success', 'error', 'loading');
+        }
+        
+        showSuccess('PDF supprimé avec succès !');
+    } catch (error) {
+        showError('Erreur lors de la suppression du PDF: ' + error.message);
+    }
+}
+
+// Écouter le clic sur le bouton de suppression
+const deletePdfBtn = document.getElementById('deletePdfBtn');
+if (deletePdfBtn) {
+    deletePdfBtn.addEventListener('click', deletePDF);
 }
 
 const pdfInput = document.getElementById('projectPdfFile');

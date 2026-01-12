@@ -78,12 +78,18 @@ function getSupabaseClient() {
                 const projectsHTML = await Promise.all(projects.data.map(async p => {
                     let pdfLink = '#';
                     
-                    // Si un PDF existe, utiliser getPublicUrl
+                    // Si un PDF existe
                     if (p.pdf_url) {
-                        const { data: urlData } = client.storage
-                            .from('project-pdfs')
-                            .getPublicUrl(p.pdf_url);
-                        pdfLink = urlData.publicUrl;
+                        // Vérifier si c'est déjà une URL complète (pour compatibilité avec les anciennes données)
+                        if (p.pdf_url.startsWith('http://') || p.pdf_url.startsWith('https://')) {
+                            pdfLink = p.pdf_url;
+                        } else {
+                            // Sinon, c'est un nom de fichier, générer l'URL publique
+                            const { data: urlData } = client.storage
+                                .from('project-pdfs')
+                                .getPublicUrl(p.pdf_url);
+                            pdfLink = urlData.publicUrl;
+                        }
                     } 
                     // Sinon, utiliser le lien normal s'il existe
                     else if (p.link) {
