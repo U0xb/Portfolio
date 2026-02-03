@@ -1,0 +1,7 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/cpe004089/public_html/
+    - rm -rf $DEPLOYPATH/*
+    - /bin/cp -Rf . $DEPLOYPATH
+    - /bin/rm -rf $DEPLOYPATH/.git
