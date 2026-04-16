@@ -29,13 +29,21 @@
     <!-- Dashboard Header -->
     <div class="dashboard-header">
         <div class="dashboard-header-content">
-            <h1>
-                <svg style="width:22px;height:22px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM14 12a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1v-7zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3z"/>
-                </svg>
-                Dashboard Portfolio
-            </h1>
-            <button class="logout-btn" onclick="logout()">Déconnexion</button>
+            <div class="dashboard-header-main">
+                <span class="dashboard-badge">Administration</span>
+                <h1>
+                    <svg style="width:22px;height:22px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 5a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1H5a1 1 0 01-1-1V5zM14 5a1 1 0 011-1h4a1 1 0 011 1v2a1 1 0 01-1 1h-4a1 1 0 01-1-1V5zM14 12a1 1 0 011-1h4a1 1 0 011 1v7a1 1 0 01-1 1h-4a1 1 0 01-1-1v-7zM4 16a1 1 0 011-1h4a1 1 0 011 1v3a1 1 0 01-1 1H5a1 1 0 01-1-1v-3z"/>
+                    </svg>
+                    Dashboard Portfolio
+                </h1>
+                <p class="dashboard-subtitle">Réorganise rapidement les contenus clés du portfolio depuis une interface plus claire et plus structurée.</p>
+            </div>
+
+            <div class="dashboard-header-actions">
+                <a href="index.html" class="btn ghost dashboard-link">Voir le site</a>
+                <button class="logout-btn" onclick="logout()">Déconnexion</button>
+            </div>
         </div>
     </div>
 
@@ -44,84 +52,129 @@
         <div class="success-message" id="successMessage"></div>
         <div class="error-message" id="errorMessage"></div>
 
-        <!-- VUE NAVIGATION - Grille de cartes -->
-        <div id="navigationView">
-            <!-- Carte Hero -->
-            <div class="section-card" onclick="showSection('hero')">
-                <div class="section-card-icon">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
-                    </svg>
-                </div>
-                <div class="section-card-title">Hero</div>
-                <div class="section-card-count">Section d'accueil</div>
-            </div>
+        <!-- VUE NAVIGATION -->
+        <div class="dashboard-overview" id="navigationView">
+            <aside class="dashboard-sidebar">
+                <div class="dashboard-panel">
+                    <p class="dashboard-panel-label">Accès rapide</p>
+                    <h2>Choisis une zone à gérer</h2>
+                    <p class="dashboard-panel-text">Les sections principales sont regroupées ici pour rendre la gestion plus visuelle. Clique sur une carte pour ouvrir son contenu détaillé.</p>
 
-            <!-- Carte Projets -->
-            <div class="section-card" onclick="showSection('projects')">
-                <div class="section-card-icon">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
-                    </svg>
+                    <div class="dashboard-quick-actions">
+                        <button class="dashboard-quick-btn" type="button" onclick="showSection('projects')">
+                            <span class="dashboard-quick-btn-title">Gérer les projets</span>
+                            <span class="dashboard-quick-btn-text">Mettre à jour les réalisations et supports</span>
+                        </button>
+                        <button class="dashboard-quick-btn" type="button" onclick="showSection('skills')">
+                            <span class="dashboard-quick-btn-title">Gérer les compétences</span>
+                            <span class="dashboard-quick-btn-text">Ajuster les technologies et expertises</span>
+                        </button>
+                    </div>
                 </div>
-                <div class="section-card-title">Projets</div>
-                <div class="section-card-count" id="projectsCount">0 projets</div>
-            </div>
+            </aside>
 
-            <!-- Carte Compétences -->
-            <div class="section-card" onclick="showSection('skills')">
-                <div class="section-card-icon">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
-                    </svg>
+            <div class="dashboard-main">
+                <div class="dashboard-main-header">
+                    <div>
+                        <p class="dashboard-panel-label">Sections disponibles</p>
+                        <h2>Organisation du contenu</h2>
+                    </div>
+                    <p class="dashboard-main-text">Une présentation plus aérée pour accéder plus vite aux différentes zones du dashboard.</p>
                 </div>
-                <div class="section-card-title">Compétences</div>
-                <div class="section-card-count" id="skillsCount">0 compétences</div>
-            </div>
 
-            <!-- Carte À propos -->
-            <div class="section-card" onclick="showSection('about')">
-                <div class="section-card-icon">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
-                    </svg>
-                </div>
-                <div class="section-card-title">À propos</div>
-                <div class="section-card-count">Votre présentation</div>
-            </div>
+                <div class="dashboard-cards-grid">
+                    <!-- Carte Hero -->
+                    <div class="section-card" onclick="showSection('hero')">
+                        <div class="section-card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
+                            </svg>
+                        </div>
+                        <div class="section-card-body">
+                            <div class="section-card-title">Hero</div>
+                            <div class="section-card-count">Section d'accueil</div>
+                        </div>
+                    </div>
 
-            <!-- Carte Expériences -->
-            <div class="section-card" onclick="showSection('experience')">
-                <div class="section-card-icon">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                    </svg>
-                </div>
-                <div class="section-card-title">Expériences</div>
-                <div class="section-card-count" id="experienceCount">0 expériences</div>
-            </div>
+                    <!-- Carte Projets -->
+                    <div class="section-card" onclick="showSection('projects')">
+                        <div class="section-card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01"/>
+                            </svg>
+                        </div>
+                        <div class="section-card-body">
+                            <div class="section-card-title">Projets</div>
+                            <div class="section-card-count" id="projectsCount">0 projets</div>
+                        </div>
+                    </div>
 
-            <!-- Carte Formation -->
-            <div class="section-card" onclick="showSection('education')">
-                <div class="section-card-icon">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
-                    </svg>
-                </div>
-                <div class="section-card-title">Formation</div>
-                <div class="section-card-count" id="educationCount">0 formations</div>
-            </div>
+                    <!-- Carte Compétences -->
+                    <div class="section-card" onclick="showSection('skills')">
+                        <div class="section-card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                            </svg>
+                        </div>
+                        <div class="section-card-body">
+                            <div class="section-card-title">Compétences</div>
+                            <div class="section-card-count" id="skillsCount">0 compétences</div>
+                        </div>
+                    </div>
 
-            <!-- Carte Contact -->
-            <div class="section-card" onclick="showSection('contact')">
-                <div class="section-card-icon">
-                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
-                    </svg>
+                    <!-- Carte À propos -->
+                    <div class="section-card" onclick="showSection('about')">
+                        <div class="section-card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                            </svg>
+                        </div>
+                        <div class="section-card-body">
+                            <div class="section-card-title">À propos</div>
+                            <div class="section-card-count">Votre présentation</div>
+                        </div>
+                    </div>
+
+                    <!-- Carte Expériences -->
+                    <div class="section-card" onclick="showSection('experience')">
+                        <div class="section-card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div class="section-card-body">
+                            <div class="section-card-title">Expériences</div>
+                            <div class="section-card-count" id="experienceCount">0 expériences</div>
+                        </div>
+                    </div>
+
+                    <!-- Carte Formation -->
+                    <div class="section-card" onclick="showSection('education')">
+                        <div class="section-card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>
+                            </svg>
+                        </div>
+                        <div class="section-card-body">
+                            <div class="section-card-title">Formation</div>
+                            <div class="section-card-count" id="educationCount">0 formations</div>
+                        </div>
+                    </div>
+
+                    <!-- Carte Contact -->
+                    <div class="section-card" onclick="showSection('contact')">
+                        <div class="section-card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div class="section-card-body">
+                            <div class="section-card-title">Contact</div>
+                            <div class="section-card-count">Informations</div>
+                        </div>
+                    </div>
                 </div>
-                <div class="section-card-title">Contact</div>
-                <div class="section-card-count">Informations</div>
             </div>
         </div>
 
@@ -131,7 +184,10 @@
             <div class="section-view-header">
                 <div class="section-view-title">
                     <div class="section-view-icon" id="sectionIcon"></div>
-                    <h2 id="sectionTitle"></h2>
+                    <div>
+                        <p class="dashboard-panel-label">Section active</p>
+                        <h2 id="sectionTitle"></h2>
+                    </div>
                 </div>
                 <div class="section-view-actions">
                     <button class="btn-back" onclick="showNavigation()">
@@ -201,31 +257,82 @@
                         Médias
                     </h4>
                     <div class="form-group">
-                        <label>Image (URL)</label>
-                        <input type="url" id="projectImageUrl" placeholder="https://...">
+                        <label>Image du projet</label>
+                        <input type="hidden" id="projectImageUrl">
+                        <label for="projectImageFile" class="upload-field">
+                            <span class="upload-field-top">
+                                <span class="upload-field-icon">
+                                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                    </svg>
+                                </span>
+                                <span>
+                                    <strong>Importer une image</strong>
+                                    <small>PNG, JPG, WEBP… </small>
+                                </span>
+                            </span>
+                            <span class="upload-field-button">Choisir une image</span>
+                        </label>
+                        <input type="file" id="projectImageFile" accept="image/*" class="upload-input-hidden">
+                        <div class="upload-status" id="imageUploadStatus"></div>
+                        <div id="currentImageDisplay" class="media-preview-card" style="display: none;">
+                            <div class="media-preview-main">
+                                <img id="currentImagePreview" alt="Prévisualisation image projet">
+                                <div class="media-preview-meta">
+                                    <span class="media-preview-label">Image actuelle</span>
+                                    <span id="currentImageName" class="media-preview-name"></span>
+                                </div>
+                            </div>
+                            <button type="button" id="deleteImageBtn" class="btn btn-danger media-delete-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                </svg>
+                                Supprimer
+                            </button>
+                        </div>
                     </div>
                     <div class="form-group">
                         <label>PDF</label>
-                        <input type="file" id="projectPdfFile" accept=".pdf">
+                        <label for="projectPdfFile" class="upload-field upload-field-pdf">
+                            <span class="upload-field-top">
+                                <span class="upload-field-icon">
+                                    <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                    </svg>
+                                </span>
+                                <span>
+                                    <strong>Ajouter un PDF projet</strong>
+                                    <small>Glisse le fichier ou clique pour importer un document</small>
+                                </span>
+                            </span>
+                            <span class="upload-field-button">Sélectionner un PDF</span>
+                        </label>
+                        <input type="file" id="projectPdfFile" accept=".pdf" class="upload-input-hidden">
                         <div class="upload-status" id="pdfUploadStatus"></div>
-                        <div id="currentPdfDisplay" style="display: none; margin-top: 0.75rem; padding: 0.75rem; background: var(--bg-secondary); border-radius: 6px; border: 1px solid var(--border-color);">
-                            <div style="display: flex; align-items: center; justify-content: space-between;">
-                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <div id="currentPdfDisplay" class="media-preview-card" style="display: none;">
+                            <div class="media-preview-main">
+                                <div class="media-preview-file-icon">
                                     <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                                     </svg>
-                                    <span id="currentPdfName" style="color: var(--text-primary); font-size: 0.875rem;"></span>
                                 </div>
-                                <button type="button" id="deletePdfBtn" class="btn btn-danger" style="padding: 0.25rem 0.75rem; font-size: 0.75rem;">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                        <polyline points="3 6 5 6 21 6"></polyline>
-                                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-                                        <line x1="10" y1="11" x2="10" y2="17"></line>
-                                        <line x1="14" y1="11" x2="14" y2="17"></line>
-                                    </svg>
-                                    Supprimer
-                                </button>
+                                <div class="media-preview-meta">
+                                    <span class="media-preview-label">PDF actuel</span>
+                                    <span id="currentPdfName" class="media-preview-name"></span>
+                                </div>
                             </div>
+                            <button type="button" id="deletePdfBtn" class="btn btn-danger media-delete-btn">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                </svg>
+                                Supprimer
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -267,8 +374,13 @@
                     <input type="text" id="skillName" required>
                 </div>
                 <div class="form-group">
-                    <label>Valeur (0-100)*</label>
-                    <input type="number" id="skillValue" min="0" max="100" required>
+                    <label>Description</label>
+                    <textarea id="skillDescription" rows="3" placeholder="Décrivez cette compétence..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Icône SVG</label>
+                    <textarea id="skillSvg" rows="4" placeholder="Collez votre code SVG ici... (<svg>...</svg>)" oninput="previewSkillSvg()"></textarea>
+                    <div id="skillSvgPreview" style="margin-top:0.75rem; width:48px; height:48px; color:var(--accent-primary);"></div>
                 </div>
                 <div class="form-group">
                     <label>Ordre</label>

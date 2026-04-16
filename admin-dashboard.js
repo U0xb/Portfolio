@@ -244,11 +244,9 @@ function renderSkillsSection() {
             <div class="item-list">
                 ${skills.map(skill => `
                     <div class="item-card">
+                        ${skill.svg_icon ? `<div style="width:32px;height:32px;color:var(--accent-primary);margin-bottom:0.5rem;">${skill.svg_icon}</div>` : ''}
                         <h3>${skill.name}</h3>
-                        <p>Niveau: ${skill.value}%</p>
-                        <div style="background: var(--border-color); height: 8px; border-radius: 4px; overflow: hidden; margin: 0.5rem 0;">
-                            <div style="background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary)); height: 100%; width: ${skill.value}%; transition: width 0.3s ease;"></div>
-                        </div>
+                        ${skill.description ? `<p>${skill.description}</p>` : ''}
                         <div class="item-actions">
                             <button class="btn" onclick='editSkill(${JSON.stringify(skill).replace(/'/g, "&apos;")})'>                                ${icons.edit} Modifier
                             </button>
@@ -268,6 +266,44 @@ function renderAboutSection() {
         document.getElementById('sectionContent').innerHTML = `
             <form id="aboutForm" onsubmit="saveAbout(event)">
                 <input type="hidden" id="aboutId" value="${about?.id || ''}">
+                <input type="hidden" id="aboutImageUrl" value="${about?.image_url || ''}">
+                <div class="form-group">
+                    <label>Photo de profil</label>
+                    <label for="aboutImageFile" class="upload-field">
+                        <span class="upload-field-top">
+                            <span class="upload-field-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                                </svg>
+                            </span>
+                            <span>
+                                <strong>Importer une photo</strong>
+                                <small>PNG, JPG, WEBP…</small>
+                            </span>
+                        </span>
+                        <span class="upload-field-button">Choisir une image</span>
+                    </label>
+                    <input type="file" id="aboutImageFile" accept="image/*" class="upload-input-hidden">
+                    <div class="upload-status" id="aboutImageUploadStatus"></div>
+                    <div id="aboutImageDisplay" class="media-preview-card" style="display: none;">
+                        <div class="media-preview-main">
+                            <img id="aboutImagePreview" alt="Photo de profil" style="width:60px;height:60px;object-fit:cover;border-radius:50%;">
+                            <div class="media-preview-meta">
+                                <span class="media-preview-label">Photo actuelle</span>
+                                <span id="aboutImageName" class="media-preview-name"></span>
+                            </div>
+                        </div>
+                        <button type="button" id="deleteAboutImageBtn" class="btn btn-danger media-delete-btn">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                <line x1="10" y1="11" x2="10" y2="17"></line>
+                                <line x1="14" y1="11" x2="14" y2="17"></line>
+                            </svg>
+                            Supprimer
+                        </button>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label>Description</label>
                     <textarea id="aboutDescription" rows="5" placeholder="Parlez de vous...">${about?.description || ''}</textarea>
@@ -285,6 +321,24 @@ function renderAboutSection() {
                 </div>
             </form>
         `;
+
+        if (about?.image_url) {
+            updateAboutImageDisplay(about.image_url);
+        }
+
+        document.getElementById('aboutImageFile').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                await uploadAboutImage(file);
+            } else if (file) {
+                const statusDiv = document.getElementById('aboutImageUploadStatus');
+                statusDiv.textContent = '❌ Veuillez sélectionner un fichier image valide';
+                statusDiv.classList.add('show', 'error');
+            }
+        });
+
+        document.getElementById('deleteAboutImageBtn').addEventListener('click', deleteAboutImage);
+
         currentAboutTags = about?.tags || [];
         renderAboutTags();
     });
@@ -491,9 +545,10 @@ async function saveAbout(event) {
         const updates = {
             description: document.getElementById('aboutDescription').value,
             tags: currentAboutTags,
+            image_url: document.getElementById('aboutImageUrl').value || null,
             updated_at: new Date().toISOString()
         };
-        
+
         await portfolioAPI.updateAbout(id, updates);
         showSuccess('Section À propos mise à jour !');
     } catch (error) {
@@ -516,6 +571,104 @@ async function saveContact(event) {
         showSuccess('Informations de contact mises à jour !');
     } catch (error) {
         showError('Erreur lors de la sauvegarde: ' + error.message);
+    }
+}
+
+// ========================================
+// ABOUT IMAGE UPLOAD
+// ========================================
+
+async function uploadAboutImage(file) {
+    const statusDiv = document.getElementById('aboutImageUploadStatus');
+
+    try {
+        statusDiv.textContent = '⏳ Upload image en cours...';
+        statusDiv.classList.add('show', 'loading');
+        statusDiv.classList.remove('success', 'error');
+
+        const timestamp = Date.now();
+        const fileName = `${timestamp}-${sanitizeFileName(file.name)}`;
+
+        const { error } = await supabase.storage
+            .from('project-images')
+            .upload(fileName, file, {
+                cacheControl: '3600',
+                upsert: false,
+                contentType: file.type || 'image/*'
+            });
+
+        if (error) throw error;
+
+        document.getElementById('aboutImageUrl').value = fileName;
+        updateAboutImageDisplay(fileName);
+
+        statusDiv.textContent = '✅ Photo uploadée avec succès !';
+        statusDiv.classList.remove('loading');
+        statusDiv.classList.add('success');
+
+        return fileName;
+    } catch (error) {
+        statusDiv.textContent = '❌ Erreur: ' + error.message;
+        statusDiv.classList.remove('loading');
+        statusDiv.classList.add('error');
+        throw error;
+    }
+}
+
+function updateAboutImageDisplay(fileName) {
+    const display = document.getElementById('aboutImageDisplay');
+    const nameSpan = document.getElementById('aboutImageName');
+    const preview = document.getElementById('aboutImagePreview');
+
+    if (display && nameSpan && preview) {
+        nameSpan.textContent = getDisplayFileName(fileName);
+        preview.src = getStoragePublicUrl('project-images', fileName);
+        display.style.display = 'flex';
+    }
+}
+
+function hideAboutImageDisplay() {
+    const display = document.getElementById('aboutImageDisplay');
+    const preview = document.getElementById('aboutImagePreview');
+    if (display) display.style.display = 'none';
+    if (preview) preview.removeAttribute('src');
+}
+
+async function deleteAboutImage() {
+    const imageUrl = document.getElementById('aboutImageUrl').value;
+
+    if (!imageUrl) return;
+
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cette photo ?')) return;
+
+    try {
+        let fileName = imageUrl;
+        if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+            const urlParts = imageUrl.split('/');
+            fileName = urlParts[urlParts.length - 1];
+        }
+
+        const { error } = await supabase.storage
+            .from('project-images')
+            .remove([fileName]);
+
+        if (error) {
+            console.warn('Erreur lors de la suppression du fichier:', error);
+        }
+
+        document.getElementById('aboutImageUrl').value = '';
+        document.getElementById('aboutImageFile').value = '';
+        hideAboutImageDisplay();
+
+        const statusDiv = document.getElementById('aboutImageUploadStatus');
+        if (statusDiv) {
+            statusDiv.textContent = '';
+            statusDiv.classList.remove('show', 'success', 'error', 'loading');
+        }
+
+        showSuccess('Photo supprimée avec succès !');
+    } catch (error) {
+        showError('Erreur lors de la suppression: ' + error.message);
     }
 }
 
@@ -613,7 +766,12 @@ function openProjectModal(project = null) {
         currentProjectTags = project.tags || [];
         renderProjectTags();
         
-        // Afficher le PDF s'il existe
+        if (project.image_url) {
+            updateImageDisplay(project.image_url);
+        } else {
+            hideImageDisplay();
+        }
+
         if (project.pdf_url) {
             updatePdfDisplay(project.pdf_url);
         } else {
@@ -623,9 +781,11 @@ function openProjectModal(project = null) {
         title.textContent = 'Ajouter un projet';
         document.getElementById('projectForm').reset();
         document.getElementById('projectId').value = '';
+        document.getElementById('projectImageUrl').value = '';
         document.getElementById('projectPdfUrl').value = '';
         currentProjectTags = [];
         renderProjectTags();
+        hideImageDisplay();
         hidePdfDisplay();
     }
     
@@ -634,7 +794,7 @@ function openProjectModal(project = null) {
 
 function closeProjectModal() {
     document.getElementById('projectModal').classList.remove('active');
-    // Réinitialiser l'affichage du PDF
+    hideImageDisplay();
     hidePdfDisplay();
 }
 
@@ -707,6 +867,44 @@ function sanitizeFileName(originalName) {
 }
 
 // Upload PDF
+async function uploadProjectImage(file) {
+    const statusDiv = document.getElementById('imageUploadStatus');
+    
+    try {
+        statusDiv.textContent = '⏳ Upload image en cours...';
+        statusDiv.classList.add('show', 'loading');
+        statusDiv.classList.remove('success', 'error');
+        
+        const timestamp = Date.now();
+        const fileName = `${timestamp}-${sanitizeFileName(file.name)}`;
+        
+        const { error } = await supabase.storage
+            .from('project-images')
+            .upload(fileName, file, {
+                cacheControl: '3600',
+                upsert: false,
+                contentType: file.type || 'image/*'
+            });
+        
+        if (error) throw error;
+        
+        document.getElementById('projectImageUrl').value = fileName;
+        updateImageDisplay(fileName);
+        
+        statusDiv.textContent = '✅ Image uploadée avec succès !';
+        statusDiv.classList.remove('loading');
+        statusDiv.classList.add('success');
+        
+        return fileName;
+    } catch (error) {
+        statusDiv.textContent = '❌ Erreur: ' + error.message;
+        statusDiv.classList.remove('loading');
+        statusDiv.classList.add('error');
+        throw error;
+    }
+}
+
+// Upload PDF
 async function uploadPDF(file) {
     const statusDiv = document.getElementById('pdfUploadStatus');
     
@@ -749,17 +947,53 @@ async function uploadPDF(file) {
 }
 
 // Fonction pour mettre à jour l'affichage du PDF
+function getStoragePublicUrl(bucket, fileName) {
+    if (!fileName) return '';
+    if (fileName.startsWith('http://') || fileName.startsWith('https://')) {
+        return fileName;
+    }
+
+    const { data } = supabase.storage.from(bucket).getPublicUrl(fileName);
+    return data?.publicUrl || '';
+}
+
+function getDisplayFileName(fileName) {
+    if (!fileName) return '';
+    return fileName.includes('-') && /^\d+-/.test(fileName)
+        ? fileName.substring(fileName.indexOf('-') + 1)
+        : fileName;
+}
+
+function updateImageDisplay(fileName) {
+    const display = document.getElementById('currentImageDisplay');
+    const nameSpan = document.getElementById('currentImageName');
+    const preview = document.getElementById('currentImagePreview');
+
+    if (display && nameSpan && preview) {
+        nameSpan.textContent = getDisplayFileName(fileName);
+        preview.src = getStoragePublicUrl('project-images', fileName);
+        display.style.display = 'flex';
+    }
+}
+
 function updatePdfDisplay(fileName) {
     const display = document.getElementById('currentPdfDisplay');
     const nameSpan = document.getElementById('currentPdfName');
     
     if (display && nameSpan) {
-        // Extraire le nom du fichier (sans le timestamp si présent)
-        const displayName = fileName.includes('-') && /^\d+-/.test(fileName) 
-            ? fileName.substring(fileName.indexOf('-') + 1) 
-            : fileName;
-        nameSpan.textContent = displayName;
-        display.style.display = 'block';
+        nameSpan.textContent = getDisplayFileName(fileName);
+        display.style.display = 'flex';
+    }
+}
+
+function hideImageDisplay() {
+    const display = document.getElementById('currentImageDisplay');
+    const preview = document.getElementById('currentImagePreview');
+    if (display) {
+        display.style.display = 'none';
+    }
+    if (preview) {
+        preview.removeAttribute('src');
     }
 }
 
@@ -768,6 +1002,49 @@ function hidePdfDisplay() {
     const display = document.getElementById('currentPdfDisplay');
     if (display) {
         display.style.display = 'none';
+    }
+}
+
+// Fonction pour supprimer l'image
+async function deleteProjectImage() {
+    const imageUrl = document.getElementById('projectImageUrl').value;
+    
+    if (!imageUrl) {
+        return;
+    }
+    
+    if (!confirm('Êtes-vous sûr de vouloir supprimer cette image ?')) {
+        return;
+    }
+    
+    try {
+        let fileName = imageUrl;
+        if (imageUrl.startsWith('http://') || imageUrl.startsWith('https://')) {
+            const urlParts = imageUrl.split('/');
+            fileName = urlParts[urlParts.length - 1];
+        }
+        
+        const { error } = await supabase.storage
+            .from('project-images')
+            .remove([fileName]);
+        
+        if (error) {
+            console.warn('Erreur lors de la suppression du fichier image:', error);
+        }
+        
+        document.getElementById('projectImageUrl').value = '';
+        document.getElementById('projectImageFile').value = '';
+        hideImageDisplay();
+        
+        const statusDiv = document.getElementById('imageUploadStatus');
+        if (statusDiv) {
+            statusDiv.textContent = '';
+            statusDiv.classList.remove('show', 'success', 'error', 'loading');
+        }
+        
+        showSuccess('Image supprimée avec succès !');
+    } catch (error) {
+        showError('Erreur lors de la suppression de l’image: ' + error.message);
     }
 }
 
@@ -821,6 +1098,25 @@ async function deletePDF() {
 }
 
 // Écouter le clic sur le bouton de suppression
+const deleteImageBtn = document.getElementById('deleteImageBtn');
+if (deleteImageBtn) {
+    deleteImageBtn.addEventListener('click', deleteProjectImage);
+}
+
+const imageInput = document.getElementById('projectImageFile');
+if (imageInput) {
+    imageInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            await uploadProjectImage(file);
+        } else if (file) {
+            const statusDiv = document.getElementById('imageUploadStatus');
+            statusDiv.textContent = '❌ Veuillez sélectionner un fichier image valide';
+            statusDiv.classList.add('show', 'error');
+        }
+    });
+}
+
 const deletePdfBtn = document.getElementById('deletePdfBtn');
 if (deletePdfBtn) {
     deletePdfBtn.addEventListener('click', deletePDF);
@@ -852,12 +1148,15 @@ function openSkillModal(skill = null) {
         title.textContent = 'Modifier la compétence';
         document.getElementById('skillId').value = skill.id;
         document.getElementById('skillName').value = skill.name;
-        document.getElementById('skillValue').value = skill.value;
+        document.getElementById('skillDescription').value = skill.description || '';
+        document.getElementById('skillSvg').value = skill.svg_icon || '';
         document.getElementById('skillOrder').value = skill.order_index || 0;
+        previewSkillSvg();
     } else {
         title.textContent = 'Ajouter une compétence';
         document.getElementById('skillForm').reset();
         document.getElementById('skillId').value = '';
+        document.getElementById('skillSvgPreview').innerHTML = '';
     }
     
     modal.classList.add('active');
@@ -865,6 +1164,17 @@ function openSkillModal(skill = null) {
 
 function closeSkillModal() {
     document.getElementById('skillModal').classList.remove('active');
+}
+
+function previewSkillSvg() {
+    const svg = document.getElementById('skillSvg').value.trim();
+    const preview = document.getElementById('skillSvgPreview');
+    preview.innerHTML = svg.startsWith('<svg') ? svg : '';
+    const svgEl = preview.querySelector('svg');
+    if (svgEl) {
+        svgEl.style.width = '100%';
+        svgEl.style.height = '100%';
+    }
 }
 
 function editSkill(skill) {
@@ -889,7 +1199,8 @@ document.getElementById('skillForm').addEventListener('submit', async (e) => {
     try {
         const skillData = {
             name: document.getElementById('skillName').value,
-            value: parseInt(document.getElementById('skillValue').value),
+            description: document.getElementById('skillDescription').value || null,
+            svg_icon: document.getElementById('skillSvg').value || null,
             order_index: parseInt(document.getElementById('skillOrder').value) || 0
         };
         

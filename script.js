@@ -4,7 +4,6 @@
 
 const selectAll = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
 const select = (sel, ctx = document) => ctx.querySelector(sel);
-
 // ========================================
 // SET CURRENT YEAR
 // ========================================
@@ -34,16 +33,15 @@ function initTheme() {
   themeToggle.className = 'theme-toggle';
   themeToggle.setAttribute('aria-label', 'Changer de thème');
   
-  // Icônes améliorées et plus visibles
-  const sunIcon = `<svg fill="white" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+  const sunIcon = `<svg fill="currentColor" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
     <circle cx="12" cy="12" r="4"/>
     <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
   </svg>`;
-  
-  const moonIcon = `<svg fill="white" viewBox="0 0 24 24">
-    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  const moonIcon = `<svg fill="currentColor" viewBox="0 0 24 24">
+    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>`;
-  
+
   themeToggle.innerHTML = theme === 'dark' ? sunIcon : moonIcon;
   
   themeToggle.addEventListener('click', toggleTheme);
@@ -61,18 +59,17 @@ function toggleTheme() {
   document.documentElement.setAttribute('data-theme', next);
   localStorage.setItem('theme', next);
   
-  // Icônes améliorées
   const toggle = document.querySelector('.theme-toggle');
   if (toggle) {
-    const sunIcon = `<svg fill="white" viewBox="0 0 24 24" stroke="white" stroke-width="2">
+    const sunIcon = `<svg fill="currentColor" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
       <circle cx="12" cy="12" r="4"/>
       <path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
     </svg>`;
-    
-    const moonIcon = `<svg fill="white" viewBox="0 0 24 24">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+    const moonIcon = `<svg fill="currentColor" viewBox="0 0 24 24">
+      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>`;
-    
+
     toggle.innerHTML = next === 'dark' ? sunIcon : moonIcon;
   }
 }

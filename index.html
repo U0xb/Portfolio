@@ -3,31 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portfolio - Redouane</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&display=swap" rel="stylesheet">
-    
-    <!-- Favicon ajouté -->
+    <title>Redouane — Administrateur Systèmes & Réseaux</title>
+    <meta name="description" content="Portfolio de Redouane, étudiant BTS SIO et alternant Administrateur Systèmes & Réseaux chez GetCaas. Compétences en Windows Server, Linux, Active Directory, réseaux et sécurité.">
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+
     <!-- Header -->
     <header class="site-header">
         <div class="header-inner container">
-            <a href="#" class="brand">RD</a>
+            <a href="#" class="brand">r.<span>saraoui</span></a>
             <button class="nav-toggle" aria-label="Basculer le menu" aria-expanded="false">
                 <span class="nav-bar"></span>
                 <span class="nav-bar"></span>
                 <span class="nav-bar"></span>
             </button>
             <nav class="site-nav">
-                <a href="#projets">Projets</a>
-                <a href="#competences">Compétences</a>
                 <a href="#a-propos">À propos</a>
+                <a href="#competences">Compétences</a>
                 <a href="#experience">Expérience</a>
                 <a href="#formation">Formation</a>
+                <a href="#projets">Projets</a>
                 <a href="#contact">Contact</a>
             </nav>
         </div>
@@ -35,43 +32,21 @@
 
 
     <!-- Hero -->
-    <section class="section hero">
+    <section class="hero" id="hero">
         <div class="container">
-            <h1 class="title" data-reveal>
-                <span id="heroTitle"></span>
-            </h1>
-            <p class="subtitle" data-reveal id="heroSubtitle"></p>
-            <div class="cta" data-reveal>
-                <a href="#projets" class="btn primary">Voir mes projets</a>
-                <a href="#contact" class="btn ghost">Me contacter</a>
-            </div>
-        </div>
-    </section>
-
-
-    <!-- Projects -->
-    <section class="section projects" id="projets">
-        <div class="container">
-            <div class="section-head" data-reveal>
-                <p class="eyebrow">Portfolio</p>
-                <h2>Une sélection de travaux récents réalisés</h2>
-            </div>
-            <div class="grid" id="projectsGrid" data-reveal>
-                <!-- Les projets seront chargés ici via JavaScript -->
-            </div>
-        </div>
-    </section>
-
-
-    <!-- Skills -->
-    <section class="section skills" id="competences">
-        <div class="container">
-            <div class="section-head" data-reveal>
-                <p class="eyebrow">Compétences</p>
-                <h2>Un aperçu de mes points forts.</h2>
-            </div>
-            <div class="skills-grid" id="skillsGrid" data-reveal>
-                <!-- Les compétences seront chargées ici via JavaScript -->
+            <div class="hero-content">
+                <p class="eyebrow" data-reveal>Bonjour</p>
+                <h1 class="title" data-reveal>
+                    <span class="accent" id="heroTitle"></span>
+                </h1>
+                <p class="subtitle" data-reveal id="heroSubtitle">
+                    Étudiant en <strong>BTS SIO</strong> et alternant
+                    <strong>Administrateur Systèmes &amp; Réseaux</strong>.
+                </p>
+                <div class="cta" data-reveal>
+                    <a href="#competences" class="btn primary">Voir mes compétences →</a>
+                    <a href="#contact" class="btn ghost">Me contacter</a>
+                </div>
             </div>
         </div>
     </section>
@@ -80,31 +55,60 @@
     <!-- About -->
     <section class="section about" id="a-propos">
         <div class="container">
-            <div class="section-head" data-reveal>
-                <p class="eyebrow">À propos</p>
-                <h2>Alternant en réseau et développement</h2>
+            <div class="about-grid" data-reveal>
+                <div class="avatar" id="aboutAvatar">
+                    <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="60" cy="40" r="26" fill="#1e2d45"/>
+                        <circle cx="60" cy="40" r="22" fill="#253550"/>
+                        <ellipse cx="60" cy="42" rx="14" ry="16" fill="#f5c5a3"/>
+                        <path d="M46 36 Q60 18 74 36 Q72 26 60 22 Q48 26 46 36Z" fill="#2c1a0e"/>
+                        <circle cx="54" cy="40" r="2" fill="#1a1a2e"/>
+                        <circle cx="66" cy="40" r="2" fill="#1a1a2e"/>
+                        <path d="M54 48 Q60 53 66 48" stroke="#c47a5a" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                        <path d="M36 90 Q36 70 60 68 Q84 70 84 90" fill="#ff6a00"/>
+                        <rect x="40" y="84" width="40" height="26" rx="3" fill="#1e2d45" stroke="#ff6a00" stroke-width="1.5"/>
+                        <rect x="43" y="87" width="34" height="18" rx="1" fill="#0d1420"/>
+                        <rect x="46" y="90" width="12" height="1.5" rx="1" fill="#ff6a00" opacity=".8"/>
+                        <rect x="46" y="93" width="20" height="1.5" rx="1" fill="#ff9a3c" opacity=".6"/>
+                        <rect x="46" y="96" width="16" height="1.5" rx="1" fill="#ff6a00" opacity=".5"/>
+                        <rect x="46" y="99" width="22" height="1.5" rx="1" fill="#ff9a3c" opacity=".4"/>
+                        <rect x="34" y="110" width="52" height="4" rx="2" fill="#1e2d45" stroke="#ff6a00" stroke-width="1"/>
+                    </svg>
+                </div>
+                <div class="about-text">
+                    <p class="eyebrow">// À propos</p>
+                    <h2>Qui suis-<span class="accent">je</span> ?</h2>
+                    <div id="aboutDescription"></div>
+                    <ul class="tags" id="aboutTags"></ul>
+                </div>
             </div>
-            <div class="about-content" data-reveal>
-                <p id="aboutDescription">
-                    
-                </p>
-                <ul class="tags" id="aboutTags">
-                    <!-- Les tags seront chargés ici via JavaScript -->
-                </ul>
+        </div>
+    </section>
+
+
+    <!-- Skills -->
+    <section class="section" id="competences">
+        <div class="container">
+            <div class="section-head" data-reveal>
+                <p class="eyebrow">// Compétences</p>
+                <h2>Ce que je <span class="accent">maîtrise</span></h2>
+            </div>
+            <div class="skills-grid" id="skillsGrid" data-reveal>
+                <!-- Chargé via JavaScript -->
             </div>
         </div>
     </section>
 
 
     <!-- Experience -->
-    <section class="section" id="experience">
+    <section class="section section-alt" id="experience">
         <div class="container">
             <div class="section-head" data-reveal>
-                <p class="eyebrow">Parcours</p>
-                <h2>Expérience professionnelle</h2>
+                <p class="eyebrow">// Expérience</p>
+                <h2>Mon <span class="accent">parcours</span></h2>
             </div>
-            <div class="timeline" id="experienceTimeline" data-reveal>
-                <!-- Les expériences seront chargées ici via JavaScript -->
+            <div id="experienceTimeline" data-reveal>
+                <!-- Chargé via JavaScript -->
             </div>
         </div>
     </section>
@@ -114,25 +118,41 @@
     <section class="section" id="formation">
         <div class="container">
             <div class="section-head" data-reveal>
-                <p class="eyebrow">Formation</p>
-                <h2>Cursus académique</h2>
+                <p class="eyebrow">// Formation</p>
+                <h2>Mes <span class="accent">formations</span></h2>
             </div>
-            <div class="timeline" id="educationTimeline" data-reveal>
-                <!-- Les formations seront chargées ici via JavaScript -->
+            <div class="formation-grid" id="educationTimeline" data-reveal>
+                <!-- Chargé via JavaScript -->
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Projects -->
+    <section class="section section-alt" id="projets">
+        <div class="container">
+            <div class="section-head" data-reveal>
+                <p class="eyebrow">// Projets</p>
+                <h2>Mes <span class="accent">réalisations</span></h2>
+            </div>
+            <div class="grid" id="projectsGrid" data-reveal>
+                
+                <!-- Chargé via JavaScript -->
             </div>
         </div>
     </section>
 
 
     <!-- Contact -->
-    <section class="section" id="contact">
+    <section class="section contact" id="contact">
         <div class="container">
-            <div class="section-head" data-reveal>
-                <h2>Contact</h2>
-                <p class="subtitle">Discutons de votre projet. Réponse sous 24h.</p>
-            </div>
-            <div class="contact-actions" id="contactButtons" data-reveal>
-                <!-- Les boutons de contact seront chargés ici via JavaScript -->
+            <div class="contact-wrap" data-reveal>
+                <p class="eyebrow">// Contact</p>
+                <h2>Travaillons <span class="accent">ensemble</span></h2>
+                <p class="contact-desc">Vous avez un projet, une opportunité ou simplement envie d'échanger ? N'hésitez pas à me contacter via les canaux ci-dessous.</p>
+                <div class="contact-actions" id="contactButtons">
+                    <!-- Chargé via JavaScript -->
+                </div>
             </div>
         </div>
     </section>
@@ -140,13 +160,13 @@
 
     <!-- Footer -->
     <footer class="site-footer">
-        <div class="container">
-            <p>© <span id="year">2025</span> Redouane. Fait avec <a href="admin-login.html" class="heart-link">♥</a>.</p>
+        <div class="container footer-inner">
+            <span>© <span id="year">2025</span> — Redouane</span>
+            <span>BTS SIO · Admin Sys &amp; Réseaux <a href="admin-login.html" class="heart-link">♥</a> GetCaas</span>
         </div>
     </footer>
 
-    <!-- Scripts - Supabase UMD pour navigateur -->
-    <script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
     <script src="supabase-config.js"></script>
     <script src="script.js"></script>
     <script src="portfolio-loader.js"></script>

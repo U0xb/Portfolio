@@ -28,6 +28,7 @@
   --accent-primary: var(--accent);
   --accent-secondary: var(--accent2);
   --accent-glow:    rgba(255, 106, 0, 0.35);
+  --accent-primary-rgb: 255, 106, 0;
   --border-color:   var(--border);
   --shadow-sm:      0 2px 8px rgba(0, 0, 0, 0.4);
   --shadow-md:      0 4px 20px rgba(0, 0, 0, 0.6);
@@ -170,34 +171,6 @@ body::before {
   color: var(--accent);
 }
 
-/* Bouton thème */
-.theme-toggle {
-  background: rgba(255, 106, 0, 0.1);
-  border: 1px solid rgba(255, 106, 0, 0.25);
-  border-radius: 50%;
-  width: 38px;
-  height: 38px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  margin-left: 1rem;
-  flex-shrink: 0;
-  color: var(--accent);
-}
-
-.theme-toggle:hover {
-  background: rgba(255, 106, 0, 0.2);
-  transform: scale(1.1);
-  box-shadow: 0 0 16px rgba(255, 106, 0, 0.3);
-}
-
-.theme-toggle svg {
-  width: 18px;
-  height: 18px;
-  color: var(--accent);
-}
 
 .nav-toggle {
   display: none;
@@ -271,8 +244,6 @@ body::before {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
   padding-top: 100px;
   position: relative;
   overflow: hidden;
@@ -300,7 +271,7 @@ body::before {
   font-size: clamp(1rem, 2vw, 1.2rem);
   color: var(--muted);
   max-width: 620px;
-  margin: 0 auto 3rem;
+  margin: 0 0 3rem;
   line-height: 1.8;
 }
 
@@ -341,7 +312,7 @@ body::before {
 .cta {
   display: flex;
   gap: 1rem;
-  justify-content: center;
+  justify-content: flex-start;
   flex-wrap: wrap;
   position: relative;
   z-index: 1;
@@ -488,7 +459,7 @@ body::before {
 
 .skills-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1.2rem;
   max-width: 1200px;
   margin: 0 auto;
@@ -505,7 +476,26 @@ body::before {
   min-height: 120px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.skill-icon {
+  width: 40px;
+  height: 40px;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.skill-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.skill-description {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  margin: 0;
 }
 
 .skill::before {
@@ -730,34 +720,6 @@ body::before {
   flex-wrap: wrap;
 }
 
-.contact-actions .btn {
-  display: inline-flex !important;
-  align-items: center;
-  justify-content: center;
-  width: 52px;
-  height: 52px;
-  padding: 0;
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  color: var(--text);
-  transition: all 0.2s ease;
-}
-
-.contact-actions .btn:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(255, 106, 0, 0.2);
-}
-
-.contact-actions .btn svg {
-  width: 22px;
-  height: 22px;
-  margin: 0;
-  flex-shrink: 0;
-}
-
 /* ========================================
    FOOTER
 ======================================== */
@@ -780,7 +742,7 @@ body::before {
 }
 
 .heart-link:hover {
-  color: var(--accent);
+  color: inherit;
 }
 
 /* ========================================
@@ -822,6 +784,285 @@ body::before {
 [data-reveal].is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+/* ========================================
+   ACCENT UTILITY
+======================================== */
+
+.accent { color: var(--accent); }
+
+/* ========================================
+   BRAND LOGO (R.Redouane)
+======================================== */
+
+.brand span { color: var(--text); }
+
+/* ========================================
+   HERO CONTENT (left-aligned)
+======================================== */
+
+.hero-content { max-width: 700px; }
+
+/* ========================================
+   À PROPOS GRID
+======================================== */
+
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+.avatar {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--card), var(--border));
+  border: 2px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.avatar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,106,0,.08), rgba(255,154,60,.08));
+  pointer-events: none;
+}
+
+.avatar-corner {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  background: var(--accent);
+  color: #000;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .7rem;
+  font-weight: 700;
+  padding: .3rem .7rem;
+  border-radius: 8px 0 0 0;
+  z-index: 1;
+}
+
+.about-text h2 {
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+/* ========================================
+   EXPÉRIENCE CARD
+======================================== */
+
+.exp-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2rem 2.5rem;
+  max-width: 820px;
+  margin: 0 auto 1.2rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .25s, box-shadow .25s;
+}
+
+.exp-card:hover {
+  border-color: rgba(255,106,0,.35);
+  box-shadow: 0 12px 32px rgba(0,0,0,.5);
+}
+
+.exp-card::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: linear-gradient(180deg, var(--accent), var(--accent2));
+}
+
+.exp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1.2rem;
+}
+
+.exp-company {
+  font-size: 1.2rem;
+  font-weight: 900;
+}
+
+.exp-role {
+  color: var(--muted);
+  font-size: .9rem;
+  margin-top: .25rem;
+}
+
+.exp-date {
+  background: rgba(255,106,0,.08);
+  border: 1px solid rgba(255,106,0,.2);
+  color: var(--accent);
+  font-size: .8rem;
+  font-weight: 700;
+  padding: .35rem .9rem;
+  border-radius: 99px;
+  font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.exp-desc {
+  font-size: .9rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.exp-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+
+.exp-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: .75rem;
+  font-size: .9rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.exp-list li::before {
+  content: '▸';
+  color: var(--accent);
+  font-size: .8rem;
+  margin-top: .1rem;
+  flex-shrink: 0;
+}
+
+/* ========================================
+   FORMATION GRID
+======================================== */
+
+.formation-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.2rem;
+}
+
+.form-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  transition: all .25s;
+}
+
+.form-card:hover {
+  border-color: rgba(255,106,0,.35);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 24px rgba(0,0,0,.4);
+}
+
+.form-year {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .75rem;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: .6rem;
+}
+
+.form-card h3 {
+  font-size: 1rem;
+  font-weight: 700;
+  margin-bottom: .3rem;
+}
+
+.form-card p {
+  font-size: .85rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* ========================================
+   SECTION ALTERNANCE DE FOND
+======================================== */
+
+.section-alt { background: var(--bg2); }
+
+/* ========================================
+   CONTACT SECTION
+======================================== */
+
+.contact-wrap {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.contact-wrap h2 {
+  font-size: clamp(1.8rem, 3.5vw, 2.5rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  margin-bottom: 1rem;
+}
+
+.contact-desc {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.8;
+  margin-bottom: 2.5rem;
+}
+
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .6rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  text-decoration: none;
+  padding: .8rem 1.5rem;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: .9rem;
+  transition: all .2s;
+}
+
+.contact-link:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255,106,0,.15);
+}
+
+.contact-link svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+/* ========================================
+   FOOTER DEUX COLONNES
+======================================== */
+
+.footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
 }
 
 /* ========================================
@@ -887,7 +1128,7 @@ body::before {
     position: fixed;
     top: 0;
     right: -100%;
-    width: 280px;
+    width: min(360px, 90vw);
     height: 100vh;
     background: var(--bg2);
     backdrop-filter: blur(20px);
@@ -932,10 +1173,6 @@ body::before {
     transform: rotate(-45deg) translate(7px, -7px);
   }
 
-  .theme-toggle {
-    margin-left: 0;
-    margin-top: auto;
-  }
 
   .section {
     padding: 3rem 0;
@@ -1044,6 +1281,34 @@ body::before {
     justify-content: center;
   }
 
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .avatar {
+    max-width: 200px;
+    margin: 0 auto;
+  }
+
+  .exp-card {
+    padding: 1.5rem;
+  }
+
+  .exp-header {
+    flex-direction: column;
+    gap: .75rem;
+  }
+
+  .footer-inner {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .cta {
+    flex-direction: column;
+  }
+
   .site-footer {
     padding: 1.5rem 0;
     font-size: 0.78rem;
@@ -1109,6 +1374,75 @@ body::before {
     margin-left: 0.75rem;
     padding: 1.25rem;
   }
+}
+
+/* ========================================
+   BOUTON THÈME CLAIR/SOMBRE
+======================================== */
+
+.theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  background: rgba(255, 106, 0, 0.1);
+  border: 1px solid rgba(255, 106, 0, 0.25);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+  color: var(--accent);
+}
+
+.theme-toggle:hover {
+  background: rgba(255, 106, 0, 0.2);
+  border-color: var(--accent);
+  transform: translateY(-1px);
+}
+
+.theme-toggle svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+  stroke: currentColor;
+}
+
+/* ========================================
+   THÈME CLAIR
+======================================== */
+
+[data-theme="light"] {
+  --bg:             #f0f2f5;
+  --bg2:            #e4e9f0;
+  --card:           #ffffff;
+  --border:         #cdd5e0;
+  --text:           #0f172a;
+  --muted:          #475569;
+
+  --bg-primary:     var(--bg);
+  --bg-secondary:   var(--bg2);
+  --bg-tertiary:    #dce3ee;
+  --text-primary:   var(--text);
+  --text-secondary: var(--muted);
+  --text-muted:     #64748b;
+  --border-color:   var(--border);
+  --shadow-sm:      0 2px 8px rgba(0, 0, 0, 0.08);
+  --shadow-md:      0 4px 20px rgba(0, 0, 0, 0.12);
+  --shadow-lg:      0 8px 40px rgba(0, 0, 0, 0.18);
+  --shadow-glow:    0 0 30px rgba(255, 106, 0, 0.25);
+  --card-bg:        var(--card);
+  --nav-bg:         rgba(240, 242, 245, 0.92);
+}
+
+[data-theme="light"] body::before {
+  background: radial-gradient(circle, rgba(255, 106, 0, 0.06) 0%, transparent 70%);
+}
+
+[data-theme="light"] body::after {
+  background-image:
+    linear-gradient(rgba(255, 106, 0, 0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 106, 0, 0.02) 1px, transparent 1px);
 }
 
 /* ========================================

@@ -23,24 +23,11 @@
     border: 1px solid var(--border-color);
     border-radius: 24px;
     padding: 3rem;
-    box-shadow: var(--shadow-lg);
-    transition: all 0.3s ease;
-}
-
-[data-theme="dark"] .login-box {
-    background: rgba(20, 20, 20, 0.7);
-    box-shadow: 
+    box-shadow:
         0 8px 40px rgba(0, 0, 0, 0.6),
         inset 0 1px 0 rgba(255, 255, 255, 0.05),
-        0 0 60px rgba(129, 140, 248, 0.1);
-}
-
-:root:not([data-theme="dark"]) .login-box {
-    background: rgba(255, 255, 255, 0.9);
-    box-shadow: 
-        0 8px 40px rgba(0, 0, 0, 0.12),
-        inset 0 1px 0 rgba(255, 255, 255, 1),
-        0 0 40px rgba(99, 102, 241, 0.05);
+        0 0 60px rgba(255, 106, 0, 0.1);
+    transition: all 0.3s ease;
 }
 
 .login-box:hover {
