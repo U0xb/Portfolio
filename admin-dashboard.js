@@ -1169,11 +1169,15 @@ function closeSkillModal() {
 function previewSkillSvg() {
     const svg = document.getElementById('skillSvg').value.trim();
     const preview = document.getElementById('skillSvgPreview');
-    preview.innerHTML = svg.startsWith('<svg') ? svg : '';
-    const svgEl = preview.querySelector('svg');
-    if (svgEl) {
+    preview.innerHTML = '';
+    if (!svg.startsWith('<svg')) return;
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(svg, 'image/svg+xml');
+    const svgEl = doc.querySelector('svg');
+    if (svgEl && !doc.querySelector('parsererror')) {
         svgEl.style.width = '100%';
         svgEl.style.height = '100%';
+        preview.appendChild(document.importNode(svgEl, true));
     }
 }
 
