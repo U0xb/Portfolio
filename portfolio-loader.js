@@ -112,14 +112,21 @@ function getSupabaseClient() {
                         pdfLink = p.link;
                     }
                     
+                    const tagsHTML = p.tags && Array.isArray(p.tags) ? p.tags.map(t => `<span class="pill">${t}</span>`).join('') : '';
                     return `
                     <article class="card">
+                        <div class="card-description">
+                            ${p.description}
+                        </div>
                         <a class="card-link" href="${pdfLink}" target="_blank" rel="noopener">
-                            <div class="card-media" style="background-image: url('${imageLink}');"></div>
+                            <div class="card-media">
+                                ${imageLink
+                                    ? `<img src="${imageLink}" alt="${p.title}" class="card-media-img">`
+                                    : ''}
+                            </div>
                             <div class="card-body">
                                 <h3>${p.title}</h3>
-                                <p>${p.description}</p>
-                                ${p.tags && Array.isArray(p.tags) ? p.tags.map(t => `<span class="pill">${t}</span>`).join('') : ''}
+                                ${tagsHTML ? `<div class="card-tags">${tagsHTML}</div>` : ''}
                             </div>
                         </a>
                     </article>

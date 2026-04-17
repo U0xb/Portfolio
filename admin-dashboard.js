@@ -9,7 +9,7 @@ let currentAboutTags = [];
 // Configuration des sections
 const sections = {
     hero: {
-        title: 'Hero',
+        title: 'Accueil',
         icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5.882V19.24a1.76 1.76 0 01-3.417.592l-2.147-6.15M18 13a3 3 0 100-6M5.436 13.683A4.001 4.001 0 017 6h1.832c4.1 0 7.625-1.234 9.168-3v14c-1.543-1.766-5.067-3-9.168-3H7a3.988 3.988 0 01-1.564-.317z"/>
         </svg>`,
@@ -367,7 +367,7 @@ function renderExperienceSection() {
                     <div class="item-card">
                         <h3>${exp.title}</h3>
                         <p><strong>${exp.company}</strong>${exp.location ? ' | ' + exp.location : ''}</p>
-                        <p style="color: var(--text-secondary); font-size: 0.75rem;">${exp.date}</p>
+                        <span style="display:inline-block;background:rgba(255,106,0,.08);border:1px solid rgba(255,106,0,.2);color:var(--accent-primary);font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:700;padding:.28rem .75rem;border-radius:6px;margin-bottom:.35rem;">${exp.date}</span>
                         ${exp.description ? `<p style="margin-top: 0.5rem;">${exp.description}</p>` : ''}
                         <div class="item-actions">
                             <button class="btn" onclick='editExperience(${JSON.stringify(exp).replace(/'/g, "&apos;")})'>                                ${icons.edit} Modifier
@@ -407,7 +407,7 @@ function renderEducationSection() {
                     <div class="item-card">
                         <h3>${edu.title}</h3>
                         <p><strong>${edu.institution}</strong></p>
-                        <p style="color: var(--text-secondary); font-size: 0.75rem;">${edu.date}</p>
+                        <span style="display:inline-block;background:rgba(255,106,0,.08);border:1px solid rgba(255,106,0,.2);color:var(--accent-primary);font-family:'JetBrains Mono',monospace;font-size:.75rem;font-weight:700;padding:.28rem .75rem;border-radius:6px;margin-bottom:.35rem;">${edu.date}</span>
                         ${edu.description ? `<p style="margin-top: 0.5rem;">${edu.description}</p>` : ''}
                         <div class="item-actions">
                             <button class="btn" onclick='editEducation(${JSON.stringify(edu).replace(/'/g, "&apos;")})'>                                ${icons.edit} Modifier
@@ -532,7 +532,7 @@ async function saveHero(event) {
         };
         
         await portfolioAPI.updateHero(id, updates);
-        showSuccess('Section Hero mise à jour avec succès !');
+        showSuccess('Section Accueil mise à jour avec succès !');
     } catch (error) {
         showError('Erreur lors de la sauvegarde: ' + error.message);
     }

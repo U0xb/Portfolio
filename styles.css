@@ -374,7 +374,7 @@ body::before {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
-  overflow: hidden;
+  overflow: visible;
   transition: all 0.25s ease;
   position: relative;
 }
@@ -410,20 +410,78 @@ body::before {
 
 .card-media {
   width: 100%;
-  height: 200px;
-  background: linear-gradient(135deg, var(--bg2), var(--border));
-  background-size: cover;
-  background-position: center;
+  height: 320px;
+  background-color: var(--bg2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 12px 12px 0 0;
+}
+
+.card-media-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+}
+
+.card-description {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  width: 260px;
+  background: var(--bg2);
+  border: 1px solid rgba(255, 106, 0, 0.3);
+  border-radius: 10px;
+  padding: 0.75rem 1rem;
+  font-size: 0.78rem;
+  color: var(--muted);
+  line-height: 1.55;
+  text-align: center;
+  z-index: 100;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s ease;
+}
+
+.card-description::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid rgba(255, 106, 0, 0.3);
+}
+
+.card:hover .card-description {
+  opacity: 1;
+  visibility: visible;
+  transform: translateX(-50%) translateY(0);
+}
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  justify-content: center;
+  margin-top: 0.75rem;
 }
 
 .card-body {
-  padding: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  text-align: center;
 }
 
 .card-body h3 {
   font-size: 1.1rem;
   font-weight: 700;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0;
   color: var(--text);
 }
 
@@ -943,7 +1001,7 @@ body::before {
   font-size: .8rem;
   font-weight: 700;
   padding: .35rem .9rem;
-  border-radius: 99px;
+  border-radius: 6px;
   font-family: 'JetBrains Mono', monospace;
   white-space: nowrap;
   flex-shrink: 0;
@@ -1004,10 +1062,15 @@ body::before {
 }
 
 .form-year {
+  display: inline-block;
+  background: rgba(255,106,0,.08);
+  border: 1px solid rgba(255,106,0,.2);
+  color: var(--accent);
   font-family: 'JetBrains Mono', monospace;
   font-size: .75rem;
-  color: var(--accent);
   font-weight: 700;
+  padding: .28rem .75rem;
+  border-radius: 6px;
   margin-bottom: .6rem;
 }
 

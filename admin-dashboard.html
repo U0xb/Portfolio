@@ -10,10 +10,10 @@
     
     <!-- Styles de base (thème, variables, backgrounds) -->
     <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="stylesheet" href="styles.css">
-    
+    <link rel="stylesheet" href="styles.css?v=2">
+
     <!-- Styles spécifiques admin dashboard -->
-    <link rel="stylesheet" href="admin-dashboard.css">
+    <link rel="stylesheet" href="admin-dashboard.css?v=2">
 </head>
 <body>
     <!-- Header avec navigation -->
@@ -39,7 +39,7 @@
         <div class="dashboard-overview" id="navigationView">
             <aside class="dashboard-sidebar">
                 <div class="dashboard-panel">
-                    <p class="dashboard-panel-label">Accès rapide</p>
+                    <p class="dashboard-panel-label">// Accès rapide</p>
                     <h2>Choisis une zone à gérer</h2>
                     <p class="dashboard-panel-text">Les sections principales sont regroupées ici pour rendre la gestion plus visuelle. Clique sur une carte pour ouvrir son contenu détaillé.</p>
 
@@ -59,7 +59,7 @@
             <div class="dashboard-main">
                 <div class="dashboard-main-header">
                     <div>
-                        <p class="dashboard-panel-label">Sections disponibles</p>
+                        <p class="dashboard-panel-label">// Sections disponibles</p>
                     </div>
                 </div>
 
@@ -166,7 +166,7 @@
                 <div class="section-view-title">
                     <div class="section-view-icon" id="sectionIcon"></div>
                     <div>
-                        <p class="dashboard-panel-label">Section active</p>
+                        <p class="dashboard-panel-label">// Section active</p>
                         <h2 id="sectionTitle"></h2>
                     </div>
                 </div>
@@ -455,8 +455,8 @@
 
     <!-- Supabase UMD pour navigateur -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-    <script src="supabase-config.js"></script>
-    <script src="script.js"></script>
-    <script src="admin-dashboard.js"></script>
+    <script src="supabase-config.js?v=2"></script>
+    <script src="script.js?v=2"></script>
+    <script src="admin-dashboard.js?v=2"></script>
 </body>
 </html>
