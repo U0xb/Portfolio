@@ -141,6 +141,7 @@ function getSupabaseClient() {
                         ${s.description ? `<p class="skill-description">${s.description}</p>` : ''}
                     </div>
                 `).join('');
+
             }
         }
         
