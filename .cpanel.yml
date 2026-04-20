@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/cpe0004089/public_html/redouane/
+    - export DEPLOYPATH=/home/cpe0004089/redouane.saraoui.fr/
     - rm -rf $DEPLOYPATH/*
     - /bin/cp -Rf . $DEPLOYPATH
     - /bin/rm -rf $DEPLOYPATH/.git
