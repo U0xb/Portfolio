@@ -1607,12 +1607,12 @@ body::before {
   font-family: 'JetBrains Mono', monospace;
   font-size: 1.6rem;
   font-weight: 700;
-  color: var(--text);
+  color: var(--accent);
   letter-spacing: -0.02em;
 }
 
 .loader-brand span {
-  color: var(--accent);
+  color: var(--text);
 }
 
 .loader-bar {
