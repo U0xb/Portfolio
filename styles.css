@@ -175,20 +175,42 @@ body::before {
 .nav-toggle {
   display: none;
   flex-direction: column;
-  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
   background: none;
   border: none;
   cursor: pointer;
   z-index: 1001;
-  padding: 0.5rem;
 }
 
 .nav-toggle .nav-bar {
-  width: 25px;
+  display: block;
+  width: 22px;
   height: 2px;
-  background: var(--text);
   border-radius: 2px;
-  transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity  0.25s ease,
+              width    0.25s ease;
+}
+
+.nav-toggle .nav-bar:nth-child(1) { background: var(--text); }
+.nav-toggle .nav-bar:nth-child(2) { background: var(--text); width: 14px; align-self: flex-start; }
+.nav-toggle .nav-bar:nth-child(3) { background: var(--accent); }
+
+.nav-toggle:hover .nav-bar:nth-child(2) {
+  width: 22px;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-bar:nth-child(1) {
+  background: var(--accent);
+}
+.nav-toggle[aria-expanded="true"] .nav-bar:nth-child(2) {
+  background: var(--accent);
+  width: 22px;
 }
 
 /* ========================================
@@ -1156,53 +1178,114 @@ body::before {
     display: flex;
   }
 
-  .site-nav {
+.site-nav {
     position: fixed;
     top: 0;
     right: -100%;
-    width: min(360px, 90vw);
-    height: 100vh;
+    width: min(185px, 60vw);
+    height: 100dvh;
     background: var(--bg2);
-    backdrop-filter: blur(20px);
-    flex-direction: column;
-    padding: 6rem 2rem 2rem;
-    gap: 2rem;
-    transition: right 0.3s ease;
     border-left: 1px solid var(--border);
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 0;
+    padding: 0 0 2rem;
     z-index: 999;
-    overflow-y: auto;
-    scrollbar-width: none;
+    transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
   }
 
-  .site-nav::-webkit-scrollbar {
-    display: none;
+  /* Barre orange verticale à gauche */
+  .site-nav::before {
+    content: '';
+    position: absolute;
+    top: 15%;
+    bottom: 15%;
+    left: 0;
+    width: 2px;
+    background: linear-gradient(180deg, transparent, var(--accent), var(--accent2), transparent);
+    border-radius: 2px;
   }
+
+  .site-nav::after { display: none; }
 
   .site-nav.is-open {
     right: 0;
   }
 
-  .site-nav.is-open::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 280px;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.6);
-    z-index: -1;
+  .site-nav a {
+    display: block;
+    width: 100%;
+    padding: 0.9rem 2rem 0.9rem 2.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    color: var(--muted);
+    background: none;
+    border: none;
+    position: relative;
+    opacity: 0;
+    transform: translateX(12px);
+    transition: color 0.2s, padding-left 0.2s;
   }
 
+  /* Tiret orange glissant */
+  .site-nav a::before {
+    content: '';
+    position: absolute;
+    left: 2rem;
+    top: 50%;
+    transform: translateY(-50%) scaleX(0);
+    transform-origin: left;
+    width: 14px;
+    height: 2px;
+    background: var(--accent);
+    border-radius: 2px;
+    transition: transform 0.2s ease;
+  }
+
+  .site-nav a:hover {
+    color: var(--text);
+    padding-left: 3.8rem;
+    background: none;
+  }
+
+  .site-nav a:hover::before {
+    transform: translateY(-50%) scaleX(1);
+  }
+
+  .site-nav .theme-toggle {
+    margin-top: 2rem;
+    margin-left: 2.5rem;
+  }
+
+  @keyframes navItemIn {
+    to { opacity: 1; transform: translateX(0); }
+  }
+
+  .site-nav.is-open a {
+    animation: navItemIn 0.3s ease forwards;
+  }
+
+  .site-nav.is-open a:nth-child(1) { animation-delay: 0.06s; }
+  .site-nav.is-open a:nth-child(2) { animation-delay: 0.12s; }
+  .site-nav.is-open a:nth-child(3) { animation-delay: 0.18s; }
+  .site-nav.is-open a:nth-child(4) { animation-delay: 0.24s; }
+  .site-nav.is-open a:nth-child(5) { animation-delay: 0.30s; }
+  .site-nav.is-open a:nth-child(6) { animation-delay: 0.36s; }
+
   .nav-toggle[aria-expanded="true"] .nav-bar:nth-child(1) {
-    transform: rotate(45deg) translate(7px, 7px);
+    transform: rotate(45deg) translate(0px, 8px);
   }
 
   .nav-toggle[aria-expanded="true"] .nav-bar:nth-child(2) {
     opacity: 0;
+    transform: scaleX(0);
   }
 
   .nav-toggle[aria-expanded="true"] .nav-bar:nth-child(3) {
-    transform: rotate(-45deg) translate(7px, -7px);
+    transform: rotate(-45deg) translate(0px, -8px);
   }
 
 
