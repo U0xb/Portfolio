@@ -1256,8 +1256,7 @@ body::before {
   }
 
   .site-nav .theme-toggle {
-    margin-top: 2rem;
-    margin-left: 2.5rem;
+    margin: 2rem auto 0;
   }
 
   @keyframes navItemIn {
