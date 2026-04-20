@@ -2,7 +2,7 @@
    IMPORTS
 ======================================== */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap');
+/* Google Fonts chargé depuis le HTML pour éviter le blocage de rendu */
 
 /* ========================================
    VARIABLES & THÈME
@@ -124,7 +124,7 @@ body::before {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
-  transition: all 0.3s ease;
+  transition: background 0.3s ease, border-color 0.3s ease;
 }
 
 .header-inner {
@@ -188,7 +188,7 @@ body::before {
   height: 2px;
   background: var(--text);
   border-radius: 2px;
-  transition: all 0.3s ease;
+  transition: transform 0.3s ease, opacity 0.3s ease, background 0.3s ease;
 }
 
 /* ========================================
@@ -331,7 +331,7 @@ body::before {
   font-weight: 700;
   text-decoration: none;
   border-radius: 8px;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
   cursor: pointer;
   border: none;
   font-family: inherit;
@@ -470,7 +470,7 @@ body::before {
   margin-right: 0.4rem;
   margin-top: 0.4rem;
   font-family: 'JetBrains Mono', monospace;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease;
 }
 
 .pill:hover {
@@ -498,7 +498,7 @@ body::before {
   border-radius: 16px;
   padding: 0 1rem;
   height: 150px;
-  transition: all 0.25s ease;
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
   position: relative;
   overflow: visible;
   display: flex;
@@ -542,7 +542,7 @@ body::before {
   border: 1px solid rgba(255, 106, 0, 0.18);
   border-radius: 14px;
   padding: 10px;
-  transition: all 0.25s ease;
+  transition: background 0.25s ease, border-color 0.25s ease;
 }
 
 .skill:hover .skill-icon {
@@ -669,7 +669,7 @@ body::before {
   font-weight: 600;
   font-size: 0.8rem;
   font-family: 'JetBrains Mono', monospace;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, transform 0.2s ease;
   cursor: default;
 }
 
@@ -993,7 +993,7 @@ body::before {
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 1.5rem;
-  transition: all .25s;
+  transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .form-card:hover {
@@ -1069,7 +1069,7 @@ body::before {
   border-radius: 10px;
   font-weight: 600;
   font-size: .9rem;
-  transition: all .2s;
+  transition: border-color 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .contact-link:hover {
@@ -1425,7 +1425,7 @@ body::before {
   background: rgba(255, 106, 0, 0.1);
   border: 1px solid rgba(255, 106, 0, 0.25);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
   flex-shrink: 0;
   color: var(--accent);
 }
