@@ -89,8 +89,7 @@ function getSupabaseClient() {
                             const { data: imgData } = client.storage
                                 .from('project-images')
                                 .getPublicUrl(p.image_url);
-                            const optimizedUrl = imgData.publicUrl.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/');
-                            imageLink = `${optimizedUrl}?width=800&quality=75&format=webp`;
+                            imageLink = imgData.publicUrl;
                         }
                     }
                     let pdfLink = '#';
@@ -165,8 +164,7 @@ function getSupabaseClient() {
                 const { data: imgData } = client.storage
                     .from('project-images')
                     .getPublicUrl(about.data.image_url);
-                const optimizedUrl = imgData.publicUrl.replace('/storage/v1/object/public/', '/storage/v1/render/image/public/');
-                avatar.innerHTML = `<img src="${optimizedUrl}?width=400&quality=75&format=webp" alt="Photo de profil" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+                avatar.innerHTML = `<img src="${imgData.publicUrl}" alt="Photo de profil" style="width:100%;height:100%;object-fit:cover;display:block;">`;
             }
         }
         
