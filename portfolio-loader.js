@@ -44,11 +44,17 @@ function getSupabaseClient() {
 // CHARGEMENT DU PORTFOLIO
 // ========================================
 
+function hideLoader() {
+    const loader = document.getElementById('page-loader');
+    if (loader) loader.classList.add('hidden');
+}
+
 (async function loadPortfolio() {
     try {
         const client = getSupabaseClient();
         
         if (!client) {
+            hideLoader();
             return;
         }
         
@@ -277,7 +283,9 @@ function getSupabaseClient() {
             }
         }
         
+        hideLoader();
+
     } catch (error) {
-        // Erreur silencieuse
+        hideLoader();
     }
 })();
