@@ -44,20 +44,25 @@ function getSupabaseClient() {
 // CHARGEMENT DU PORTFOLIO
 // ========================================
 
+const _loaderStart = Date.now();
+
 function hideLoader() {
     const loader = document.getElementById('page-loader');
-    if (loader) loader.classList.add('hidden');
+    if (!loader) return;
+    const elapsed = Date.now() - _loaderStart;
+    const remaining = Math.max(0, 800 - elapsed);
+    setTimeout(() => loader.classList.add('hidden'), remaining);
 }
 
 (async function loadPortfolio() {
     try {
         const client = getSupabaseClient();
-        
+
         if (!client) {
             hideLoader();
             return;
         }
-        
+
         const [hero, projects, skills, about, experience, education, contact] = await Promise.all([
             client.from('hero').select('*').single(),
             client.from('projects').select('*').order('order_index'),
