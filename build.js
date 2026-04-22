@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const { buildSkillsHTML, buildExperienceHTML, buildEducationHTML, buildProjectsHTML } = require('./render-helpers');
 
 const SUPABASE_URL = 'https://bhfastbtpfqqggaukxmo.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJoZmFzdGJ0cGZxcWdnYXVreG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MDU5NDcsImV4cCI6MjA3OTA4MTk0N30.k9IJSDLXLRGQZLhy-LlIkgiTm78JTYb_1_3LttBOuuc';
@@ -31,86 +32,16 @@ function inject(html, markerId, content) {
     );
 }
 
-function buildSkillsHTML(skills) {
-    return skills.map(s => `
-    <div class="skill">
-        ${s.svg_icon ? `<div class="skill-icon">${s.svg_icon}</div>` : ''}
-        <span class="skill-name">${s.name}</span>
-        ${s.description ? `<p class="skill-description">${s.description}</p>` : ''}
-    </div>`).join('');
+function resolveImageUrl(filename) {
+    if (!filename) return '';
+    if (filename.startsWith('http://') || filename.startsWith('https://') || filename.startsWith('data:')) return filename;
+    if (filename.length > 200 || /^[A-Za-z0-9+/]+=*$/.test(filename)) return '';
+    return storageUrl('project-images', filename);
 }
 
-function buildExperienceHTML(experience) {
-    return experience.map(e => {
-        const company = e.company || e.entreprise || e.organization || e.organisation || e.employer || '';
-        const type = e.type || e.contract || '';
-        const companyLine = company
-            ? `${company}${type ? ` <span class="accent">—</span> ${type}` : ''}`
-            : e.title;
-        const lines = e.description ? e.description.split('\n').map(l => l.trim()).filter(Boolean) : [];
-        const descHtml = lines.length > 1
-            ? `<ul class="exp-list">${lines.map(l => `<li><span>${l}</span></li>`).join('')}</ul>`
-            : (lines.length === 1 ? `<p class="exp-desc">${lines[0]}</p>` : '');
-        return `
-    <div class="exp-card">
-        <div class="exp-header">
-            <div>
-                <div class="exp-company">${companyLine}</div>
-                ${company ? `<div class="exp-role">${e.title}</div>` : ''}
-            </div>
-            <div class="exp-date">${e.period || e.date || ''}</div>
-        </div>
-        ${descHtml}
-    </div>`;
-    }).join('');
-}
-
-function buildEducationHTML(education) {
-    return education.map(e => {
-        const institution = e.institution || e.school || e.ecole || e.etablissement || e.établissement || e.establishment || e.university || e.universite || '';
-        return `
-    <div class="form-card">
-        <div class="form-year">${e.period || e.date || ''}</div>
-        <h3>${e.title}</h3>
-        ${institution ? `<p>${institution}</p>` : ''}
-        ${e.description ? `<p>${e.description}</p>` : ''}
-    </div>`;
-    }).join('');
-}
-
-function buildProjectsHTML(projects) {
-    return projects.map(p => {
-        let imageUrl = '';
-        if (p.image_url) {
-            if (p.image_url.startsWith('http://') || p.image_url.startsWith('https://') || p.image_url.startsWith('data:')) {
-                imageUrl = p.image_url;
-            } else if (!(p.image_url.length > 200 || /^[A-Za-z0-9+/]+=*$/.test(p.image_url))) {
-                imageUrl = storageUrl('project-images', p.image_url);
-            }
-        }
-        let link = '#';
-        if (p.pdf_url) {
-            link = p.pdf_url.startsWith('http') ? p.pdf_url : storageUrl('project-pdfs', p.pdf_url);
-        } else if (p.link) {
-            link = p.link;
-        }
-        const tagsHTML = p.tags && Array.isArray(p.tags)
-            ? p.tags.map(t => `<span class="pill">${t}</span>`).join('')
-            : '';
-        return `
-    <article class="card">
-        <a class="card-link" href="${link}" target="_blank" rel="noopener">
-            <div class="card-media">
-                ${imageUrl ? `<img src="${imageUrl}" alt="${p.title}" class="card-media-img">` : ''}
-            </div>
-            <div class="card-body">
-                <h3>${p.title}</h3>
-                ${p.description ? `<p class="card-description">${p.description}</p>` : ''}
-                ${tagsHTML ? `<div class="card-tags">${tagsHTML}</div>` : ''}
-            </div>
-        </a>
-    </article>`;
-    }).join('');
+function resolvePdfLink(p) {
+    if (p.pdf_url) return p.pdf_url.startsWith('http') ? p.pdf_url : storageUrl('project-pdfs', p.pdf_url);
+    return p.link || '#';
 }
 
 async function build() {
@@ -133,7 +64,7 @@ async function build() {
     html = inject(html, 'skillsGrid', buildSkillsHTML(skills));
     html = inject(html, 'experienceTimeline', buildExperienceHTML(experience));
     html = inject(html, 'educationTimeline', buildEducationHTML(education));
-    html = inject(html, 'projectsGrid', buildProjectsHTML(projects));
+    html = inject(html, 'projectsGrid', buildProjectsHTML(projects, resolveImageUrl, resolvePdfLink));
 
     if (about) {
         if (about.description) html = inject(html, 'aboutDescription', about.description);

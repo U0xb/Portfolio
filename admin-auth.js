@@ -10,9 +10,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function checkAuth() {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session  && window.location.pathname.includes('admin-login'))     window.location.href = 'admin-dashboard.html';
-    if (!session && window.location.pathname.includes('admin-dashboard')) window.location.href = 'admin-login.html';
+    try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session  && window.location.pathname.includes('admin-login'))     window.location.href = 'admin-dashboard.html';
+        if (!session && window.location.pathname.includes('admin-dashboard')) window.location.href = 'admin-login.html';
+    } catch (e) {
+        console.error('Auth check failed:', e);
+    }
 }
 
 async function logout() {

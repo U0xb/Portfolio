@@ -135,7 +135,13 @@ function showNavigation() {
     updateCounters();
 }
 
+let _countersCache = { time: 0, counts: null };
+
 async function updateCounters() {
+    if (_countersCache.counts && Date.now() - _countersCache.time < 30_000) {
+        applyCounters(_countersCache.counts);
+        return;
+    }
     try {
         const [projects, skills, experience, education] = await Promise.all([
             portfolioAPI.getProjects(),
@@ -143,19 +149,29 @@ async function updateCounters() {
             portfolioAPI.getExperience(),
             portfolioAPI.getEducation()
         ]);
-
-        document.getElementById('projectsCount').textContent  = `${projects.length} projet${projects.length > 1 ? 's' : ''}`;
-        document.getElementById('skillsCount').textContent    = `${skills.length} compétence${skills.length > 1 ? 's' : ''}`;
-        document.getElementById('experienceCount').textContent = `${experience.length} expérience${experience.length > 1 ? 's' : ''}`;
-        document.getElementById('educationCount').textContent  = `${education.length} formation${education.length > 1 ? 's' : ''}`;
+        const counts = { p: projects.length, s: skills.length, ex: experience.length, ed: education.length };
+        _countersCache = { time: Date.now(), counts };
+        applyCounters(counts);
     } catch (error) {
         console.error('Erreur mise à jour des compteurs:', error);
     }
 }
 
+function applyCounters({ p, s, ex, ed }) {
+    document.getElementById('projectsCount').textContent   = `${p} projet${p !== 1 ? 's' : ''}`;
+    document.getElementById('skillsCount').textContent     = `${s} compétence${s !== 1 ? 's' : ''}`;
+    document.getElementById('experienceCount').textContent = `${ex} expérience${ex !== 1 ? 's' : ''}`;
+    document.getElementById('educationCount').textContent  = `${ed} formation${ed !== 1 ? 's' : ''}`;
+}
+
+function invalidateCounters() { _countersCache = { time: 0, counts: null }; }
+
 // ========================================
 // UTILITIES
 // ========================================
+
+const escAttr = s => String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const escHtml = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 function showNotification(id, message) {
     const el = document.getElementById(id);
@@ -200,220 +216,217 @@ function emptyStateHTML(svgInner, title, desc) {
 // RENDER SECTIONS
 // ========================================
 
-function renderHeroSection() {
-    loadHero().then(hero => {
-        document.getElementById('sectionContent').innerHTML = `
-            <form id="heroForm" onsubmit="saveHero(event)">
-                <input type="hidden" id="heroId" value="${hero?.id || ''}">
-                <div class="form-group">
-                    <label>Titre</label>
-                    <input type="text" id="heroTitle" value="${hero?.title || ''}" placeholder="Créons des expériences web...">
-                </div>
-                <div class="form-group">
-                    <label>Sous-titre</label>
-                    <textarea id="heroSubtitle" rows="3" placeholder="Étudiant en BTS SIO...">${hero?.subtitle || ''}</textarea>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-success">${icons.save} Enregistrer</button>
-                </div>
-            </form>
-        `;
-    });
-}
-
-function renderProjectsSection() {
-    loadProjects().then(projects => {
-        const container = document.getElementById('sectionContent');
-
-        if (!projects.length) {
-            container.innerHTML = emptyStateHTML(
-                `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>`,
-                'Aucun projet', 'Commencez par ajouter votre premier projet'
-            );
-            return;
-        }
-
-        container.innerHTML = `<div class="item-list">${projects.map(project => `
-            <div class="item-card">
-                <h3>${project.title}</h3>
-                <p>${project.description}</p>
-                ${project.tags?.length ? `<div style="display:flex;gap:.3rem;flex-wrap:wrap;margin:.5rem 0;">${project.tags.map(t => `<span class="tag">${t}</span>`).join('')}</div>` : ''}
-                <div class="item-actions">
-                    <button class="btn" onclick='editProject(${JSON.stringify(project).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
-                    <button class="btn btn-danger" onclick="deleteProject('${project.id}')">${icons.delete} Supprimer</button>
-                </div>
+async function renderHeroSection() {
+    const hero = await loadHero();
+    document.getElementById('sectionContent').innerHTML = `
+        <form id="heroForm" onsubmit="saveHero(event)">
+            <input type="hidden" id="heroId" value="${escAttr(hero?.id)}">
+            <div class="form-group">
+                <label>Titre</label>
+                <input type="text" id="heroTitle" value="${escAttr(hero?.title)}" placeholder="Créons des expériences web...">
             </div>
-        `).join('')}</div>`;
-    });
-}
-
-function renderSkillsSection() {
-    loadSkills().then(skills => {
-        const container = document.getElementById('sectionContent');
-
-        if (!skills.length) {
-            container.innerHTML = emptyStateHTML(
-                `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>`,
-                'Aucune compétence', 'Ajoutez vos compétences et savoir-faire'
-            );
-            return;
-        }
-
-        container.innerHTML = `<div class="item-list">${skills.map(skill => `
-            <div class="item-card">
-                ${skill.svg_icon ? `<div style="width:32px;height:32px;color:var(--accent-primary);margin-bottom:.5rem;">${skill.svg_icon}</div>` : ''}
-                <h3>${skill.name}</h3>
-                ${skill.description ? `<p>${skill.description}</p>` : ''}
-                <div class="item-actions">
-                    <button class="btn" onclick='editSkill(${JSON.stringify(skill).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
-                    <button class="btn btn-danger" onclick="deleteSkill('${skill.id}')">${icons.delete} Supprimer</button>
-                </div>
+            <div class="form-group">
+                <label>Sous-titre</label>
+                <textarea id="heroSubtitle" rows="3" placeholder="Étudiant en BTS SIO...">${escHtml(hero?.subtitle)}</textarea>
             </div>
-        `).join('')}</div>`;
-    });
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success">${icons.save} Enregistrer</button>
+            </div>
+        </form>
+    `;
 }
 
-function renderAboutSection() {
-    loadAbout().then(about => {
-        document.getElementById('sectionContent').innerHTML = `
-            <form id="aboutForm" onsubmit="saveAbout(event)">
-                <input type="hidden" id="aboutId" value="${about?.id || ''}">
-                <input type="hidden" id="aboutImageUrl" value="${about?.image_url || ''}">
-                <div class="form-group">
-                    <label>Photo de profil</label>
-                    <label for="aboutImageFile" class="upload-field">
-                        <span class="upload-field-top">
-                            <span class="upload-field-icon">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-                                </svg>
-                            </span>
-                            <span>
-                                <strong>Importer une photo</strong>
-                                <small>PNG, JPG, WEBP…</small>
-                            </span>
+async function renderProjectsSection() {
+    const projects = await loadProjects();
+    const container = document.getElementById('sectionContent');
+
+    if (!projects.length) {
+        container.innerHTML = emptyStateHTML(
+            `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"/>`,
+            'Aucun projet', 'Commencez par ajouter votre premier projet'
+        );
+        return;
+    }
+
+    container.innerHTML = `<div class="item-list">${projects.map(project => `
+        <div class="item-card">
+            <h3>${escHtml(project.title)}</h3>
+            <p>${escHtml(project.description)}</p>
+            ${project.tags?.length ? `<div style="display:flex;gap:.3rem;flex-wrap:wrap;margin:.5rem 0;">${project.tags.map(t => `<span class="tag">${escHtml(t)}</span>`).join('')}</div>` : ''}
+            <div class="item-actions">
+                <button class="btn" onclick='editProject(${JSON.stringify(project).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
+                <button class="btn btn-danger" onclick="deleteProject('${escAttr(project.id)}')">${icons.delete} Supprimer</button>
+            </div>
+        </div>
+    `).join('')}</div>`;
+}
+
+async function renderSkillsSection() {
+    const skills = await loadSkills();
+    const container = document.getElementById('sectionContent');
+
+    if (!skills.length) {
+        container.innerHTML = emptyStateHTML(
+            `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>`,
+            'Aucune compétence', 'Ajoutez vos compétences et savoir-faire'
+        );
+        return;
+    }
+
+    container.innerHTML = `<div class="item-list">${skills.map(skill => `
+        <div class="item-card">
+            ${skill.svg_icon ? `<div style="width:32px;height:32px;color:var(--accent-primary);margin-bottom:.5rem;">${skill.svg_icon}</div>` : ''}
+            <h3>${escHtml(skill.name)}</h3>
+            ${skill.description ? `<p>${escHtml(skill.description)}</p>` : ''}
+            <div class="item-actions">
+                <button class="btn" onclick='editSkill(${JSON.stringify(skill).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
+                <button class="btn btn-danger" onclick="deleteSkill('${escAttr(skill.id)}')">${icons.delete} Supprimer</button>
+            </div>
+        </div>
+    `).join('')}</div>`;
+}
+
+async function renderAboutSection() {
+    const about = await loadAbout();
+    document.getElementById('sectionContent').innerHTML = `
+        <form id="aboutForm" onsubmit="saveAbout(event)">
+            <input type="hidden" id="aboutId" value="${escAttr(about?.id)}">
+            <input type="hidden" id="aboutImageUrl" value="${escAttr(about?.image_url)}">
+            <div class="form-group">
+                <label>Photo de profil</label>
+                <label for="aboutImageFile" class="upload-field">
+                    <span class="upload-field-top">
+                        <span class="upload-field-icon">
+                            <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+                            </svg>
                         </span>
-                        <span class="upload-field-button">Choisir une image</span>
-                    </label>
-                    <input type="file" id="aboutImageFile" accept="image/*" class="upload-input-hidden">
-                    <div class="upload-status" id="aboutImageUploadStatus"></div>
-                    <div id="aboutImageDisplay" class="media-preview-card" style="display:none;">
-                        <div class="media-preview-main">
-                            <img id="aboutImagePreview" alt="Photo de profil" style="width:60px;height:60px;object-fit:cover;border-radius:50%;">
-                            <div class="media-preview-meta">
-                                <span class="media-preview-label">Photo actuelle</span>
-                                <span id="aboutImageName" class="media-preview-name"></span>
-                            </div>
+                        <span>
+                            <strong>Importer une photo</strong>
+                            <small>PNG, JPG, WEBP…</small>
+                        </span>
+                    </span>
+                    <span class="upload-field-button">Choisir une image</span>
+                </label>
+                <input type="file" id="aboutImageFile" accept="image/*" class="upload-input-hidden">
+                <div class="upload-status" id="aboutImageUploadStatus"></div>
+                <div id="aboutImageDisplay" class="media-preview-card" style="display:none;">
+                    <div class="media-preview-main">
+                        <img id="aboutImagePreview" alt="Photo de profil" style="width:60px;height:60px;object-fit:cover;border-radius:50%;">
+                        <div class="media-preview-meta">
+                            <span class="media-preview-label">Photo actuelle</span>
+                            <span id="aboutImageName" class="media-preview-name"></span>
                         </div>
-                        <button type="button" id="deleteAboutImageBtn" class="btn btn-danger media-delete-btn">
-                            ${icons.delete} Supprimer
-                        </button>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label>Description</label>
-                    <textarea id="aboutDescription" rows="5" placeholder="Parlez de vous...">${about?.description || ''}</textarea>
-                </div>
-                <div class="form-group">
-                    <label>Tags (Entrée pour ajouter)</label>
-                    <div class="tags-input" id="aboutTagsContainer" onclick="focusAboutTagInput()">
-                        <input type="text" id="aboutTagInput" placeholder="Ex: Passionné, Créatif..." style="border:none;flex:1;outline:none;background:transparent;color:var(--text-primary);" onkeypress="addAboutTag(event)">
-                    </div>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-success">${icons.save} Enregistrer</button>
-                </div>
-            </form>
-        `;
-
-        if (about?.image_url) updateAboutImageDisplay(about.image_url);
-
-        setupFileInput('aboutImageFile', f => f.type.startsWith('image/'), uploadAboutImage, 'aboutImageUploadStatus', 'Veuillez sélectionner un fichier image valide');
-        document.getElementById('deleteAboutImageBtn').addEventListener('click', deleteAboutImage);
-
-        currentAboutTags = about?.tags || [];
-        renderAboutTags();
-    });
-}
-
-function renderExperienceSection() {
-    loadExperience().then(experiences => {
-        const container = document.getElementById('sectionContent');
-
-        if (!experiences.length) {
-            container.innerHTML = emptyStateHTML(
-                `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>`,
-                'Aucune expérience', 'Ajoutez vos expériences professionnelles'
-            );
-            return;
-        }
-
-        container.innerHTML = `<div class="item-list">${experiences.map(exp => `
-            <div class="item-card">
-                <h3>${exp.title}</h3>
-                <p><strong>${exp.company}</strong>${exp.location ? ' | ' + exp.location : ''}</p>
-                <span class="item-date">${exp.date}</span>
-                ${exp.description ? `<p style="margin-top:.5rem;">${exp.description}</p>` : ''}
-                <div class="item-actions">
-                    <button class="btn" onclick='editExperience(${JSON.stringify(exp).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
-                    <button class="btn btn-danger" onclick="deleteExperience('${exp.id}')">${icons.delete} Supprimer</button>
+                    <button type="button" id="deleteAboutImageBtn" class="btn btn-danger media-delete-btn">
+                        ${icons.delete} Supprimer
+                    </button>
                 </div>
             </div>
-        `).join('')}</div>`;
-    });
-}
-
-function renderEducationSection() {
-    loadEducation().then(education => {
-        const container = document.getElementById('sectionContent');
-
-        if (!education.length) {
-            container.innerHTML = emptyStateHTML(
-                `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
-                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>`,
-                'Aucune formation', 'Ajoutez votre parcours académique'
-            );
-            return;
-        }
-
-        container.innerHTML = `<div class="item-list">${education.map(edu => `
-            <div class="item-card">
-                <h3>${edu.title}</h3>
-                <p><strong>${edu.institution}</strong></p>
-                <span class="item-date">${edu.date}</span>
-                ${edu.description ? `<p style="margin-top:.5rem;">${edu.description}</p>` : ''}
-                <div class="item-actions">
-                    <button class="btn" onclick='editEducation(${JSON.stringify(edu).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
-                    <button class="btn btn-danger" onclick="deleteEducation('${edu.id}')">${icons.delete} Supprimer</button>
+            <div class="form-group">
+                <label>Description</label>
+                <textarea id="aboutDescription" rows="5" placeholder="Parlez de vous...">${escHtml(about?.description)}</textarea>
+            </div>
+            <div class="form-group">
+                <label>Tags (Entrée pour ajouter)</label>
+                <div class="tags-input" id="aboutTagsContainer" onclick="focusAboutTagInput()">
+                    <input type="text" id="aboutTagInput" placeholder="Ex: Passionné, Créatif..." style="border:none;flex:1;outline:none;background:transparent;color:var(--text-primary);" onkeypress="addAboutTag(event)">
                 </div>
             </div>
-        `).join('')}</div>`;
-    });
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success">${icons.save} Enregistrer</button>
+            </div>
+        </form>
+    `;
+
+    if (about?.image_url) updateAboutImageDisplay(about.image_url);
+
+    setupFileInput('aboutImageFile', f => f.type.startsWith('image/'), uploadAboutImage, 'aboutImageUploadStatus', 'Veuillez sélectionner un fichier image valide');
+    document.getElementById('deleteAboutImageBtn').addEventListener('click', deleteAboutImage);
+
+    currentAboutTags = about?.tags || [];
+    renderAboutTags();
 }
 
-function renderContactSection() {
-    loadContact().then(contact => {
-        document.getElementById('sectionContent').innerHTML = `
-            <form id="contactForm" onsubmit="saveContact(event)">
-                <input type="hidden" id="contactId" value="${contact?.id || ''}">
-                <div class="form-group">
-                    <label>Téléphone</label>
-                    <input type="tel" id="contactPhone" value="${contact?.phone || ''}" placeholder="06 00 00 00 00">
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" id="contactEmail" value="${contact?.email || ''}" placeholder="votre@email.com">
-                </div>
-                <div class="form-group">
-                    <label>LinkedIn</label>
-                    <input type="url" id="contactLinkedin" value="${contact?.linkedin || ''}" placeholder="https://www.linkedin.com/in/...">
-                </div>
-                <div class="form-actions">
-                    <button type="submit" class="btn btn-success">${icons.save} Enregistrer</button>
-                </div>
-            </form>
-        `;
-    });
+async function renderExperienceSection() {
+    const experiences = await loadExperience();
+    const container = document.getElementById('sectionContent');
+
+    if (!experiences.length) {
+        container.innerHTML = emptyStateHTML(
+            `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>`,
+            'Aucune expérience', 'Ajoutez vos expériences professionnelles'
+        );
+        return;
+    }
+
+    container.innerHTML = `<div class="item-list">${experiences.map(exp => `
+        <div class="item-card">
+            <h3>${escHtml(exp.title)}</h3>
+            <p><strong>${escHtml(exp.company)}</strong>${exp.location ? ' | ' + escHtml(exp.location) : ''}</p>
+            <span class="item-date">${escHtml(exp.date)}</span>
+            ${exp.description ? `<p style="margin-top:.5rem;">${escHtml(exp.description)}</p>` : ''}
+            <div class="item-actions">
+                <button class="btn" onclick='editExperience(${JSON.stringify(exp).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
+                <button class="btn btn-danger" onclick="deleteExperience('${escAttr(exp.id)}')">${icons.delete} Supprimer</button>
+            </div>
+        </div>
+    `).join('')}</div>`;
+}
+
+async function renderEducationSection() {
+    const education = await loadEducation();
+    const container = document.getElementById('sectionContent');
+
+    if (!education.length) {
+        container.innerHTML = emptyStateHTML(
+            `<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"/>
+             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"/>`,
+            'Aucune formation', 'Ajoutez votre parcours académique'
+        );
+        return;
+    }
+
+    container.innerHTML = `<div class="item-list">${education.map(edu => `
+        <div class="item-card">
+            <h3>${escHtml(edu.title)}</h3>
+            <p><strong>${escHtml(edu.institution)}</strong></p>
+            <span class="item-date">${escHtml(edu.date)}</span>
+            ${edu.description ? `<p style="margin-top:.5rem;">${escHtml(edu.description)}</p>` : ''}
+            <div class="item-actions">
+                <button class="btn" onclick='editEducation(${JSON.stringify(edu).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
+                <button class="btn btn-danger" onclick="deleteEducation('${escAttr(edu.id)}')">${icons.delete} Supprimer</button>
+            </div>
+        </div>
+    `).join('')}</div>`;
+}
+
+async function renderContactSection() {
+    const contact = await loadContact();
+    document.getElementById('sectionContent').innerHTML = `
+        <form id="contactForm" onsubmit="saveContact(event)">
+            <input type="hidden" id="contactId" value="${escAttr(contact?.id)}">
+            <div class="form-group">
+                <label>Téléphone</label>
+                <input type="tel" id="contactPhone" value="${escAttr(contact?.phone)}" placeholder="06 00 00 00 00">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="contactEmail" value="${escAttr(contact?.email)}" placeholder="votre@email.com">
+            </div>
+            <div class="form-group">
+                <label>LinkedIn</label>
+                <input type="url" id="contactLinkedin" value="${escAttr(contact?.linkedin)}" placeholder="https://www.linkedin.com/in/...">
+            </div>
+            <div class="form-group">
+                <label>GitHub</label>
+                <input type="url" id="contactGithub" value="${escAttr(contact?.github)}" placeholder="https://github.com/...">
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success">${icons.save} Enregistrer</button>
+            </div>
+        </form>
+    `;
 }
 
 // ========================================
@@ -452,6 +465,7 @@ async function saveContact(event) {
             phone:      document.getElementById('contactPhone').value,
             email:      document.getElementById('contactEmail').value,
             linkedin:   document.getElementById('contactLinkedin').value,
+            github:     document.getElementById('contactGithub').value,
             updated_at: new Date().toISOString()
         });
         showSuccess('Informations de contact mises à jour !');
@@ -644,7 +658,7 @@ function renderTags(tags, containerId, inputId, removeFnName) {
     const container = document.getElementById(containerId);
     const input     = document.getElementById(inputId);
     container.innerHTML = tags.map((tag, i) => `
-        <span class="tag">${tag}<button type="button" onclick="${removeFnName}(${i})">${icons.close}</button></span>
+        <span class="tag">${escHtml(tag)}<button type="button" onclick="${removeFnName}(${i})">${icons.close}</button></span>
     `).join('') + input.outerHTML;
 }
 
@@ -653,7 +667,11 @@ function addTag(event, tags, inputId, renderFn) {
     event.preventDefault();
     const input = document.getElementById(inputId);
     const val = input.value.trim();
-    if (val && !tags.includes(val)) { tags.push(val); renderFn(); input.value = ''; }
+    if (val && !tags.includes(val)) {
+        tags.push(val);
+        renderFn();
+        document.getElementById(inputId).focus();
+    }
 }
 
 function renderProjectTags() { renderTags(currentProjectTags, 'projectTagsContainer', 'projectTagInput', 'removeProjectTag'); }
@@ -711,6 +729,7 @@ async function deleteProject(id) {
     if (!confirm('Êtes-vous sûr de vouloir supprimer ce projet ?')) return;
     try {
         await portfolioAPI.deleteProject(id);
+        invalidateCounters();
         showSuccess('Projet supprimé !');
         renderProjectsSection();
     } catch (e) { showError('Erreur lors de la suppression: ' + e.message); }
@@ -734,6 +753,7 @@ document.getElementById('projectForm').addEventListener('submit', async (e) => {
             showSuccess('Projet modifié !');
         } else {
             await portfolioAPI.createProject(projectData);
+            invalidateCounters();
             showSuccess('Projet créé !');
         }
         closeProjectModal();
@@ -786,6 +806,7 @@ async function deleteSkill(id) {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cette compétence ?')) return;
     try {
         await portfolioAPI.deleteSkill(id);
+        invalidateCounters();
         showSuccess('Compétence supprimée !');
         renderSkillsSection();
     } catch (e) { showError('Erreur lors de la suppression: ' + e.message); }
@@ -806,6 +827,7 @@ document.getElementById('skillForm').addEventListener('submit', async (e) => {
             showSuccess('Compétence modifiée !');
         } else {
             await portfolioAPI.createSkill(skillData);
+            invalidateCounters();
             showSuccess('Compétence créée !');
         }
         closeSkillModal();
@@ -845,6 +867,7 @@ async function deleteExperience(id) {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cette expérience ?')) return;
     try {
         await portfolioAPI.deleteExperience(id);
+        invalidateCounters();
         showSuccess('Expérience supprimée !');
         renderExperienceSection();
     } catch (e) { showError('Erreur lors de la suppression: ' + e.message); }
@@ -867,6 +890,7 @@ document.getElementById('experienceForm').addEventListener('submit', async (e) =
             showSuccess('Expérience modifiée !');
         } else {
             await portfolioAPI.createExperience(experienceData);
+            invalidateCounters();
             showSuccess('Expérience créée !');
         }
         closeExperienceModal();
@@ -905,6 +929,7 @@ async function deleteEducation(id) {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cette formation ?')) return;
     try {
         await portfolioAPI.deleteEducation(id);
+        invalidateCounters();
         showSuccess('Formation supprimée !');
         renderEducationSection();
     } catch (e) { showError('Erreur lors de la suppression: ' + e.message); }
@@ -926,6 +951,7 @@ document.getElementById('educationForm').addEventListener('submit', async (e) =>
             showSuccess('Formation modifiée !');
         } else {
             await portfolioAPI.createEducation(educationData);
+            invalidateCounters();
             showSuccess('Formation créée !');
         }
         closeEducationModal();
@@ -948,7 +974,12 @@ window.addEventListener('click', (e) => {
 });
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) { window.location.href = 'admin-login.html'; return; }
-    await updateCounters();
+    try {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (!session) { window.location.href = 'admin-login.html'; return; }
+        await updateCounters();
+    } catch (e) {
+        console.error('Init error:', e);
+        window.location.href = 'admin-login.html';
+    }
 });

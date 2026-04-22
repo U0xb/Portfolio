@@ -8,7 +8,7 @@ window.supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 function _list(table, orderCol = 'id') {
     return async () => {
         const { data, error } = await supabase.from(table).select('*').order(orderCol, { ascending: true });
-        if (error) console.error(`Error loading ${table}:`, error);
+        if (error) throw error;
         return data || [];
     };
 }
@@ -16,7 +16,7 @@ function _list(table, orderCol = 'id') {
 function _single(table) {
     return async () => {
         const { data, error } = await supabase.from(table).select('*').limit(1).single();
-        if (error) console.error(`Error loading ${table}:`, error);
+        if (error) throw error;
         return data;
     };
 }
