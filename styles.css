@@ -28,6 +28,8 @@
   --accent-primary: var(--accent);
   --accent-secondary: var(--accent2);
   --accent-glow:    rgba(255, 106, 0, 0.35);
+  --gradient-accent: linear-gradient(135deg, var(--accent), var(--accent2));
+  --color-accent-light: rgba(255, 106, 0, 0.08);
   --accent-primary-rgb: 255, 106, 0;
   --border-color:   var(--border);
   --shadow-sm:      0 2px 8px rgba(0, 0, 0, 0.4);
