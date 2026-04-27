@@ -7,12 +7,16 @@
     else root.renderHelpers = factory();
 })(typeof globalThis !== 'undefined' ? globalThis : this, function () {
 
+    function esc(s) {
+        return String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
     function buildSkillsHTML(skills) {
         return skills.map(s => `
     <div class="skill">
         ${s.svg_icon ? `<div class="skill-icon">${s.svg_icon}</div>` : ''}
-        <span class="skill-name">${s.name}</span>
-        ${s.description ? `<p class="skill-description">${s.description}</p>` : ''}
+        <span class="skill-name">${esc(s.name)}</span>
+        ${s.description ? `<p class="skill-description">${esc(s.description)}</p>` : ''}
     </div>`).join('');
     }
 
@@ -21,20 +25,20 @@
             const company     = e.company || e.entreprise || e.organization || e.organisation || e.employer || '';
             const type        = e.type || e.contract || '';
             const companyLine = company
-                ? `${company}${type ? ` <span class="accent">—</span> ${type}` : ''}`
-                : e.title;
+                ? `${esc(company)}${type ? ` <span class="accent">—</span> ${esc(type)}` : ''}`
+                : esc(e.title);
             const lines    = e.description ? e.description.split('\n').map(l => l.trim()).filter(Boolean) : [];
             const descHtml = lines.length > 1
-                ? `<ul class="exp-list">${lines.map(l => `<li><span>${l}</span></li>`).join('')}</ul>`
-                : (lines.length === 1 ? `<p class="exp-desc">${lines[0]}</p>` : '');
+                ? `<ul class="exp-list">${lines.map(l => `<li><span>${esc(l)}</span></li>`).join('')}</ul>`
+                : (lines.length === 1 ? `<p class="exp-desc">${esc(lines[0])}</p>` : '');
             return `
     <div class="exp-card">
         <div class="exp-header">
             <div>
                 <div class="exp-company">${companyLine}</div>
-                ${company ? `<div class="exp-role">${e.title}</div>` : ''}
+                ${company ? `<div class="exp-role">${esc(e.title)}</div>` : ''}
             </div>
-            <div class="exp-date">${e.period || e.date || ''}</div>
+            <div class="exp-date">${esc(e.period || e.date || '')}</div>
         </div>
         ${descHtml}
     </div>`;
@@ -46,24 +50,27 @@
             const institution = e.institution || e.school || e.ecole || e.etablissement || e.établissement || e.establishment || e.university || e.universite || '';
             return `
     <div class="form-card">
-        <div class="form-year">${e.period || e.date || ''}</div>
-        <h3>${e.title}</h3>
-        ${institution ? `<p>${institution}</p>` : ''}
-        ${e.description ? `<p>${e.description}</p>` : ''}
+        <div class="form-year">${esc(e.period || e.date || '')}</div>
+        <h3>${esc(e.title)}</h3>
+        ${institution ? `<p>${esc(institution)}</p>` : ''}
+        ${e.description ? `<p>${esc(e.description)}</p>` : ''}
     </div>`;
         }).join('');
     }
 
     // resolveImageUrl(filename) → string url ou ''
     // resolvePdfLink(project)  → string url
-    function esc(s) {
-        return String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    function safeLinkHref(url) {
+        if (!url || url === '#') return '#';
+        const s = String(url).trim().toLowerCase();
+        return (s.startsWith('https://') || s.startsWith('http://') || s.startsWith('mailto:') || s.startsWith('tel:')) ? url : '#';
     }
 
     function buildProjectsHTML(projects, resolveImageUrl, resolvePdfLink) {
         return projects.map(p => {
             const imageLink = resolveImageUrl(p.image_url);
-            const pdfLink   = resolvePdfLink(p);
+            const pdfLink   = safeLinkHref(resolvePdfLink(p));
             const tagsHTML  = Array.isArray(p.tags) ? p.tags.map(t => `<span class="pill">${esc(t)}</span>`).join('') : '';
             return `
     <article class="card">
@@ -81,5 +88,5 @@
         }).join('');
     }
 
-    return { buildSkillsHTML, buildExperienceHTML, buildEducationHTML, buildProjectsHTML };
+    return { esc, buildSkillsHTML, buildExperienceHTML, buildEducationHTML, buildProjectsHTML };
 });

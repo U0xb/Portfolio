@@ -45,7 +45,7 @@ function hideLoader() {
         const resolveImageUrl = (filename) => {
             if (!filename) return '';
             if (filename.startsWith('http') || filename.startsWith('data:')) return filename;
-            if (filename.length > 200 || /^[A-Za-z0-9+/]+=*$/.test(filename)) return '';
+            if (filename.length > 200) return '';
             return publicUrl('project-images', filename);
         };
 
@@ -59,7 +59,7 @@ function hideLoader() {
             const t = document.getElementById('heroTitle');
             const s = document.getElementById('heroSubtitle');
             if (t) t.textContent = hero.data.title;
-            if (s) s.textContent = hero.data.subtitle;
+            if (s) s.innerHTML = hero.data.subtitle;
         }
 
         // PROJETS
@@ -79,10 +79,10 @@ function hideLoader() {
             const desc   = document.getElementById('aboutDescription');
             const tags   = document.getElementById('aboutTags');
             const avatar = document.getElementById('aboutAvatar');
-            if (desc && about.data.description) desc.innerHTML = about.data.description;
-            if (tags && Array.isArray(about.data.tags)) tags.innerHTML = about.data.tags.map(t => `<li>${t}</li>`).join('');
+            if (desc && about.data.description) desc.textContent = about.data.description;
+            if (tags && Array.isArray(about.data.tags)) tags.innerHTML = about.data.tags.map(t => `<li>${renderHelpers.esc(t)}</li>`).join('');
             if (avatar && about.data.image_url) {
-                avatar.innerHTML = `<img src="${publicUrl('project-images', about.data.image_url)}" alt="Photo de profil" style="width:100%;height:100%;object-fit:cover;display:block;">`;
+                avatar.innerHTML = `<img src="${publicUrl('project-images', about.data.image_url)}" alt="Photo de profil" class="avatar-img">`;
             }
         }
 
@@ -109,8 +109,15 @@ function hideLoader() {
                     phone:    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"/></svg>`,
                 };
 
+                const escAttr = s => String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+                const safeHref = url => {
+                    if (!url) return '#';
+                    const s = String(url).trim().toLowerCase();
+                    return (s.startsWith('https://') || s.startsWith('http://') || s.startsWith('mailto:') || s.startsWith('tel:')) ? url : '#';
+                };
+
                 const contactBtn = (href, label, svgKey, external = false) =>
-                    `<a href="${href}" class="contact-link"${external ? ' target="_blank" rel="noopener"' : ''} aria-label="${label}">${CONTACT_SVGS[svgKey]} ${label}</a>`;
+                    `<a href="${escAttr(safeHref(href))}" class="contact-link"${external ? ' target="_blank" rel="noopener"' : ''} aria-label="${escAttr(label)}">${CONTACT_SVGS[svgKey]} ${escAttr(label)}</a>`;
 
                 const d = contact.data;
                 btns.innerHTML = [

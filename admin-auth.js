@@ -50,6 +50,7 @@ function initSSHTerminal() {
 
     // ── Utilitaires
     const sleep = ms => new Promise(r => setTimeout(r, ms));
+    const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
     function rand(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -142,7 +143,7 @@ function initSSHTerminal() {
         const sshMatch = raw.match(/^ssh\s+([^\s@]+@[^\s]+)$/i);
         if (!sshMatch) {
             const bin = raw.split(/\s+/)[0];
-            addLine(`bash: ${bin}: command not found`, 'error');
+            addLine(`bash: ${esc(bin)}: command not found`, 'error');
             return;
         }
 
@@ -157,7 +158,7 @@ function initSSHTerminal() {
         const ip  = `${rand(80,200)}.${rand(10,220)}.${rand(1,250)}.${rand(1,253)}`;
 
         await typeLines([
-            { text: `The authenticity of host '${sshHost} (${ip})' can't be established.`, delay: 250 },
+            { text: `The authenticity of host '${esc(sshHost)} (${ip})' can't be established.`, delay: 250 },
             { text: `ED25519 key fingerprint is SHA256:${fp}.`,                            delay: 180 },
             { text: `This key is not known by any other names.`,                           delay: 150 },
             { text: `Are you sure you want to continue connecting (yes/no/[fingerprint])?`,delay: 200 },
@@ -191,7 +192,7 @@ function initSSHTerminal() {
         // yes
         state = 'BUSY';
         hideInput();
-        addLine(`Warning: Permanently added '${sshHost}' (ED25519) to the list of known hosts.`, 'warning');
+        addLine(`Warning: Permanently added '${esc(sshHost)}' (ED25519) to the list of known hosts.`, 'warning');
         await sleep(350);
 
         attempts = 0;
@@ -233,10 +234,10 @@ function initSSHTerminal() {
             if (attempts >= MAX_TRIES) {
                 // Trop de tentatives — déconnexion
                 await typeLines([
-                    { text: `${sshEmail}@${sshHost}: Permission denied (publickey,password).`, cls: 'error', delay: 100 },
+                    { text: `${esc(sshEmail)}@${esc(sshHost)}: Permission denied (publickey,password).`, cls: 'error', delay: 100 },
                     { text: '' },
-                    { text: `Received disconnect from ${sshHost}: Too many authentication failures`, cls: 'error', delay: 200 },
-                    { text: `Connection to ${sshHost} closed by remote host.`, cls: 'dim', delay: 300 },
+                    { text: `Received disconnect from ${esc(sshHost)}: Too many authentication failures`, cls: 'error', delay: 200 },
+                    { text: `Connection to ${esc(sshHost)} closed by remote host.`, cls: 'dim', delay: 300 },
                     { text: '' },
                 ]);
                 await sleep(700);
@@ -247,7 +248,7 @@ function initSSHTerminal() {
                 sshHost  = '';
                 setPrompt('C:\\Users\\Redouane>');
             } else {
-                addLine(`${sshEmail}@${sshHost}: Permission denied, please try again.`, 'error');
+                addLine(`${esc(sshEmail)}@${esc(sshHost)}: Permission denied, please try again.`, 'error');
                 await sleep(280);
                 state = 'WAITING_PASSWORD';
                 setPrompt(`${sshEmail}'s password: `, 'password');

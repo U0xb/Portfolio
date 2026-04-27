@@ -2,8 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const { buildSkillsHTML, buildExperienceHTML, buildEducationHTML, buildProjectsHTML } = require('./render-helpers');
 
-const SUPABASE_URL = 'https://bhfastbtpfqqggaukxmo.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJoZmFzdGJ0cGZxcWdnYXVreG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MDU5NDcsImV4cCI6MjA3OTA4MTk0N30.k9IJSDLXLRGQZLhy-LlIkgiTm78JTYb_1_3LttBOuuc';
+const { SUPABASE_URL, SUPABASE_ANON_KEY } = require('./supabase-credentials');
+
+const esc = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
 const HEADERS = {
     'apikey': SUPABASE_ANON_KEY,
@@ -26,10 +27,12 @@ function inject(html, markerId, content) {
     const start = `<!-- BUILD:${markerId}:START -->`;
     const end = `<!-- BUILD:${markerId}:END -->`;
     const escaped = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-    return html.replace(
-        new RegExp(`${escaped(start)}[\\s\\S]*?${escaped(end)}`),
-        `${start}\n${content}\n${end}`
-    );
+    const regex = new RegExp(`${escaped(start)}[\\s\\S]*?${escaped(end)}`);
+    if (!regex.test(html)) {
+        console.warn(`⚠️  Marqueur BUILD:${markerId} introuvable dans index.html`);
+        return html;
+    }
+    return html.replace(regex, () => `${start}\n${content}\n${end}`);
 }
 
 function resolveImageUrl(filename) {
@@ -67,9 +70,9 @@ async function build() {
     html = inject(html, 'projectsGrid', buildProjectsHTML(projects, resolveImageUrl, resolvePdfLink));
 
     if (about) {
-        if (about.description) html = inject(html, 'aboutDescription', about.description);
+        if (about.description) html = inject(html, 'aboutDescription', esc(about.description));
         if (about.tags && Array.isArray(about.tags)) {
-            html = inject(html, 'aboutTags', about.tags.map(t => `<li>${t}</li>`).join(''));
+            html = inject(html, 'aboutTags', about.tags.map(t => `<li>${esc(t)}</li>`).join(''));
         }
     }
 

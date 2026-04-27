@@ -106,8 +106,6 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 20px;
     box-shadow: var(--shadow-md);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
 }
 
 .dashboard-panel {
@@ -1284,36 +1282,36 @@ body {
 @media (max-width: 768px) {
     /* Annule le menu coulissant du portfolio — la nav doit rester inline sur l'admin */
     .site-nav {
-        position: static !important;
-        right: auto !important;
-        width: auto !important;
-        height: auto !important;
-        background: transparent !important;
-        backdrop-filter: none !important;
-        -webkit-backdrop-filter: none !important;
-        flex-direction: row !important;
-        padding: 0 !important;
-        gap: 0.5rem !important;
-        border: none !important;
-        z-index: auto !important;
-        overflow: visible !important;
-        transition: none !important;
-        align-items: center !important;
+        position: static;
+        right: auto;
+        width: auto;
+        height: auto;
+        background: transparent;
+        backdrop-filter: none;
+        -webkit-backdrop-filter: none;
+        flex-direction: row;
+        padding: 0;
+        gap: 0.5rem;
+        border: none;
+        z-index: auto;
+        overflow: visible;
+        transition: none;
+        align-items: center;
     }
 
     /* Réinitialise le margin du thème (conçu pour le menu coulissant portfolio) */
     .site-nav .theme-toggle {
-        margin: 0 !important;
+        margin: 0;
         flex-shrink: 0;
     }
 
     /* Les boutons admin restent en ligne, pas en bloc comme les liens portfolio */
     .site-nav .btn-back,
     .site-nav .logout-btn {
-        display: inline-flex !important;
-        width: auto !important;
-        padding: 0.45rem 0.75rem !important;
-        font-size: 0.78rem !important;
+        display: inline-flex;
+        width: auto;
+        padding: 0.45rem 0.75rem;
+        font-size: 0.78rem;
         white-space: nowrap;
     }
 

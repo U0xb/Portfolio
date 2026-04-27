@@ -79,7 +79,8 @@
     padding: 0.55rem 1.1rem;
     background: rgba(8, 12, 20, 0.55);
     border-bottom: 1px solid var(--border);
-    user-select: none;
+    -webkit-user-select: none;
+  user-select: none;
 }
 
 .terminal-dots {
@@ -140,7 +141,7 @@
 /* ── Lignes de sortie ── */
 .terminal-line {
     white-space: pre-wrap;
-    word-break: break-all;
+    overflow-wrap: anywhere;
     min-height: 1.8em;
 }
 

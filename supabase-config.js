@@ -1,8 +1,10 @@
-// Configuration Supabase
-const SUPABASE_URL = 'https://bhfastbtpfqqggaukxmo.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJoZmFzdGJ0cGZxcWdnYXVreG1vIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM1MDU5NDcsImV4cCI6MjA3OTA4MTk0N30.k9IJSDLXLRGQZLhy-LlIkgiTm78JTYb_1_3LttBOuuc';
-
-window.supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+// SUPABASE_URL et SUPABASE_ANON_KEY sont injectés par supabase-credentials.js chargé avant ce script
+if (typeof window.supabase?.createClient === 'function') {
+    window.supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+} else {
+    console.warn('Supabase library not loaded — dynamic content unavailable.');
+    window.supabase = null;
+}
 
 // Helpers internes
 function _list(table, orderCol = 'id') {

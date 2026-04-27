@@ -2,9 +2,15 @@
 // STATE
 // ========================================
 
-let currentSection = null;
 let currentProjectTags = [];
 let currentAboutTags = [];
+
+const _itemCache = {
+    projects:   new Map(),
+    skills:     new Map(),
+    experience: new Map(),
+    education:  new Map(),
+};
 
 // ========================================
 // ICONS
@@ -110,7 +116,6 @@ function showSection(sectionKey) {
     const section = sections[sectionKey];
     if (!section) return;
 
-    currentSection = sectionKey;
     document.getElementById('navigationView').style.display = 'none';
     document.getElementById('sectionView').classList.add('active');
     document.getElementById('sectionIcon').innerHTML = section.icon;
@@ -129,7 +134,6 @@ function showSection(sectionKey) {
 }
 
 function showNavigation() {
-    currentSection = null;
     document.getElementById('navigationView').style.display = 'grid';
     document.getElementById('sectionView').classList.remove('active');
     updateCounters();
@@ -173,11 +177,13 @@ function invalidateCounters() { _countersCache = { time: 0, counts: null }; }
 const escAttr = s => String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 const escHtml = s => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
+const _notifTimers = {};
 function showNotification(id, message) {
     const el = document.getElementById(id);
     el.textContent = message;
     el.style.display = 'block';
-    setTimeout(() => { el.style.display = 'none'; }, 4000);
+    clearTimeout(_notifTimers[id]);
+    _notifTimers[id] = setTimeout(() => { el.style.display = 'none'; }, 4000);
 }
 
 function showSuccess(msg) { showNotification('successMessage', msg); }
@@ -248,13 +254,16 @@ async function renderProjectsSection() {
         return;
     }
 
+    _itemCache.projects.clear();
+    projects.forEach(p => _itemCache.projects.set(String(p.id), p));
+
     container.innerHTML = `<div class="item-list">${projects.map(project => `
         <div class="item-card">
             <h3>${escHtml(project.title)}</h3>
             <p>${escHtml(project.description)}</p>
             ${project.tags?.length ? `<div style="display:flex;gap:.3rem;flex-wrap:wrap;margin:.5rem 0;">${project.tags.map(t => `<span class="tag">${escHtml(t)}</span>`).join('')}</div>` : ''}
             <div class="item-actions">
-                <button class="btn" onclick='editProject(${JSON.stringify(project).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
+                <button class="btn" onclick="editProject('${escAttr(project.id)}')">${icons.edit} Modifier</button>
                 <button class="btn btn-danger" onclick="deleteProject('${escAttr(project.id)}')">${icons.delete} Supprimer</button>
             </div>
         </div>
@@ -273,13 +282,16 @@ async function renderSkillsSection() {
         return;
     }
 
+    _itemCache.skills.clear();
+    skills.forEach(s => _itemCache.skills.set(String(s.id), s));
+
     container.innerHTML = `<div class="item-list">${skills.map(skill => `
         <div class="item-card">
             ${skill.svg_icon ? `<div style="width:32px;height:32px;color:var(--accent-primary);margin-bottom:.5rem;">${skill.svg_icon}</div>` : ''}
             <h3>${escHtml(skill.name)}</h3>
             ${skill.description ? `<p>${escHtml(skill.description)}</p>` : ''}
             <div class="item-actions">
-                <button class="btn" onclick='editSkill(${JSON.stringify(skill).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
+                <button class="btn" onclick="editSkill('${escAttr(skill.id)}')">${icons.edit} Modifier</button>
                 <button class="btn btn-danger" onclick="deleteSkill('${escAttr(skill.id)}')">${icons.delete} Supprimer</button>
             </div>
         </div>
@@ -360,6 +372,9 @@ async function renderExperienceSection() {
         return;
     }
 
+    _itemCache.experience.clear();
+    experiences.forEach(e => _itemCache.experience.set(String(e.id), e));
+
     container.innerHTML = `<div class="item-list">${experiences.map(exp => `
         <div class="item-card">
             <h3>${escHtml(exp.title)}</h3>
@@ -367,7 +382,7 @@ async function renderExperienceSection() {
             <span class="item-date">${escHtml(exp.date)}</span>
             ${exp.description ? `<p style="margin-top:.5rem;">${escHtml(exp.description)}</p>` : ''}
             <div class="item-actions">
-                <button class="btn" onclick='editExperience(${JSON.stringify(exp).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
+                <button class="btn" onclick="editExperience('${escAttr(exp.id)}')">${icons.edit} Modifier</button>
                 <button class="btn btn-danger" onclick="deleteExperience('${escAttr(exp.id)}')">${icons.delete} Supprimer</button>
             </div>
         </div>
@@ -387,6 +402,9 @@ async function renderEducationSection() {
         return;
     }
 
+    _itemCache.education.clear();
+    education.forEach(e => _itemCache.education.set(String(e.id), e));
+
     container.innerHTML = `<div class="item-list">${education.map(edu => `
         <div class="item-card">
             <h3>${escHtml(edu.title)}</h3>
@@ -394,7 +412,7 @@ async function renderEducationSection() {
             <span class="item-date">${escHtml(edu.date)}</span>
             ${edu.description ? `<p style="margin-top:.5rem;">${escHtml(edu.description)}</p>` : ''}
             <div class="item-actions">
-                <button class="btn" onclick='editEducation(${JSON.stringify(edu).replace(/'/g, "&apos;")})'>${icons.edit} Modifier</button>
+                <button class="btn" onclick="editEducation('${escAttr(edu.id)}')">${icons.edit} Modifier</button>
                 <button class="btn btn-danger" onclick="deleteEducation('${escAttr(edu.id)}')">${icons.delete} Supprimer</button>
             </div>
         </div>
@@ -433,8 +451,15 @@ async function renderContactSection() {
 // SAVE FUNCTIONS
 // ========================================
 
+function getSubmitBtn(event) {
+    return event.submitter || event.target.querySelector('[type="submit"]');
+}
+
 async function saveHero(event) {
     event.preventDefault();
+    const btn = getSubmitBtn(event);
+    if (btn?.disabled) return;
+    if (btn) btn.disabled = true;
     try {
         await portfolioAPI.updateHero(document.getElementById('heroId').value, {
             title:      document.getElementById('heroTitle').value,
@@ -443,10 +468,14 @@ async function saveHero(event) {
         });
         showSuccess('Section Accueil mise à jour avec succès !');
     } catch (e) { showError('Erreur lors de la sauvegarde: ' + e.message); }
+    finally { if (btn) btn.disabled = false; }
 }
 
 async function saveAbout(event) {
     event.preventDefault();
+    const btn = getSubmitBtn(event);
+    if (btn?.disabled) return;
+    if (btn) btn.disabled = true;
     try {
         await portfolioAPI.updateAbout(document.getElementById('aboutId').value, {
             description: document.getElementById('aboutDescription').value,
@@ -456,10 +485,14 @@ async function saveAbout(event) {
         });
         showSuccess('Section À propos mise à jour !');
     } catch (e) { showError('Erreur lors de la sauvegarde: ' + e.message); }
+    finally { if (btn) btn.disabled = false; }
 }
 
 async function saveContact(event) {
     event.preventDefault();
+    const btn = getSubmitBtn(event);
+    if (btn?.disabled) return;
+    if (btn) btn.disabled = true;
     try {
         await portfolioAPI.updateContact(document.getElementById('contactId').value, {
             phone:      document.getElementById('contactPhone').value,
@@ -470,6 +503,7 @@ async function saveContact(event) {
         });
         showSuccess('Informations de contact mises à jour !');
     } catch (e) { showError('Erreur lors de la sauvegarde: ' + e.message); }
+    finally { if (btn) btn.disabled = false; }
 }
 
 // ========================================
@@ -657,9 +691,17 @@ async function deleteAboutImage() {
 function renderTags(tags, containerId, inputId, removeFnName) {
     const container = document.getElementById(containerId);
     const input     = document.getElementById(inputId);
-    container.innerHTML = tags.map((tag, i) => `
-        <span class="tag">${escHtml(tag)}<button type="button" onclick="${removeFnName}(${i})">${icons.close}</button></span>
-    `).join('') + input.outerHTML;
+
+    container.querySelectorAll('.tag').forEach(el => el.remove());
+
+    const frag = document.createDocumentFragment();
+    tags.forEach((tag, i) => {
+        const span = document.createElement('span');
+        span.className = 'tag';
+        span.innerHTML = `${escHtml(tag)}<button type="button" onclick="${removeFnName}(${i})">${icons.close}</button>`;
+        frag.appendChild(span);
+    });
+    container.insertBefore(frag, input);
 }
 
 function addTag(event, tags, inputId, renderFn) {
@@ -669,8 +711,9 @@ function addTag(event, tags, inputId, renderFn) {
     const val = input.value.trim();
     if (val && !tags.includes(val)) {
         tags.push(val);
+        input.value = '';
         renderFn();
-        document.getElementById(inputId).focus();
+        input.focus();
     }
 }
 
@@ -723,7 +766,7 @@ function closeProjectModal() {
     hidePdfDisplay();
 }
 
-function editProject(project) { openProjectModal(project); }
+function editProject(id) { openProjectModal(_itemCache.projects.get(String(id)) ?? null); }
 
 async function deleteProject(id) {
     if (!confirm('Êtes-vous sûr de vouloir supprimer ce projet ?')) return;
@@ -737,6 +780,9 @@ async function deleteProject(id) {
 
 document.getElementById('projectForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const btn = getSubmitBtn(e);
+    if (btn?.disabled) return;
+    if (btn) btn.disabled = true;
     try {
         const projectData = {
             title:       document.getElementById('projectTitle').value,
@@ -759,6 +805,7 @@ document.getElementById('projectForm').addEventListener('submit', async (e) => {
         closeProjectModal();
         renderProjectsSection();
     } catch (e) { showError('Erreur: ' + e.message); }
+    finally { if (btn) btn.disabled = false; }
 });
 
 // ========================================
@@ -800,7 +847,7 @@ function previewSkillSvg() {
     }
 }
 
-function editSkill(skill) { openSkillModal(skill); }
+function editSkill(id) { openSkillModal(_itemCache.skills.get(String(id)) ?? null); }
 
 async function deleteSkill(id) {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cette compétence ?')) return;
@@ -814,6 +861,9 @@ async function deleteSkill(id) {
 
 document.getElementById('skillForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const btn = getSubmitBtn(e);
+    if (btn?.disabled) return;
+    if (btn) btn.disabled = true;
     try {
         const skillData = {
             name:        document.getElementById('skillName').value,
@@ -833,6 +883,7 @@ document.getElementById('skillForm').addEventListener('submit', async (e) => {
         closeSkillModal();
         renderSkillsSection();
     } catch (e) { showError('Erreur: ' + e.message); }
+    finally { if (btn) btn.disabled = false; }
 });
 
 // ========================================
@@ -861,7 +912,7 @@ function openExperienceModal(experience = null) {
 
 function closeExperienceModal() { document.getElementById('experienceModal').classList.remove('active'); }
 
-function editExperience(experience) { openExperienceModal(experience); }
+function editExperience(id) { openExperienceModal(_itemCache.experience.get(String(id)) ?? null); }
 
 async function deleteExperience(id) {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cette expérience ?')) return;
@@ -875,6 +926,9 @@ async function deleteExperience(id) {
 
 document.getElementById('experienceForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const btn = getSubmitBtn(e);
+    if (btn?.disabled) return;
+    if (btn) btn.disabled = true;
     try {
         const experienceData = {
             title:       document.getElementById('experienceTitle').value,
@@ -896,6 +950,7 @@ document.getElementById('experienceForm').addEventListener('submit', async (e) =
         closeExperienceModal();
         renderExperienceSection();
     } catch (e) { showError('Erreur: ' + e.message); }
+    finally { if (btn) btn.disabled = false; }
 });
 
 // ========================================
@@ -923,7 +978,7 @@ function openEducationModal(education = null) {
 
 function closeEducationModal() { document.getElementById('educationModal').classList.remove('active'); }
 
-function editEducation(education) { openEducationModal(education); }
+function editEducation(id) { openEducationModal(_itemCache.education.get(String(id)) ?? null); }
 
 async function deleteEducation(id) {
     if (!confirm('Êtes-vous sûr de vouloir supprimer cette formation ?')) return;
@@ -937,6 +992,9 @@ async function deleteEducation(id) {
 
 document.getElementById('educationForm').addEventListener('submit', async (e) => {
     e.preventDefault();
+    const btn = getSubmitBtn(e);
+    if (btn?.disabled) return;
+    if (btn) btn.disabled = true;
     try {
         const educationData = {
             title:       document.getElementById('educationTitle').value,
@@ -957,6 +1015,7 @@ document.getElementById('educationForm').addEventListener('submit', async (e) =>
         closeEducationModal();
         renderEducationSection();
     } catch (e) { showError('Erreur: ' + e.message); }
+    finally { if (btn) btn.disabled = false; }
 });
 
 // ========================================

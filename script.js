@@ -91,29 +91,37 @@ selectAll('a[href^="#"]').forEach((link) => {
   });
 });
 
+
 // ========================================
-// ANIMATION DES BARRES DE COMPÉTENCES
+// ACTIVE NAV SECTION TRACKING
 // ========================================
 
-const animateSkills = () => {
-  selectAll('.skill-fill').forEach((bar) => {
-    const value = Number(bar.getAttribute('data-skill-value') || '0');
-    const clamped = Math.max(0, Math.min(100, value));
-    bar.style.width = clamped + '%';
-  });
-};
+(function () {
+  const sections = selectAll('section[id]');
+  const navLinks = selectAll('.site-nav a[href^="#"]');
+  let ticking = false;
 
-const skillsObserver = new IntersectionObserver((entries) => {
-  entries.forEach((entry) => {
-    if (entry.isIntersecting) {
-      animateSkills();
-      skillsObserver.disconnect();
+  function updateActiveNav() {
+    const trigger = window.scrollY + window.innerHeight * 0.4;
+    let active = null;
+    sections.forEach((section) => {
+      if (section.offsetTop <= trigger) active = section;
+    });
+    const activeId = active ? active.id : null;
+    navLinks.forEach((link) => {
+      link.classList.toggle('nav-active', link.getAttribute('href') === `#${activeId}`);
+    });
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      requestAnimationFrame(() => { updateActiveNav(); ticking = false; });
+      ticking = true;
     }
-  });
-}, { threshold: 0.2 });
+  }, { passive: true });
 
-const skillsSection = document.getElementById('competences');
-if (skillsSection) skillsObserver.observe(skillsSection);
+  updateActiveNav();
+})();
 
 // ========================================
 // MOBILE NAV TOGGLE
