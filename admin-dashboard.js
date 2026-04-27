@@ -287,7 +287,7 @@ async function renderSkillsSection() {
 
     container.innerHTML = `<div class="item-list">${skills.map(skill => `
         <div class="item-card">
-            ${skill.svg_icon ? `<div style="width:32px;height:32px;color:var(--accent-primary);margin-bottom:.5rem;">${skill.svg_icon}</div>` : ''}
+            ${skill.svg_icon ? `<div class="skill-svg-slot" style="width:32px;height:32px;color:var(--accent-primary);margin-bottom:.5rem;" data-skill-id="${escAttr(skill.id)}"></div>` : ''}
             <h3>${escHtml(skill.name)}</h3>
             ${skill.description ? `<p>${escHtml(skill.description)}</p>` : ''}
             <div class="item-actions">
@@ -296,6 +296,19 @@ async function renderSkillsSection() {
             </div>
         </div>
     `).join('')}</div>`;
+
+    // Injection sécurisée des SVG via DOMParser (évite XSS)
+    skills.forEach(skill => {
+        if (!skill.svg_icon) return;
+        const slot = container.querySelector(`.skill-svg-slot[data-skill-id="${CSS.escape(String(skill.id))}"]`);
+        if (!slot) return;
+        const doc   = new DOMParser().parseFromString(skill.svg_icon, 'image/svg+xml');
+        const svgEl = doc.querySelector('svg');
+        if (svgEl && !doc.querySelector('parsererror')) {
+            svgEl.style.width = svgEl.style.height = '100%';
+            slot.appendChild(document.importNode(svgEl, true));
+        }
+    });
 }
 
 async function renderAboutSection() {

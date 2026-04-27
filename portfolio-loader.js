@@ -49,8 +49,14 @@ function hideLoader() {
             return publicUrl('project-images', filename);
         };
 
+        const supabaseOrigin = (() => { try { return new URL(window.SUPABASE_URL).origin; } catch { return null; } })();
         const resolvePdfLink = (p) => {
-            if (p.pdf_url) return p.pdf_url.startsWith('http') ? p.pdf_url : publicUrl('project-pdfs', p.pdf_url);
+            if (p.pdf_url) {
+                if (p.pdf_url.startsWith('http')) {
+                    try { return new URL(p.pdf_url).origin === supabaseOrigin ? p.pdf_url : '#'; } catch { return '#'; }
+                }
+                return publicUrl('project-pdfs', p.pdf_url);
+            }
             return p.link || '#';
         };
 
@@ -59,7 +65,7 @@ function hideLoader() {
             const t = document.getElementById('heroTitle');
             const s = document.getElementById('heroSubtitle');
             if (t) t.textContent = hero.data.title;
-            if (s) s.innerHTML = hero.data.subtitle;
+            if (s) s.textContent = hero.data.subtitle;
         }
 
         // PROJETS

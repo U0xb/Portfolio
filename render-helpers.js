@@ -11,10 +11,19 @@
         return String(s ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     }
 
+    // Supprime les scripts et handlers d'événements d'un SVG avant injection innerHTML
+    function sanitizeSvg(svg) {
+        if (!svg || typeof svg !== 'string') return '';
+        return svg
+            .replace(/<script[\s\S]*?<\/script>/gi, '')
+            .replace(/\son\w+\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]*)/gi, '')
+            .replace(/javascript\s*:/gi, '');
+    }
+
     function buildSkillsHTML(skills) {
         return skills.map(s => `
     <div class="skill">
-        ${s.svg_icon ? `<div class="skill-icon">${s.svg_icon}</div>` : ''}
+        ${s.svg_icon ? `<div class="skill-icon">${sanitizeSvg(s.svg_icon)}</div>` : ''}
         <span class="skill-name">${esc(s.name)}</span>
         ${s.description ? `<p class="skill-description">${esc(s.description)}</p>` : ''}
     </div>`).join('');
