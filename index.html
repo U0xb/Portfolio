@@ -50,7 +50,7 @@
     <meta name="theme-color" content="#080c14" media="(prefers-color-scheme: dark)">
     <meta name="theme-color" content="#f0f2f5" media="(prefers-color-scheme: light)">
     <link rel="icon" type="image/png" href="favicon.png">
-    <link rel="stylesheet" href="styles.css?v=4">
+    <link rel="stylesheet" href="styles.css?v=6">
 </head>
 <body>
 
@@ -310,6 +310,7 @@ Motivé par les défis techniques, je souhaite continuer à développer mes comp
         <div class="card-link">
             <div class="card-media">
                 <img src="https://bhfastbtpfqqggaukxmo.supabase.co/storage/v1/object/public/project-images/1777296810344-Nouveau-diagramme-Draw.io-317542.png" alt="Déploiement d'un serveur GLPI en entreprise" class="card-media-img">
+                <div class="card-media-overlay"><button type="button" class="card-media-btn" data-lightbox-src="https://bhfastbtpfqqggaukxmo.supabase.co/storage/v1/object/public/project-images/1777296810344-Nouveau-diagramme-Draw.io-317542.png" data-lightbox-alt="Déploiement d'un serveur GLPI en entreprise"><svg class="card-media-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>Aperçu</button></div>
             </div>
             <div class="card-body">
                 <h3>Déploiement d'un serveur GLPI en entreprise</h3>
@@ -323,6 +324,7 @@ Motivé par les défis techniques, je souhaite continuer à développer mes comp
         <div class="card-link">
             <div class="card-media">
                 <img src="https://bhfastbtpfqqggaukxmo.supabase.co/storage/v1/object/public/project-images/1777296249608-Maquette-projet-E6-eval-2-.png" alt="Infrastructure sécurisée PfSense &amp; Active Directory" class="card-media-img">
+                <div class="card-media-overlay"><button type="button" class="card-media-btn" data-lightbox-src="https://bhfastbtpfqqggaukxmo.supabase.co/storage/v1/object/public/project-images/1777296249608-Maquette-projet-E6-eval-2-.png" data-lightbox-alt="Infrastructure sécurisée PfSense &amp; Active Directory"><svg class="card-media-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>Aperçu</button></div>
             </div>
             <div class="card-body">
                 <h3>Infrastructure sécurisée PfSense &amp; Active Directory</h3>
@@ -449,6 +451,14 @@ Motivé par les défis techniques, je souhaite continuer à développer mes comp
 
     </main>
 
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Aperçu de l'image" hidden>
+        <button class="lightbox-close" type="button" aria-label="Fermer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+        </button>
+        <img class="lightbox-img" alt="">
+    </div>
+
     <!-- Footer -->
     <footer class="site-footer">
         <div class="container footer-inner">
@@ -475,6 +485,40 @@ Motivé par les défis techniques, je souhaite continuer à développer mes comp
             card.style.display = (cat === 'all' || card.dataset.category === cat) ? '' : 'none';
           });
         });
+      });
+    })();
+    </script>
+    <script>
+    (function() {
+      var lightbox = document.getElementById('lightbox');
+      if (!lightbox) return;
+      var img = lightbox.querySelector('.lightbox-img');
+      var closeBtn = lightbox.querySelector('.lightbox-close');
+
+      function open(src, alt) {
+        img.src = src;
+        img.alt = alt || '';
+        lightbox.hidden = false;
+        requestAnimationFrame(function() { lightbox.classList.add('is-open'); });
+        document.body.style.overflow = 'hidden';
+      }
+      function close() {
+        lightbox.classList.remove('is-open');
+        document.body.style.overflow = '';
+        setTimeout(function() { lightbox.hidden = true; img.src = ''; }, 250);
+      }
+
+      document.addEventListener('click', function(e) {
+        var btn = e.target.closest('[data-lightbox-src]');
+        if (btn) {
+          e.preventDefault();
+          open(btn.dataset.lightboxSrc, btn.dataset.lightboxAlt);
+        }
+      });
+      closeBtn.addEventListener('click', close);
+      lightbox.addEventListener('click', function(e) { if (e.target === lightbox) close(); });
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && !lightbox.hidden) close();
       });
     })();
     </script>

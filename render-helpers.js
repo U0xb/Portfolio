@@ -85,7 +85,7 @@
     <article class="card">
         <div class="card-link">
             <div class="card-media">
-                ${imageLink ? `<img src="${esc(imageLink)}" alt="${esc(p.title)}" class="card-media-img">` : ''}
+                ${imageLink ? `<img src="${esc(imageLink)}" alt="${esc(p.title)}" class="card-media-img"><div class="card-media-overlay"><button type="button" class="card-media-btn" data-lightbox-src="${esc(imageLink)}" data-lightbox-alt="${esc(p.title)}"><svg class="card-media-btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"></circle><path d="m20 20-3.5-3.5"></path></svg>Aperçu</button></div>` : ''}
             </div>
             <div class="card-body">
                 <h3>${esc(p.title)}</h3>
