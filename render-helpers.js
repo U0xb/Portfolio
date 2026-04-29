@@ -83,7 +83,7 @@
             const tagsHTML  = Array.isArray(p.tags) ? p.tags.map(t => `<span class="pill">${esc(t)}</span>`).join('') : '';
             return `
     <article class="card">
-        <a class="card-link" href="${esc(pdfLink)}" target="_blank" rel="noopener">
+        <div class="card-link">
             <div class="card-media">
                 ${imageLink ? `<img src="${esc(imageLink)}" alt="${esc(p.title)}" class="card-media-img">` : ''}
             </div>
@@ -91,8 +91,9 @@
                 <h3>${esc(p.title)}</h3>
                 ${p.description ? `<p class="card-description">${esc(p.description)}</p>` : ''}
                 ${tagsHTML ? `<div class="card-tags">${tagsHTML}</div>` : ''}
+                <a class="card-cta" href="${esc(pdfLink)}" target="_blank" rel="noopener">Voir le projet <span aria-hidden="true">→</span></a>
             </div>
-        </a>
+        </div>
     </article>`;
         }).join('');
     }
