@@ -1862,6 +1862,50 @@ body::before {
    VEILLE TECHNOLOGIQUE
 ======================================== */
 
+.veille-intro {
+  margin: 0 auto 2.5rem;
+  max-width: 860px;
+}
+
+.veille-intro-text {
+  color: var(--text-secondary);
+  line-height: 1.75;
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.veille-methode {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.veille-methode-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  margin-bottom: 0.25rem;
+}
+
+.veille-methode p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.veille-pratique {
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
 .veille-filters {
   display: flex;
   flex-wrap: wrap;

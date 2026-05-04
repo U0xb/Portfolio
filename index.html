@@ -345,6 +345,15 @@ Motivé par les défis techniques, je souhaite continuer à développer mes comp
                 <p class="eyebrow">// Veille technologique</p>
                 <h2>Fuites de <span class="accent">données</span></h2>
             </div>
+
+            <div class="veille-intro" data-reveal>
+                <div class="veille-methode">
+                    <p class="veille-methode-title">Ma méthode de veille</p>
+                    <p>Je consulte régulièrement des sources spécialisées : le site du <strong>CERT-FR</strong> pour les bulletins d'alertes officiels, <strong>IT-Connect</strong> pour l'actualité des infrastructures, la <strong>CNIL</strong> pour les sanctions liées aux données personnelles, et <strong>FranceInfo / Journal du Geek</strong> pour les incidents grand public. Je synthétise ensuite les articles retenus à l'aide d'un outil d'IA pour structurer mes analyses et dégager les points techniques clés.</p>
+                    <p class="veille-pratique">En tant qu'alternant chez <strong>GetCaaS</strong>, une PME du secteur IT, j'ai pris conscience que les PME sont des cibles privilégiées des cyberattaquants, souvent moins bien protégées que les grandes structures. Cette réalité m'a conduit à déployer <strong>Passbolt</strong>, un gestionnaire de mots de passe open source avec chiffrement de bout en bout et MFA, pour sécuriser les accès aux données sensibles de l'entreprise. Ma veille sur les fuites de données m'a directement orienté vers cette solution, en montrant les conséquences concrètes d'une gestion défaillante des credentials.</p>
+                </div>
+            </div>
+
             <div class="veille-filters" data-reveal>
                 <button class="veille-filter active" data-category="all">Tous</button>
                 <button class="veille-filter" data-category="gouvernement">Gouvernement</button>
@@ -355,47 +364,81 @@ Motivé par les défis techniques, je souhaite continuer à développer mes comp
             </div>
             <div class="veille-grid" data-reveal>
 
-                <a class="veille-card" data-category="gouvernement" href="https://www.franceinfo.fr/internet/securite-sur-internet/cyberattaques/l-ants-visee-par-une-cyberattaque-massive-jusqu-a-10-millions-de-comptes-concernes_7952141.html" target="_blank" rel="noopener noreferrer">
+                <!-- Sept. 2025 -->
+                <a class="veille-card" data-category="telecom" href="https://www.it-connect.fr/fuite-de-donnees-sfr-19-millions-de-clients-exposes/" target="_blank" rel="noopener noreferrer">
                     <div class="veille-card-body">
-                        <div class="veille-tags"><span class="pill">Gouvernement</span><span class="pill">IDOR</span><span class="pill">~19M personnes</span></div>
-                        <h3 class="veille-title">ANTS — Portail France Titres piraté via une faille IDOR</h3>
-                        <p class="veille-desc">L'Agence Nationale des Titres Sécurisés victime d'une vulnérabilité IDOR sur son API : noms, prénoms, dates de naissance, e-mails et identifiants de connexion exposés.</p>
-                        <div class="veille-meta"><span>franceinfo</span><span>Avr. 2026</span></div>
+                        <div class="veille-tags"><span class="pill">Télécom</span><span class="pill">19M clients</span><span class="pill">IBAN exposés</span></div>
+                        <h3 class="veille-title">SFR — 19 millions de clients exposés, dont IBAN et adresses</h3>
+                        <p class="veille-desc">Un attaquant revendique l'exfiltration de données de 19 millions d'abonnés SFR : noms, prénoms, adresses postales et IBAN. L'incident révèle des lacunes dans la segmentation des bases de données et l'absence de chiffrement des données bancaires au repos — deux mesures fondamentales pour tout administrateur d'infrastructure hébergeant des données personnelles sensibles.</p>
+                        <div class="veille-meta"><span>IT-Connect</span><span>Sept. 2025</span></div>
                     </div>
                 </a>
 
+                <!-- Oct. 2025 -->
+                <a class="veille-card" data-category="sante" href="https://www.cert.ssi.gouv.fr/alerte/CERTFR-2025-ALE-010/" target="_blank" rel="noopener noreferrer">
+                    <div class="veille-card-body">
+                        <div class="veille-tags"><span class="pill">Santé</span><span class="pill">Ransomware</span><span class="pill">CERT-FR</span></div>
+                        <h3 class="veille-title">CHU de Rouen — Cyberattaque par ransomware, données patients chiffrées</h3>
+                        <p class="veille-desc">Le CHU de Rouen est victime d'une attaque par ransomware qui chiffre les dossiers médicaux et paralyse les systèmes pendant plusieurs jours. Le CERT-FR publie une alerte. Cet incident illustre les risques liés à la latéralisation dans les réseaux hospitaliers et l'importance de segmenter les VLAN, d'appliquer le principe du moindre privilège et de disposer de sauvegardes hors ligne testées régulièrement.</p>
+                        <div class="veille-meta"><span>CERT-FR</span><span>Oct. 2025</span></div>
+                    </div>
+                </a>
+
+                <!-- Nov. 2025 -->
+                <a class="veille-card" data-category="education" href="https://www.cert.ssi.gouv.fr/alerte/CERTFR-2025-ALE-012/" target="_blank" rel="noopener noreferrer">
+                    <div class="veille-card-body">
+                        <div class="veille-tags"><span class="pill">Éducation</span><span class="pill">CERT-FR</span><span class="pill">ENT piraté</span></div>
+                        <h3 class="veille-title">ENT académiques — Accès non autorisé aux bulletins scolaires</h3>
+                        <p class="veille-desc">Plusieurs Espaces Numériques de Travail académiques sont compromis, permettant l'accès aux bulletins de notes d'élèves. L'attaque exploite des comptes mal protégés (absence de MFA) et des sessions non expirées. En tant qu'alternant, cela confirme l'importance du déploiement de solutions MFA comme je l'ai mis en place via Passbolt chez GetCaaS pour protéger les accès sensibles.</p>
+                        <div class="veille-meta"><span>CERT-FR</span><span>Nov. 2025</span></div>
+                    </div>
+                </a>
+
+                <!-- Déc. 2025 -->
+                <a class="veille-card" data-category="sante" href="https://www.cnil.fr/fr/viamedis-almerys-amendes" target="_blank" rel="noopener noreferrer">
+                    <div class="veille-card-body">
+                        <div class="veille-tags"><span class="pill">Santé</span><span class="pill">33M assurés</span><span class="pill">Amende CNIL</span></div>
+                        <h3 class="veille-title">Viamedis / Almerys — 33 millions d'assurés, condamnation CNIL définitive</h3>
+                        <p class="veille-desc">La condamnation définitive des opérateurs de tiers-payant Viamedis et Almerys est prononcée par la CNIL : 33 millions d'assurés touchés par la fuite de 2024. L'enquête révèle l'absence de détection d'intrusion efficace (SIEM) et un contrôle insuffisant des accès API. Pour un administrateur SISR, cela rappelle l'obligation d'implémenter des outils de supervision des flux réseau et de journalisation des accès.</p>
+                        <div class="veille-meta"><span>CNIL</span><span>Déc. 2025</span></div>
+                    </div>
+                </a>
+
+                <!-- Jan. 2026 -->
                 <a class="veille-card" data-category="gouvernement" href="https://www.cnil.fr/en/data-breach-5million-fine-france-travail" target="_blank" rel="noopener noreferrer">
                     <div class="veille-card-body">
                         <div class="veille-tags"><span class="pill">Gouvernement</span><span class="pill">Amende CNIL</span><span class="pill">5 M€</span></div>
                         <h3 class="veille-title">France Travail — 5 M€ d'amende CNIL pour défaut de sécurité</h3>
-                        <p class="veille-desc">L'ancien Pôle Emploi sanctionné par la CNIL pour ne pas avoir protégé les données personnelles de millions de demandeurs d'emploi suite à une violation de données.</p>
+                        <p class="veille-desc">L'ancien Pôle Emploi est sanctionné par la CNIL pour ne pas avoir correctement protégé les données personnelles de millions de demandeurs d'emploi. L'enquête pointe un défaut de chiffrement et une absence de contrôle des accès internes. Pour un admin réseau, cela souligne l'importance de chiffrer les bases de données et de segmenter les droits d'accès par rôle (RBAC).</p>
                         <div class="veille-meta"><span>CNIL</span><span>Jan. 2026</span></div>
                     </div>
                 </a>
 
-                <a class="veille-card" data-category="education" href="https://www.journaldugeek.com/2026/04/16/piratage-massif-de-leducation-nationale-les-donnees-de-35-millions-deleves-mineurs-ont-fuite/" target="_blank" rel="noopener noreferrer">
+                <a class="veille-card" data-category="telecom" href="https://www.cnil.fr/fr/sanction-free-2026" target="_blank" rel="noopener noreferrer">
                     <div class="veille-card-body">
-                        <div class="veille-tags"><span class="pill">Éducation</span><span class="pill">DumpSec</span><span class="pill">3,5M élèves</span></div>
-                        <h3 class="veille-title">ÉduConnect — 3,5 millions d'élèves mineurs dans la nature</h3>
-                        <p class="veille-desc">Le groupe DumpSec exfiltre les données de 3,5 millions d'élèves : bulletins scolaires, mots de passe en clair, données administratives et documents ASSR2.</p>
-                        <div class="veille-meta"><span>Journal du Geek</span><span>Avr. 2026</span></div>
+                        <div class="veille-tags"><span class="pill">Télécom</span><span class="pill">Amende CNIL</span><span class="pill">42 M€</span></div>
+                        <h3 class="veille-title">Free — 42 M€ d'amende pour la fuite de 24 millions d'abonnés</h3>
+                        <p class="veille-desc">Suite à la fuite de 2024 ayant exposé les données de 24 millions d'abonnés (coordonnées, IBAN), la CNIL prononce une amende record de 42 M€ contre le groupe Iliad. L'enquête révèle des défauts de chiffrement et une absence de détection d'intrusion efficace. Pour un administrateur réseau, cela rappelle l'importance de mettre en place des solutions SIEM et de chiffrer les bases de données sensibles, même en environnement interne.</p>
+                        <div class="veille-meta"><span>CNIL</span><span>Jan. 2026</span></div>
                     </div>
                 </a>
 
-                <a class="veille-card" data-category="education" href="https://www.franceinfo.fr/internet/securite-sur-internet/cyberattaques/les-donnees-de-705-000-anciens-candidats-de-parcoursup-en-occitanie-ont-ete-piratees_7959473.html" target="_blank" rel="noopener noreferrer">
+                <!-- Fév. 2026 -->
+                <a class="veille-card" data-category="finance" href="https://www.empruntis.com/rachat-credits/actualites/2026/piratage-fichier-ficoba-20802/" target="_blank" rel="noopener noreferrer">
                     <div class="veille-card-body">
-                        <div class="veille-tags"><span class="pill">Éducation</span><span class="pill">705 000 candidats</span></div>
-                        <h3 class="veille-title">Parcoursup — 705 000 candidats d'Occitanie piratés</h3>
-                        <p class="veille-desc">Accès frauduleux à un compte autorisé : noms, adresses, nationalités, historique scolaire, statut boursier et données parentales des candidats 2023 et 2025 compromis.</p>
-                        <div class="veille-meta"><span>franceinfo</span><span>Avr. 2026</span></div>
+                        <div class="veille-tags"><span class="pill">Finance</span><span class="pill">FICOBA</span><span class="pill">1,2M comptes</span></div>
+                        <h3 class="veille-title">FICOBA — 1,2 million de comptes bancaires consultés illégalement</h3>
+                        <p class="veille-desc">Des identifiants d'un agent des Finances publiques sont volés pour accéder au fichier national des comptes bancaires (FICOBA) : IBAN, identités et adresses exfiltrés pour 1,2 million de personnes. Cet incident illustre le risque des comptes à privilèges non surveillés et l'absence d'alertes sur les comportements anormaux — un cas typique où un SIEM avec règles de détection aurait permis de stopper l'exfiltration.</p>
+                        <div class="veille-meta"><span>Empruntis</span><span>Fév. 2026</span></div>
                     </div>
                 </a>
 
+                <!-- Mars 2026 -->
                 <a class="veille-card" data-category="education" href="https://www.it-connect.fr/piratage-du-crous-les-donnees-de-774-000-etudiants-dans-la-nature-mars-2026/" target="_blank" rel="noopener noreferrer">
                     <div class="veille-card-body">
                         <div class="veille-tags"><span class="pill">Éducation</span><span class="pill">DumpSec</span><span class="pill">774 000 étudiants</span></div>
                         <h3 class="veille-title">CROUS — 774 000 étudiants exposés, passeports et diplômes inclus</h3>
-                        <p class="veille-desc">DumpSec accède à la plateforme MesRDV : 774 000 étudiants touchés dont 139 000 avec leurs pièces d'identité, passeports et justificatifs de domicile.</p>
+                        <p class="veille-desc">Le groupe DumpSec accède à la plateforme MesRDV du CROUS via un compte authentifié mais mal cloisonné : 774 000 étudiants touchés dont 139 000 avec leurs pièces d'identité, passeports et justificatifs de domicile. L'attaque exploite un problème de gestion des droits et des rôles (RBAC). En infrastructure, cela souligne la nécessité d'appliquer le principe du moindre privilège sur les comptes de service et les APIs exposées.</p>
                         <div class="veille-meta"><span>IT-Connect</span><span>Mars 2026</span></div>
                     </div>
                 </a>
@@ -404,26 +447,36 @@ Motivé par les défis techniques, je souhaite continuer à développer mes comp
                     <div class="veille-card-body">
                         <div class="veille-tags"><span class="pill">Santé</span><span class="pill">DumpSec</span><span class="pill">15M patients</span></div>
                         <h3 class="veille-title">Cegedim Santé — 15 millions de dossiers médicaux compromis</h3>
-                        <p class="veille-desc">Le logiciel médical Cegedim victime de DumpSec : 15 millions de dossiers patients dont 164 000 avec annotations médicales sensibles (diagnostics, prescriptions).</p>
+                        <p class="veille-desc">Le logiciel médical Cegedim est victime de DumpSec : 15 millions de dossiers patients dont 164 000 avec annotations médicales sensibles (diagnostics, prescriptions). L'attaque révèle une absence de chiffrement des données médicales au repos et un contrôle d'accès insuffisant entre les différents clients du logiciel. Pour un admin SISR, c'est un rappel de l'importance de la isolation des données par tenant dans les architectures multi-clients.</p>
                         <div class="veille-meta"><span>Journal du Geek</span><span>Mars 2026</span></div>
                     </div>
                 </a>
 
-                <a class="veille-card" data-category="finance" href="https://www.empruntis.com/rachat-credits/actualites/2026/piratage-fichier-ficoba-20802/" target="_blank" rel="noopener noreferrer">
+                <!-- Avr. 2026 -->
+                <a class="veille-card" data-category="gouvernement" href="https://www.franceinfo.fr/internet/securite-sur-internet/cyberattaques/l-ants-visee-par-une-cyberattaque-massive-jusqu-a-10-millions-de-comptes-concernes_7952141.html" target="_blank" rel="noopener noreferrer">
                     <div class="veille-card-body">
-                        <div class="veille-tags"><span class="pill">Finance</span><span class="pill">FICOBA</span><span class="pill">1,2M comptes</span></div>
-                        <h3 class="veille-title">FICOBA — 1,2 million de comptes bancaires consultés illégalement</h3>
-                        <p class="veille-desc">Des identifiants d'un agent des Finances publiques volés pour accéder au fichier national des comptes bancaires : IBAN, identité et adresses postales exfiltrés.</p>
-                        <div class="veille-meta"><span>Empruntis</span><span>Fév. 2026</span></div>
+                        <div class="veille-tags"><span class="pill">Gouvernement</span><span class="pill">IDOR</span><span class="pill">~19M personnes</span></div>
+                        <h3 class="veille-title">ANTS — Portail France Titres piraté via une faille IDOR</h3>
+                        <p class="veille-desc">L'Agence Nationale des Titres Sécurisés est victime d'une vulnérabilité IDOR (Insecure Direct Object Reference) sur son API : un attaquant pouvait accéder aux données d'un autre utilisateur en modifiant simplement un identifiant dans la requête HTTP. Environ 19 millions de personnes sont concernées (noms, prénoms, dates de naissance). Cet incident illustre l'importance de la validation des droits d'accès côté serveur, et non uniquement côté client — une bonne pratique fondamentale en sécurisation d'API.</p>
+                        <div class="veille-meta"><span>franceinfo</span><span>Avr. 2026</span></div>
                     </div>
                 </a>
 
-                <a class="veille-card" data-category="telecom" href="https://www.cnil.fr/fr/sanction-free-2026" target="_blank" rel="noopener noreferrer">
+                <a class="veille-card" data-category="education" href="https://www.journaldugeek.com/2026/04/16/piratage-massif-de-leducation-nationale-les-donnees-de-35-millions-deleves-mineurs-ont-fuite/" target="_blank" rel="noopener noreferrer">
                     <div class="veille-card-body">
-                        <div class="veille-tags"><span class="pill">Télécom</span><span class="pill">Amende CNIL</span><span class="pill">42 M€</span></div>
-                        <h3 class="veille-title">Free — 42 M€ d'amende pour la fuite de 24 millions d'abonnés</h3>
-                        <p class="veille-desc">La CNIL sanctionne le groupe Iliad (Free Mobile + Free) à hauteur de 42 millions d'euros pour la violation de données de 24 millions de contrats d'abonnement.</p>
-                        <div class="veille-meta"><span>CNIL</span><span>Jan. 2026</span></div>
+                        <div class="veille-tags"><span class="pill">Éducation</span><span class="pill">DumpSec</span><span class="pill">3,5M élèves</span></div>
+                        <h3 class="veille-title">ÉduConnect — 3,5 millions d'élèves mineurs dans la nature</h3>
+                        <p class="veille-desc">Le groupe DumpSec exfiltre les données de 3,5 millions d'élèves : bulletins scolaires, mots de passe stockés en clair, données administratives et documents ASSR2. Le stockage des mots de passe en clair constitue une faute grave — toute infrastructure doit utiliser un hachage salé (bcrypt, Argon2). Cet incident souligne aussi l'absence de politique de rotation des mots de passe et de surveillance des exports de données massifs.</p>
+                        <div class="veille-meta"><span>Journal du Geek</span><span>Avr. 2026</span></div>
+                    </div>
+                </a>
+
+                <a class="veille-card" data-category="education" href="https://www.franceinfo.fr/internet/securite-sur-internet/cyberattaques/les-donnees-de-705-000-anciens-candidats-de-parcoursup-en-occitanie-ont-ete-piratees_7959473.html" target="_blank" rel="noopener noreferrer">
+                    <div class="veille-card-body">
+                        <div class="veille-tags"><span class="pill">Éducation</span><span class="pill">705 000 candidats</span></div>
+                        <h3 class="veille-title">Parcoursup — 705 000 candidats d'Occitanie piratés</h3>
+                        <p class="veille-desc">Un accès frauduleux via un compte autorisé compromis permet l'exfiltration des données de 705 000 candidats Parcoursup 2023 et 2025 : noms, adresses, nationalités, historique scolaire, statut boursier et données parentales. L'utilisation d'un compte légitime rend la détection difficile — c'est exactement le cas d'usage justifiant un SIEM avec analyse comportementale (UEBA) pour détecter les accès anormaux par volume ou horaire.</p>
+                        <div class="veille-meta"><span>franceinfo</span><span>Avr. 2026</span></div>
                     </div>
                 </a>
 
