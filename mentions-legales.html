@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mentions légales — Redouane Saraoui</title>
+    <meta name="description" content="Mentions légales du site portfolio de Redouane Saraoui.">
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://redouane.saraoui.fr/mentions-legales.html">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap">
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.png" type="image/png">
+
+    <style>
+        .legal-page {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 7rem 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .legal-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-decoration: none;
+            margin-bottom: 2.5rem;
+            transition: color 0.2s;
+        }
+        .legal-back:hover { color: var(--accent); }
+        .legal-back svg { width: 16px; height: 16px; }
+        .legal-header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .legal-header .tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 1rem;
+        }
+        .legal-header h1 {
+            font-size: clamp(1.8rem, 4vw, 2.4rem);
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.75rem;
+        }
+        .legal-header .updated {
+            font-size: 0.82rem;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .legal-section {
+            margin-bottom: 2.5rem;
+        }
+        .legal-section h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent2);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .legal-section h2::before {
+            content: '';
+            display: inline-block;
+            width: 3px;
+            height: 1.1em;
+            background: var(--accent);
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+        .legal-section p,
+        .legal-section li {
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.8;
+        }
+        .legal-section ul {
+            list-style: none;
+            padding-left: 1.2rem;
+        }
+        .legal-section ul li::before {
+            content: '—';
+            color: var(--accent);
+            margin-right: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .legal-section a {
+            color: var(--accent2);
+            text-decoration: none;
+        }
+        .legal-section a:hover { text-decoration: underline; }
+        .info-block {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            padding: 1.2rem 1.5rem;
+            margin-top: 1rem;
+        }
+        .info-block p { margin-bottom: 0.3rem; }
+        .info-block p:last-child { margin-bottom: 0; }
+        .info-block strong { color: var(--text); }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="header-inner container">
+            <a href="index.html" class="brand">r.<span>saraoui</span></a>
+            <nav class="site-nav" aria-label="Navigation principale"></nav>
+        </div>
+    </header>
+
+    <main class="legal-page">
+        <a href="index.html" class="legal-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+            Retour au portfolio
+        </a>
+
+        <div class="legal-header">
+            <div class="tag">Conformité légale</div>
+            <h1>Mentions légales</h1>
+            <p class="updated">Dernière mise à jour : 4 mai 2026</p>
+        </div>
+
+        <div class="legal-section">
+            <h2>Éditeur du site</h2>
+            <p>Ce site web est édité à titre personnel par :</p>
+            <div class="info-block">
+                <p><strong>Nom :</strong> Redouane Saraoui</p>
+                <p><strong>Qualité :</strong> Particulier — Étudiant BTS SIO, alternant Administrateur Systèmes &amp; Réseaux</p>
+                <p><strong>E-mail :</strong> <a href="mailto:redouane@saraoui.fr">redouane@saraoui.fr</a></p>
+                <p><strong>Site :</strong> <a href="https://redouane.saraoui.fr">https://redouane.saraoui.fr</a></p>
+            </div>
+        </div>
+
+        <div class="legal-section">
+            <h2>Hébergement</h2>
+            <p>Ce site est hébergé par :</p>
+            <div class="info-block">
+                <p><strong>Hébergeur :</strong> Scaleway SAS</p>
+                <p><strong>Adresse :</strong> 8 rue de la Ville l'Évêque — 75008 Paris, France</p>
+                <p><strong>Site :</strong> <a href="https://www.scaleway.com" target="_blank" rel="noopener noreferrer">www.scaleway.com</a></p>
+            </div>
+            <p style="margin-top:0.8rem; font-size:0.82rem;">Conformément à l'article 6-III-2 de la loi n° 2004-575 du 21 juin 2004 pour la Confiance dans l'Économie Numérique (LCEN).</p>
+        </div>
+
+        <div class="legal-section">
+            <h2>Objet du site</h2>
+            <p>Ce site est un portfolio personnel présentant les compétences, expériences professionnelles, formations et projets de Redouane Saraoui. Il est destiné à un usage de présentation professionnelle et ne réalise aucune activité commerciale.</p>
+        </div>
+
+        <div class="legal-section">
+            <h2>Propriété intellectuelle</h2>
+            <p>L'ensemble du contenu de ce site (textes, images, code source, structure) est la propriété exclusive de Redouane Saraoui, sauf mention contraire. Toute reproduction, représentation, modification, publication ou transmission du contenu, totale ou partielle, sans autorisation préalable écrite, est interdite.</p>
+            <p style="margin-top:0.8rem;">Les marques, logos et dénominations sociales de tiers éventuellement mentionnés (GetCaas, Supabase, etc.) sont la propriété de leurs détenteurs respectifs.</p>
+        </div>
+
+        <div class="legal-section">
+            <h2>Responsabilité</h2>
+            <p>Les informations contenues sur ce site sont fournies à titre indicatif. Redouane Saraoui s'efforce d'assurer l'exactitude et la mise à jour des informations diffusées, mais ne peut garantir l'exhaustivité ou l'absence d'erreurs. Il ne saurait être tenu responsable des dommages directs ou indirects découlant de l'utilisation de ce site.</p>
+            <p style="margin-top:0.8rem;">Les liens hypertextes présents sur ce site pointant vers des sites tiers n'engagent pas la responsabilité de l'éditeur quant à leur contenu.</p>
+        </div>
+
+        <div class="legal-section">
+            <h2>Données personnelles &amp; cookies</h2>
+            <p>Le traitement des données personnelles et l'utilisation des cookies sont détaillés dans la <a href="politique-confidentialite.html">Politique de confidentialité &amp; cookies</a>.</p>
+        </div>
+
+        <div class="legal-section">
+            <h2>Droit applicable</h2>
+            <p>Les présentes mentions légales sont soumises au droit français. En cas de litige, et à défaut de résolution amiable, les tribunaux français seront seuls compétents.</p>
+        </div>
+
+        <div class="legal-section">
+            <h2>Contact</h2>
+            <p>Pour toute question relative au site : <a href="mailto:redouane@saraoui.fr">redouane@saraoui.fr</a></p>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <span>© <span id="year"></span> — Redouane</span>
+            <span>
+                <a href="mentions-legales.html" class="footer-legal-link">Mentions légales</a>
+                &nbsp;·&nbsp;
+                <a href="politique-confidentialite.html" class="footer-legal-link">Confidentialité</a>
+            </span>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>

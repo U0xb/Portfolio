@@ -457,10 +457,28 @@ Motivé par les défis techniques, je souhaite continuer à développer mes comp
         <img class="lightbox-img" alt="">
     </div>
 
+    <!-- Bannière consentement cookies -->
+    <div class="cookie-banner" id="cookieBanner" role="dialog" aria-live="polite" aria-label="Gestion des cookies" hidden>
+        <div class="cookie-banner__inner">
+            <div class="cookie-banner__text">
+<p>Ce site ne vous piste pas. Il utilise uniquement le stockage local de votre navigateur pour mémoriser votre thème, et fait appel à Google Fonts et Supabase pour son fonctionnement — sans cookie publicitaire ni analytique. <a href="politique-confidentialite.html">En savoir plus</a></p>
+            </div>
+            <div class="cookie-banner__actions">
+                <button class="cookie-btn cookie-btn--accept" id="cookieAccept" type="button">Compris</button>
+                <button class="cookie-btn cookie-btn--decline" id="cookieDecline" type="button">Continuer sans accepter</button>
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="site-footer">
         <div class="container footer-inner">
             <span>© <span id="year">2025</span> — Redouane</span>
+            <div class="footer-center">
+                <a href="mentions-legales.html" class="footer-legal-link">Mentions légales</a>
+                <span class="footer-sep">·</span>
+                <a href="politique-confidentialite.html" class="footer-legal-link">Confidentialité</a>
+            </div>
             <span>BTS SIO · Admin Sys &amp; Réseaux <a href="admin-login.html" class="heart-link">♥</a> GetCaas</span>
         </div>
     </footer>
@@ -518,6 +536,28 @@ Motivé par les défis techniques, je souhaite continuer à développer mes comp
       document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && !lightbox.hidden) close();
       });
+    })();
+    </script>
+
+    <script>
+    (function() {
+      var banner = document.getElementById('cookieBanner');
+      if (!banner) return;
+      var key = 'cookie_consent';
+
+      if (!localStorage.getItem(key)) {
+        banner.hidden = false;
+        requestAnimationFrame(function() { banner.classList.add('is-visible'); });
+      }
+
+      function dismiss(value) {
+        localStorage.setItem(key, value);
+        banner.classList.remove('is-visible');
+        setTimeout(function() { banner.hidden = true; }, 350);
+      }
+
+      document.getElementById('cookieAccept').addEventListener('click', function() { dismiss('accepted'); });
+      document.getElementById('cookieDecline').addEventListener('click', function() { dismiss('declined'); });
     })();
     </script>
 </body>

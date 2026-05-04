@@ -1,3 +1,16 @@
+# Redirects canoniques
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # HTTP → HTTPS
+    RewriteCond %{HTTPS} off
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # www → non-www
+    RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+    RewriteRule ^(.*)$ https://%1%{REQUEST_URI} [L,R=301]
+</IfModule>
+
 # Cache navigateur
 <IfModule mod_expires.c>
     ExpiresActive On

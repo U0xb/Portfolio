@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Politique de confidentialité &amp; cookies — Redouane Saraoui</title>
+    <meta name="description" content="Politique de confidentialité et gestion des cookies du portfolio de Redouane Saraoui, conformément au RGPD.">
+    <meta name="robots" content="noindex, follow">
+    <link rel="canonical" href="https://redouane.saraoui.fr/politique-confidentialite.html">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=JetBrains+Mono:wght@400;700&display=swap">
+
+    <link rel="stylesheet" href="styles.css">
+    <link rel="icon" href="favicon.png" type="image/png">
+
+    <style>
+        .legal-page {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 7rem 2rem 4rem;
+            position: relative;
+            z-index: 1;
+        }
+        .legal-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.8rem;
+            color: var(--muted);
+            text-decoration: none;
+            margin-bottom: 2.5rem;
+            transition: color 0.2s;
+        }
+        .legal-back:hover { color: var(--accent); }
+        .legal-back svg { width: 16px; height: 16px; }
+        .legal-header {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+        .legal-header .tag {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.72rem;
+            color: var(--accent);
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            margin-bottom: 1rem;
+        }
+        .legal-header h1 {
+            font-size: clamp(1.6rem, 4vw, 2.2rem);
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.75rem;
+        }
+        .legal-header .updated {
+            font-size: 0.82rem;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .legal-section {
+            margin-bottom: 2.5rem;
+        }
+        .legal-section h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--accent2);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .legal-section h2::before {
+            content: '';
+            display: inline-block;
+            width: 3px;
+            height: 1.1em;
+            background: var(--accent);
+            border-radius: 2px;
+            flex-shrink: 0;
+        }
+        .legal-section h3 {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text);
+            margin: 1.2rem 0 0.5rem;
+        }
+        .legal-section p,
+        .legal-section li {
+            color: var(--muted);
+            font-size: 0.92rem;
+            line-height: 1.8;
+        }
+        .legal-section ul {
+            list-style: none;
+            padding-left: 1.2rem;
+            margin-top: 0.5rem;
+        }
+        .legal-section ul li { margin-bottom: 0.3rem; }
+        .legal-section ul li::before {
+            content: '—';
+            color: var(--accent);
+            margin-right: 0.5rem;
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .legal-section a {
+            color: var(--accent2);
+            text-decoration: none;
+        }
+        .legal-section a:hover { text-decoration: underline; }
+        .info-block {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-left: 3px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            padding: 1.2rem 1.5rem;
+            margin-top: 1rem;
+        }
+        .info-block p { margin-bottom: 0.3rem; font-size: 0.92rem; color: var(--muted); }
+        .info-block p:last-child { margin-bottom: 0; }
+        .info-block strong { color: var(--text); }
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 1rem;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.87rem;
+        }
+        th {
+            background: var(--card);
+            color: var(--accent2);
+            font-weight: 600;
+            padding: 0.7rem 1rem;
+            text-align: left;
+            border-bottom: 2px solid var(--border);
+            white-space: nowrap;
+        }
+        td {
+            padding: 0.7rem 1rem;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+        tr:last-child td { border-bottom: none; }
+        .badge {
+            display: inline-block;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.7rem;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            background: rgba(255, 106, 0, 0.12);
+            color: var(--accent2);
+            border: 1px solid rgba(255, 106, 0, 0.25);
+            white-space: nowrap;
+        }
+        .rights-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .right-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem 1.2rem;
+        }
+        .right-card strong {
+            display: block;
+            font-size: 0.88rem;
+            color: var(--text);
+            margin-bottom: 0.3rem;
+        }
+        .right-card span {
+            font-size: 0.82rem;
+            color: var(--muted);
+        }
+        .cookie-reset-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            padding: 0.55rem 1.2rem;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--muted);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.78rem;
+            cursor: pointer;
+            transition: border-color 0.2s, color 0.2s;
+        }
+        .cookie-reset-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+    </style>
+</head>
+<body>
+
+    <header class="site-header">
+        <div class="header-inner container">
+            <a href="index.html" class="brand">r.<span>saraoui</span></a>
+            <nav class="site-nav" aria-label="Navigation principale"></nav>
+        </div>
+    </header>
+
+    <main class="legal-page">
+        <a href="index.html" class="legal-back">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+            Retour au portfolio
+        </a>
+
+        <div class="legal-header">
+            <div class="tag">RGPD · Vie privée</div>
+            <h1>Politique de confidentialité &amp; cookies</h1>
+            <p class="updated">Dernière mise à jour : 4 mai 2026</p>
+        </div>
+
+        <!-- 1. Responsable -->
+        <div class="legal-section">
+            <h2>Responsable du traitement</h2>
+            <div class="info-block">
+                <p><strong>Identité :</strong> Redouane Saraoui (particulier)</p>
+                <p><strong>E-mail :</strong> <a href="mailto:redouane@saraoui.fr">redouane@saraoui.fr</a></p>
+                <p><strong>Site :</strong> <a href="https://redouane.saraoui.fr">https://redouane.saraoui.fr</a></p>
+            </div>
+            <p style="margin-top:0.8rem;">Conformément au Règlement (UE) 2016/679 (RGPD) et à la loi Informatique &amp; Libertés modifiée, vous êtes informé(e) des conditions dans lesquelles vos données sont traitées lors de la visite de ce site.</p>
+        </div>
+
+        <!-- 2. Données collectées -->
+        <div class="legal-section">
+            <h2>Données collectées</h2>
+            <p>Ce site est un portfolio personnel <strong style="color:var(--text);">sans formulaire de contact, sans compte utilisateur et sans système de tracking</strong>. Les seules interactions avec des données sont :</p>
+            <ul style="margin-top:0.8rem;">
+                <li><strong style="color:var(--text);">Préférence de thème (clair/sombre)</strong> — stockée localement dans votre navigateur via <code style="font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--accent2);">localStorage</code>, jamais transmise à un serveur.</li>
+                <li><strong style="color:var(--text);">Consentement cookies</strong> — votre choix concernant cette bannière est enregistré dans <code style="font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--accent2);">localStorage</code>, jamais transmis à un serveur.</li>
+                <li><strong style="color:var(--text);">Logs serveur</strong> — l'hébergeur peut enregistrer automatiquement votre adresse IP et les pages consultées à des fins de sécurité (voir section hébergeur ci-dessous).</li>
+            </ul>
+        </div>
+
+        <!-- 3. Services tiers -->
+        <div class="legal-section">
+            <h2>Services tiers</h2>
+            <p>Ce site fait appel à des services tiers qui peuvent effectuer des traitements indépendants :</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Usage</th>
+                            <th>Base légale</th>
+                            <th>Politique de confidentialité</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong style="color:var(--text);">Google Fonts</strong><br><span style="font-size:0.8rem;">Google LLC</span></td>
+                            <td>Chargement des polices Inter &amp; JetBrains Mono. Lors du chargement, votre adresse IP est transmise aux serveurs Google.</td>
+                            <td><span class="badge">Intérêt légitime</span></td>
+                            <td><a href="https://policies.google.com/privacy" target="_blank" rel="noopener noreferrer">policies.google.com/privacy</a></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color:var(--text);">Supabase</strong><br><span style="font-size:0.8rem;">Supabase Inc.</span></td>
+                            <td>Backend du portfolio (chargement dynamique du contenu : projets, compétences, etc.). Aucune donnée vous concernant n'est envoyée à Supabase.</td>
+                            <td><span class="badge">Intérêt légitime</span></td>
+                            <td><a href="https://supabase.com/privacy" target="_blank" rel="noopener noreferrer">supabase.com/privacy</a></td>
+                        </tr>
+                        <tr>
+                            <td><strong style="color:var(--text);">jsDelivr CDN</strong><br><span style="font-size:0.8rem;">Prospect One</span></td>
+                            <td>Distribution du SDK Supabase côté client. Peut enregistrer votre adresse IP dans ses logs.</td>
+                            <td><span class="badge">Intérêt légitime</span></td>
+                            <td><a href="https://www.jsdelivr.com/privacy-policy-jsdelivr-net" target="_blank" rel="noopener noreferrer">jsdelivr.com/privacy-policy</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="margin-top:0.8rem; font-size:0.82rem;">Ces services sont utilisés dans le cadre de l'intérêt légitime (article 6.1.f du RGPD) pour assurer le bon fonctionnement technique du site. Aucun service de tracking, de publicité ou d'analyse comportementale n'est utilisé.</p>
+        </div>
+
+        <!-- 4. Cookies & stockage local -->
+        <div class="legal-section">
+            <h2>Cookies &amp; stockage local</h2>
+
+            <h3>Cookies strictement nécessaires</h3>
+            <p>Ce site n'utilise pas de cookies propres (aucun cookie n'est déposé sur votre navigateur par ce site). Le stockage local (<code style="font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--accent2);">localStorage</code>) est utilisé uniquement pour des finalités fonctionnelles :</p>
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Clé localStorage</th>
+                            <th>Finalité</th>
+                            <th>Durée</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code style="font-family:'JetBrains Mono',monospace;color:var(--accent2);">theme</code></td>
+                            <td>Mémoriser votre préférence de thème (clair ou sombre).</td>
+                            <td>Jusqu'à effacement manuel</td>
+                        </tr>
+                        <tr>
+                            <td><code style="font-family:'JetBrains Mono',monospace;color:var(--accent2);">cookie_consent</code></td>
+                            <td>Enregistrer votre réponse à la bannière d'information cookies.</td>
+                            <td>Jusqu'à effacement manuel</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <p style="margin-top:0.8rem;">Le <code style="font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--accent2);">localStorage</code> est stocké localement sur votre appareil et n'est jamais transmis à un serveur tiers. Il ne constitue pas un cookie au sens technique, mais est soumis aux mêmes principes de transparence.</p>
+
+            <h3>Réinitialiser vos préférences</h3>
+            <p>Vous pouvez réinitialiser vos préférences de cookies à tout moment :</p>
+            <button class="cookie-reset-btn" onclick="resetConsent()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                Réinitialiser mes préférences cookies
+            </button>
+        </div>
+
+        <!-- 5. Durée de conservation -->
+        <div class="legal-section">
+            <h2>Durée de conservation</h2>
+            <p>Aucune donnée personnelle n'est collectée ni conservée par ce site sur un serveur. Les données stockées dans le <code style="font-family:'JetBrains Mono',monospace;font-size:0.82rem;color:var(--accent2);">localStorage</code> de votre navigateur sont conservées jusqu'à ce que vous les supprimiez manuellement (via les paramètres de votre navigateur ou le bouton ci-dessus).</p>
+        </div>
+
+        <!-- 6. Droits -->
+        <div class="legal-section">
+            <h2>Vos droits (RGPD)</h2>
+            <p>Conformément aux articles 15 à 22 du RGPD, vous disposez des droits suivants :</p>
+            <div class="rights-grid">
+                <div class="right-card">
+                    <strong>Droit d'accès (art. 15)</strong>
+                    <span>Obtenir confirmation que vos données sont traitées et en recevoir une copie.</span>
+                </div>
+                <div class="right-card">
+                    <strong>Droit de rectification (art. 16)</strong>
+                    <span>Demander la correction de données inexactes vous concernant.</span>
+                </div>
+                <div class="right-card">
+                    <strong>Droit à l'effacement (art. 17)</strong>
+                    <span>Demander la suppression de vos données (droit à l'oubli).</span>
+                </div>
+                <div class="right-card">
+                    <strong>Droit à la limitation (art. 18)</strong>
+                    <span>Demander la restriction du traitement dans certains cas.</span>
+                </div>
+                <div class="right-card">
+                    <strong>Droit à la portabilité (art. 20)</strong>
+                    <span>Recevoir vos données dans un format structuré et lisible par machine.</span>
+                </div>
+                <div class="right-card">
+                    <strong>Droit d'opposition (art. 21)</strong>
+                    <span>Vous opposer au traitement fondé sur l'intérêt légitime.</span>
+                </div>
+            </div>
+            <p style="margin-top:1.2rem;">Pour exercer ces droits, contactez : <a href="mailto:redouane@saraoui.fr">redouane@saraoui.fr</a>. Une réponse vous sera apportée dans un délai d'un mois (article 12 RGPD).</p>
+        </div>
+
+        <!-- 7. Réclamation -->
+        <div class="legal-section">
+            <h2>Droit de réclamation</h2>
+            <p>Si vous estimez que le traitement de vos données ne respecte pas le RGPD, vous avez le droit d'introduire une réclamation auprès de la <strong style="color:var(--text);">CNIL</strong> (Commission Nationale de l'Informatique et des Libertés) :</p>
+            <div class="info-block">
+                <p><strong>Site :</strong> <a href="https://www.cnil.fr" target="_blank" rel="noopener noreferrer">www.cnil.fr</a></p>
+                <p><strong>Téléphone :</strong> 01 53 73 22 22</p>
+                <p><strong>Adresse :</strong> 3 Place de Fontenoy — TSA 80715 — 75334 Paris Cedex 07</p>
+            </div>
+        </div>
+
+        <!-- 8. Modifications -->
+        <div class="legal-section">
+            <h2>Modifications de cette politique</h2>
+            <p>Cette politique peut être mise à jour en cas d'évolution du site ou de la réglementation. La date de dernière mise à jour est indiquée en haut de page. En cas de modification substantielle, un avis sera affiché sur le site.</p>
+        </div>
+
+        <!-- 9. Liens -->
+        <div class="legal-section">
+            <h2>Documents liés</h2>
+            <ul>
+                <li><a href="mentions-legales.html">Mentions légales</a></li>
+            </ul>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container footer-inner">
+            <span>© <span id="year"></span> — Redouane</span>
+            <span>
+                <a href="mentions-legales.html" class="footer-legal-link">Mentions légales</a>
+                &nbsp;·&nbsp;
+                <a href="politique-confidentialite.html" class="footer-legal-link">Confidentialité</a>
+            </span>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        function resetConsent() {
+            localStorage.removeItem('cookie_consent');
+            alert('Vos préférences ont été réinitialisées. Rechargez la page d\'accueil pour revoir la bannière.');
+        }
+    </script>
+</body>
+</html>
