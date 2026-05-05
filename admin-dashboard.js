@@ -105,6 +105,14 @@ const sections = {
         </svg>`,
         hasAddButton: false,
         render: renderContactSection
+    },
+    btsFiches: {
+        title: 'Fiches BTS SIO',
+        icon: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+        </svg>`,
+        hasAddButton: false,
+        render: renderBtsFichesSection
     }
 };
 
@@ -205,6 +213,7 @@ const loadAbout      = () => loadData(portfolioAPI.getAbout,      'Erreur charge
 const loadExperience = () => loadData(portfolioAPI.getExperience, 'Erreur chargement expériences: ', []);
 const loadEducation  = () => loadData(portfolioAPI.getEducation,  'Erreur chargement formations: ', []);
 const loadContact    = () => loadData(portfolioAPI.getContact,    'Erreur chargement contact: ');
+const loadBtsFiches  = () => loadData(portfolioAPI.getBtsFiches,  'Erreur chargement fiches BTS: ');
 
 // ========================================
 // EMPTY STATE
@@ -458,6 +467,216 @@ async function renderContactSection() {
             </div>
         </form>
     `;
+}
+
+async function renderBtsFichesSection() {
+    const fiches = await loadBtsFiches();
+    const getDisplayUrl = (url) => {
+        if (!url) return '';
+        if (url.startsWith('http')) return url;
+        return getStoragePublicUrl('project-pdfs', url);
+    };
+
+    document.getElementById('sectionContent').innerHTML = `
+        <form id="btsFichesForm" onsubmit="saveBtsFiches(event)">
+            <input type="hidden" id="btsFichesId" value="${escAttr(fiches?.id)}">
+            <input type="hidden" id="btsFichesE5Url" value="${escAttr(fiches?.e5_pdf_url)}">
+            <input type="hidden" id="btsFichesE6Url" value="${escAttr(fiches?.e6_pdf_url)}">
+
+            <div class="form-section">
+                <h4 class="form-section-title">
+                    <svg style="width:14px;height:14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                    </svg>
+                    Épreuve E5 — Administration des systèmes et des réseaux
+                </h4>
+                <div class="form-group">
+                    <label>PDF Fiche E5</label>
+                    <label for="btsFichesE5File" class="upload-field upload-field-pdf">
+                        <span class="upload-field-top">
+                            <span class="upload-field-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                </svg>
+                            </span>
+                            <span>
+                                <strong>Importer la fiche E5</strong>
+                                <small>Glisse le fichier ou clique pour importer le PDF</small>
+                            </span>
+                        </span>
+                        <span class="upload-field-button">Sélectionner un PDF</span>
+                    </label>
+                    <input type="file" id="btsFichesE5File" accept=".pdf" class="upload-input-hidden">
+                    <div class="upload-status" id="btsFichesE5UploadStatus"></div>
+                    <div id="btsFichesE5Display" class="media-preview-card" style="display:${fiches?.e5_pdf_url ? 'flex' : 'none'};">
+                        <div class="media-preview-main">
+                            <div class="media-preview-file-icon">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <div class="media-preview-meta">
+                                <span class="media-preview-label">PDF actuel</span>
+                                <a id="btsFichesE5Name" class="media-preview-name" href="${escAttr(getDisplayUrl(fiches?.e5_pdf_url))}" target="_blank" rel="noopener">${escHtml(fiches?.e5_pdf_url ? getDisplayFileName(fiches.e5_pdf_url) : '')}</a>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-danger media-delete-btn" onclick="deleteBtsFiche('e5')">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                            Supprimer
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h4 class="form-section-title">
+                    <svg style="width:14px;height:14px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                    </svg>
+                    Épreuve E6 — Cybersécurité des services informatiques
+                </h4>
+                <div class="form-group">
+                    <label>PDF Fiche E6</label>
+                    <label for="btsFichesE6File" class="upload-field upload-field-pdf">
+                        <span class="upload-field-top">
+                            <span class="upload-field-icon">
+                                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                </svg>
+                            </span>
+                            <span>
+                                <strong>Importer la fiche E6</strong>
+                                <small>Glisse le fichier ou clique pour importer le PDF</small>
+                            </span>
+                        </span>
+                        <span class="upload-field-button">Sélectionner un PDF</span>
+                    </label>
+                    <input type="file" id="btsFichesE6File" accept=".pdf" class="upload-input-hidden">
+                    <div class="upload-status" id="btsFichesE6UploadStatus"></div>
+                    <div id="btsFichesE6Display" class="media-preview-card" style="display:${fiches?.e6_pdf_url ? 'flex' : 'none'};">
+                        <div class="media-preview-main">
+                            <div class="media-preview-file-icon">
+                                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                                </svg>
+                            </div>
+                            <div class="media-preview-meta">
+                                <span class="media-preview-label">PDF actuel</span>
+                                <a id="btsFichesE6Name" class="media-preview-name" href="${escAttr(getDisplayUrl(fiches?.e6_pdf_url))}" target="_blank" rel="noopener">${escHtml(fiches?.e6_pdf_url ? getDisplayFileName(fiches.e6_pdf_url) : '')}</a>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-danger media-delete-btn" onclick="deleteBtsFiche('e6')">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"></polyline>
+                                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                            </svg>
+                            Supprimer
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-success">${icons.save} Enregistrer</button>
+            </div>
+        </form>
+    `;
+
+    document.getElementById('btsFichesE5File').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        await uploadFile(file, 'project-pdfs', 'btsFichesE5UploadStatus', 'btsFichesE5Url', updateBtsFicheE5Display, 'PDF E5 uploadé !');
+    });
+    document.getElementById('btsFichesE6File').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        await uploadFile(file, 'project-pdfs', 'btsFichesE6UploadStatus', 'btsFichesE6Url', updateBtsFicheE6Display, 'PDF E6 uploadé !');
+    });
+}
+
+function updateBtsFicheE5Display(fileName) {
+    const display  = document.getElementById('btsFichesE5Display');
+    const nameEl   = document.getElementById('btsFichesE5Name');
+    if (display && nameEl) {
+        nameEl.textContent = getDisplayFileName(fileName);
+        nameEl.href = getStoragePublicUrl('project-pdfs', fileName);
+        display.style.display = 'flex';
+    }
+}
+
+function updateBtsFicheE6Display(fileName) {
+    const display  = document.getElementById('btsFichesE6Display');
+    const nameEl   = document.getElementById('btsFichesE6Name');
+    if (display && nameEl) {
+        nameEl.textContent = getDisplayFileName(fileName);
+        nameEl.href = getStoragePublicUrl('project-pdfs', fileName);
+        display.style.display = 'flex';
+    }
+}
+
+async function deleteBtsFiche(fiche) {
+    const urlInputId = fiche === 'e5' ? 'btsFichesE5Url' : 'btsFichesE6Url';
+    const displayId  = fiche === 'e5' ? 'btsFichesE5Display' : 'btsFichesE6Display';
+    const statusId   = fiche === 'e5' ? 'btsFichesE5UploadStatus' : 'btsFichesE6UploadStatus';
+    const fileInputId = fiche === 'e5' ? 'btsFichesE5File' : 'btsFichesE6File';
+
+    if (!confirm(`Supprimer la fiche ${fiche.toUpperCase()} ?`)) return;
+
+    const urlInput = document.getElementById(urlInputId);
+    const fileName = urlInput?.value;
+
+    if (fileName && !fileName.startsWith('http')) {
+        try {
+            const { error } = await supabase.storage.from('project-pdfs').remove([fileName]);
+            if (error) throw error;
+        } catch (e) {
+            showError('Erreur suppression fichier: ' + e.message);
+            return;
+        }
+    }
+
+    const id = document.getElementById('btsFichesId').value;
+    const update = fiche === 'e5' ? { e5_pdf_url: null } : { e6_pdf_url: null };
+    try {
+        await portfolioAPI.updateBtsFiches(id, { ...update, updated_at: new Date().toISOString() });
+        if (urlInput) urlInput.value = '';
+        const display = document.getElementById(displayId);
+        if (display) display.style.display = 'none';
+        const fileInput = document.getElementById(fileInputId);
+        if (fileInput) fileInput.value = '';
+        const statusEl = document.getElementById(statusId);
+        if (statusEl) statusEl.textContent = '';
+        showSuccess(`Fiche ${fiche.toUpperCase()} supprimée.`);
+    } catch (e) {
+        showError('Erreur sauvegarde: ' + e.message);
+    }
+}
+
+async function saveBtsFiches(event) {
+    event.preventDefault();
+    const btn = getSubmitBtn(event);
+    if (btn?.disabled) return;
+    if (btn) btn.disabled = true;
+    try {
+        const id = document.getElementById('btsFichesId').value;
+        const payload = {
+            e5_pdf_url: document.getElementById('btsFichesE5Url').value || null,
+            e6_pdf_url: document.getElementById('btsFichesE6Url').value || null,
+            updated_at: new Date().toISOString()
+        };
+        if (id) {
+            await portfolioAPI.updateBtsFiches(id, payload);
+        } else {
+            const { data, error } = await supabase.from('bts_fiches').upsert([payload]).select().single();
+            if (error) throw error;
+            if (data?.id) document.getElementById('btsFichesId').value = data.id;
+        }
+        showSuccess('Fiches BTS enregistrées avec succès !');
+    } catch (e) { showError('Erreur lors de la sauvegarde: ' + e.message); }
+    finally { if (btn) btn.disabled = false; }
 }
 
 // ========================================

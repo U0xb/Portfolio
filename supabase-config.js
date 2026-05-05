@@ -75,4 +75,7 @@ const portfolioAPI = {
 
     getContact:         _single('contact'),
     updateContact:      _update('contact'),
+
+    getBtsFiches:       _single('bts_fiches'),
+    updateBtsFiches:    _update('bts_fiches'),
 };

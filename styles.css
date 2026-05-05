@@ -2207,3 +2207,79 @@ body::before {
     justify-content: center;
   }
 }
+
+/* ========================================
+   BTS FICHES
+   ======================================== */
+
+.bts-fiches-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 2rem;
+}
+
+.bts-fiche-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 2rem;
+  background: var(--card-bg, rgba(255,255,255,.04));
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color .2s, transform .2s, box-shadow .2s;
+}
+
+.bts-fiche-card:hover {
+  border-color: var(--accent-primary, #ff6a00);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.15);
+}
+
+.bts-fiche-card[href="#"] {
+  opacity: .5;
+  pointer-events: none;
+}
+
+.bts-fiche-icon {
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,106,0,.1);
+  border-radius: 10px;
+  color: var(--accent-primary, #ff6a00);
+  flex-shrink: 0;
+}
+
+.bts-fiche-body {
+  flex: 1;
+}
+
+.bts-fiche-body .eyebrow {
+  margin-bottom: .25rem;
+}
+
+.bts-fiche-body h3 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: .25rem 0 .5rem;
+  line-height: 1.35;
+}
+
+.bts-fiche-body p {
+  font-size: .9rem;
+  color: var(--text-secondary, #8892a4);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.bts-fiche-cta {
+  font-size: .85rem;
+  font-weight: 600;
+  color: var(--accent-primary, #ff6a00);
+  letter-spacing: .02em;
+}

@@ -53,6 +53,10 @@
                             <span class="dashboard-quick-btn-title">Gérer les compétences</span>
                             <span class="dashboard-quick-btn-text">Ajuster les technologies et expertises</span>
                         </button>
+                        <button class="dashboard-quick-btn" type="button" onclick="showSection('btsFiches')">
+                            <span class="dashboard-quick-btn-title">Fiches BTS SIO</span>
+                            <span class="dashboard-quick-btn-text">Gérer les PDF des épreuves E5 et E6</span>
+                        </button>
                     </div>
                 </div>
             </aside>
@@ -154,6 +158,19 @@
                         <div class="section-card-body">
                             <div class="section-card-title">Contact</div>
                             <div class="section-card-count">Informations</div>
+                        </div>
+                    </div>
+
+                    <!-- Carte Fiches BTS -->
+                    <div class="section-card" onclick="showSection('btsFiches')">
+                        <div class="section-card-icon">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                            </svg>
+                        </div>
+                        <div class="section-card-body">
+                            <div class="section-card-title">Fiches BTS SIO</div>
+                            <div class="section-card-count">Épreuves E5 &amp; E6</div>
                         </div>
                     </div>
                 </div>

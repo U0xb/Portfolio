@@ -33,9 +33,10 @@ function hideLoader() {
             client.from('about').select('*').single(),
             client.from('experience').select('*').order('order_index'),
             client.from('education').select('*').order('order_index'),
-            client.from('contact').select('*').single()
+            client.from('contact').select('*').single(),
+            client.from('bts_fiches').select('*').single()
         ]);
-        const [hero, projects, skills, about, experience, education, contact] = results.map(r =>
+        const [hero, projects, skills, about, experience, education, contact, btsFiches] = results.map(r =>
             r.status === 'fulfilled' ? r.value : { data: null, error: r.reason }
         );
 
@@ -135,6 +136,22 @@ function hideLoader() {
             }
         }
         
+        // FICHES BTS
+        if (btsFiches.data) {
+            const d = btsFiches.data;
+            const resolveFicheUrl = (url) => {
+                if (!url) return null;
+                if (url.startsWith('http')) return url;
+                return publicUrl('project-pdfs', url);
+            };
+            const e5Url = resolveFicheUrl(d.e5_pdf_url);
+            const e6Url = resolveFicheUrl(d.e6_pdf_url);
+            const e5Card = document.getElementById('ficheE5Card');
+            const e6Card = document.getElementById('ficheE6Card');
+            if (e5Card && e5Url) { e5Card.href = e5Url; e5Card.style.opacity = ''; e5Card.style.pointerEvents = ''; }
+            if (e6Card && e6Url) { e6Card.href = e6Url; e6Card.style.opacity = ''; e6Card.style.pointerEvents = ''; }
+        }
+
         hideLoader();
 
     } catch (error) {
