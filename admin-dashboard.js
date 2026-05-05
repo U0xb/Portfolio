@@ -266,11 +266,21 @@ async function renderProjectsSection() {
     _itemCache.projects.clear();
     projects.forEach(p => _itemCache.projects.set(String(p.id), p));
 
+    const BTS_COMP_LABELS = [
+        '', 'C1 — Gérer le patrimoine informatique',
+        'C2 — Répondre aux incidents et aux demandes',
+        'C3 — Développer la présence en ligne',
+        'C4 — Travailler en mode projet',
+        'C5 — Mettre à disposition un service informatique',
+        'C6 — Organiser son développement professionnel'
+    ];
+
     container.innerHTML = `<div class="item-list">${projects.map(project => `
         <div class="item-card">
             <h3>${escHtml(project.title)}</h3>
             <p>${escHtml(project.description)}</p>
             ${project.tags?.length ? `<div style="display:flex;gap:.3rem;flex-wrap:wrap;margin:.5rem 0;">${project.tags.map(t => `<span class="tag">${escHtml(t)}</span>`).join('')}</div>` : ''}
+            ${project.bts_competences?.length ? `<div style="display:flex;gap:.3rem;flex-wrap:wrap;margin:.5rem 0;">${project.bts_competences.map(c => `<span class="tag tag-bts" title="${escAttr(BTS_COMP_LABELS[c])}">${escHtml('C' + c)}</span>`).join('')}</div>` : ''}
             <div class="item-actions">
                 <button class="btn" onclick="editProject('${escAttr(project.id)}')">${icons.edit} Modifier</button>
                 <button class="btn btn-danger" onclick="deleteProject('${escAttr(project.id)}')">${icons.delete} Supprimer</button>
@@ -962,6 +972,22 @@ function focusAboutTagInput(){ document.getElementById('aboutTagInput').focus();
 // MODALS - PROJECTS
 // ========================================
 
+function setBtsCompetences(selected = []) {
+    for (let i = 1; i <= 6; i++) {
+        const cb = document.getElementById(`btsComp${i}`);
+        if (cb) cb.checked = selected.includes(i);
+    }
+}
+
+function getSelectedBtsCompetences() {
+    const result = [];
+    for (let i = 1; i <= 6; i++) {
+        const cb = document.getElementById(`btsComp${i}`);
+        if (cb?.checked) result.push(i);
+    }
+    return result;
+}
+
 function openProjectModal(project = null) {
     const modal = document.getElementById('projectModal');
     document.getElementById('projectModalTitle').textContent = project ? 'Modifier le projet' : 'Ajouter un projet';
@@ -976,6 +1002,7 @@ function openProjectModal(project = null) {
         document.getElementById('projectOrder').value       = project.order_index || 0;
         currentProjectTags = project.tags || [];
         renderProjectTags();
+        setBtsCompetences(project.bts_competences || []);
         project.image_url ? updateImageDisplay(project.image_url) : hideImageDisplay();
         project.pdf_url   ? updatePdfDisplay(project.pdf_url)     : hidePdfDisplay();
     } else {
@@ -985,6 +1012,7 @@ function openProjectModal(project = null) {
         document.getElementById('projectPdfUrl').value   = '';
         currentProjectTags = [];
         renderProjectTags();
+        setBtsCompetences([]);
         hideImageDisplay();
         hidePdfDisplay();
     }
@@ -1017,13 +1045,14 @@ document.getElementById('projectForm').addEventListener('submit', async (e) => {
     if (btn) btn.disabled = true;
     try {
         const projectData = {
-            title:       document.getElementById('projectTitle').value,
-            description: document.getElementById('projectDescription').value,
-            link:        document.getElementById('projectLink').value || null,
-            image_url:   document.getElementById('projectImageUrl').value || null,
-            pdf_url:     document.getElementById('projectPdfUrl').value || null,
-            tags:        currentProjectTags,
-            order_index: parseInt(document.getElementById('projectOrder').value) || 0
+            title:            document.getElementById('projectTitle').value,
+            description:      document.getElementById('projectDescription').value,
+            link:             document.getElementById('projectLink').value || null,
+            image_url:        document.getElementById('projectImageUrl').value || null,
+            pdf_url:          document.getElementById('projectPdfUrl').value || null,
+            tags:             currentProjectTags,
+            bts_competences:  getSelectedBtsCompetences(),
+            order_index:      parseInt(document.getElementById('projectOrder').value) || 0
         };
         const id = document.getElementById('projectId').value;
         if (id) {

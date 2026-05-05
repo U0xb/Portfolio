@@ -76,11 +76,24 @@
         return (s.startsWith('https://') || s.startsWith('http://') || s.startsWith('mailto:') || s.startsWith('tel:')) ? url : '#';
     }
 
+    const BTS_COMP_LABELS = [
+        '',
+        'C1 — Gérer le patrimoine informatique',
+        'C2 — Répondre aux incidents et demandes',
+        'C3 — Développer la présence en ligne',
+        'C4 — Travailler en mode projet',
+        'C5 — Mettre à disposition un service informatique',
+        'C6 — Organiser son développement professionnel'
+    ];
+
     function buildProjectsHTML(projects, resolveImageUrl, resolvePdfLink) {
         return projects.map(p => {
             const imageLink = resolveImageUrl(p.image_url);
             const pdfLink   = safeLinkHref(resolvePdfLink(p));
             const tagsHTML  = Array.isArray(p.tags) ? p.tags.map(t => `<span class="pill">${esc(t)}</span>`).join('') : '';
+            const compsHTML = Array.isArray(p.bts_competences) && p.bts_competences.length
+                ? `<div class="card-bts-comps">${p.bts_competences.map(c => `<span class="bts-pill" title="${esc(BTS_COMP_LABELS[c] || '')}"><span class="bts-pill-num">C${c}</span><span class="bts-pill-label">${esc(BTS_COMP_LABELS[c] ? BTS_COMP_LABELS[c].replace(/^C\d+ — /, '') : '')}</span></span>`).join('')}</div>`
+                : '';
             return `
     <article class="card">
         <div class="card-link">
@@ -91,6 +104,7 @@
                 <h3>${esc(p.title)}</h3>
                 ${p.description ? `<p class="card-description">${esc(p.description)}</p>` : ''}
                 ${tagsHTML ? `<div class="card-tags">${tagsHTML}</div>` : ''}
+                ${compsHTML}
                 <a class="card-cta" href="${esc(pdfLink)}" target="_blank" rel="noopener">Voir le projet <span aria-hidden="true">→</span></a>
             </div>
         </div>
