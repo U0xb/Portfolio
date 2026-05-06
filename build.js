@@ -84,47 +84,12 @@ function buildContactHTML(contact) {
     ].filter(Boolean).join('\n');
 }
 
-// ─── BTS Fiches HTML ──────────────────────────────────────────────────────────
-
-const FICHE_ICON_SVG = `<svg width="32" height="32" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
-                    </svg>`;
-
-function resolveFicheUrl(url) {
-    if (!url) return '#';
-    if (url.startsWith('http')) return url;
-    return storageUrl('project-pdfs', url);
-}
-
-function buildBtsFichesGridHTML(fiches) {
-    const e5Url = resolveFicheUrl(fiches?.e5_pdf_url);
-    const e6Url = resolveFicheUrl(fiches?.e6_pdf_url);
-    return `                <a class="bts-fiche-card" id="ficheE5Card" href="${esc(e5Url)}" target="_blank" rel="noopener noreferrer">
-                    <div class="bts-fiche-icon">${FICHE_ICON_SVG}</div>
-                    <div class="bts-fiche-body">
-                        <p class="eyebrow">Épreuve E5</p>
-                        <h3>Administration des systèmes et des réseaux</h3>
-                        <p>Situations professionnelles documentées dans le cadre de l'alternance chez GetCaaS.</p>
-                    </div>
-                    <span class="bts-fiche-cta">Consulter la fiche →</span>
-                </a>
-                <a class="bts-fiche-card" id="ficheE6Card" href="${esc(e6Url)}" target="_blank" rel="noopener noreferrer">
-                    <div class="bts-fiche-icon">${FICHE_ICON_SVG}</div>
-                    <div class="bts-fiche-body">
-                        <p class="eyebrow">Épreuve E6</p>
-                        <h3>Cybersécurité des services informatiques</h3>
-                        <p>Parcours de professionnalisation et tableau de synthèse des compétences acquises.</p>
-                    </div>
-                    <span class="bts-fiche-cta">Consulter la fiche →</span>
-                </a>`;
-}
-
 // ─── Build principal ──────────────────────────────────────────────────────────
 
 async function build() {
     console.log('🔄 Récupération des données Supabase...');
 
-    const [skills, experience, education, projects, aboutArr, hero, contact, btsFiches] = await Promise.all([
+    const [skills, experience, education, projects, aboutArr, hero, contact] = await Promise.all([
         fetchTable('skills', 'order_index'),
         fetchTable('experience', 'order_index'),
         fetchTable('education', 'order_index'),
@@ -132,7 +97,6 @@ async function build() {
         fetchTable('about'),
         fetchSingle('hero'),
         fetchSingle('contact'),
-        fetchSingle('bts_fiches'),
     ]);
 
     const about = Array.isArray(aboutArr) ? aboutArr[0] : aboutArr;
@@ -166,9 +130,6 @@ async function build() {
         const contactHtml = buildContactHTML(contact);
         if (contactHtml) html = inject(html, 'contactButtons', contactHtml);
     }
-
-    // Fiches BTS
-    html = inject(html, 'btsFichesGrid', buildBtsFichesGridHTML(btsFiches));
 
     fs.writeFileSync(path.join(__dirname, 'index.html'), html, 'utf8');
     console.log('✅ index.html mis à jour');
