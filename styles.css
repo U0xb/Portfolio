@@ -548,6 +548,7 @@ body::before {
   max-height: 90vh;
   object-fit: contain;
   border-radius: 8px;
+  background: #ffffff;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
   transform: scale(0.96);
   transition: transform 0.25s ease;
